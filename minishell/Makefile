@@ -4,7 +4,9 @@ SRC = main.c\
 	  arg_utils_0.c\
 	  env_utils_0.c\
 	  aux_utils_0.c\
-	  free_utils_0.c
+	  free_utils_0.c\
+	  ft_parse_line.c\
+	  ft_linked_list.c
 
 OBJ = $(SRC: .c=.o)  
 

@@ -45,3 +45,26 @@ int	ft_compare_str(char *str, char *model)
 		return (1);
 	return (0);
 }
+
+char	*ft_substr(char *s, int start, int len)
+{
+	int	i;
+	int	j;
+	char	*ptr;
+
+	i = 0;
+	j = 0;
+	ptr = (char *)malloc (sizeof(char) * (len + 1));
+	if (!ptr)
+		return (0);
+	while (start--)
+		i++;
+	while (j < len)
+	{
+		ptr[j] = s[i];
+		i++;
+		j++;
+	}
+	ptr[j] = '\0';
+	return (ptr);
+}
