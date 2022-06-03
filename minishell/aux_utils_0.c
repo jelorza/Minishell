@@ -1,5 +1,34 @@
 #include "minishell.h"
 
+char	*ft_memcpy(char *dst, char *src, int n)
+{
+	size_t	i;
+
+	i = 0;
+	if (!dst && !src)
+		return (NULL);
+	while (n--)
+	{
+		*(char *)(dst + i) = *(char *)(src + i);
+		i++;
+	}
+	return (dst);
+}
+
+char	*ft_strdup(char *s1)
+{
+	char	*cpi;
+	int	i;
+
+	cpi = (char *)malloc(ft_strlen(s1) + 1 * sizeof(char));
+	if (!cpi)
+		return (00);
+	i = 0;
+	ft_memcpy(cpi, s1, ft_strlen(s1));
+	*(cpi + ft_strlen(s1)) = 00;
+	return (cpi);
+}
+
 void	ft_strlcpy(char *dest, char *line, int st, int len)
 {
 	int	i;

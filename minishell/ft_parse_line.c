@@ -1,21 +1,19 @@
 #include "minishell.h"
-/*
-void	ft_addNod_back(t_pipes **l_parseInit, char *line, int i, int z)
+
+//acabo de probar que estoy metiendo bien y sacando bien los datos de la lista de dentro de la estructura. Ahora me queda implantar la funcion de los nodos.
+
+void	ft_parse_line(char *line, t_struct *structInit)
 {
-	char *data;
+	ft_between_pipes(line,&structInit->l_parseInit);
+//	ft_redirects(line,structInit);
+}	
 
-	data = malloc(sizeof(char*) * i-z);
-	ft_strlcpy(
-}
-*/
-void	ft_between_pipes(char *line)
+void	ft_between_pipes(char *line, t_pipes **list)
 {
-	t_pipes *l_parseInit = NULL;
-	int i;
-	int z;
-
-	char *data;
-
+	int	i;
+	int	z;
+	char 	*data;
+	
 	i = 0;
 	z = 0;
 	while (line[i])
@@ -23,29 +21,46 @@ void	ft_between_pipes(char *line)
 		while(line[i] != '|' && line[i])
 		{
 			if (line[i] == 39)
-			{ 
-				while (line[++i] != 39 && line[i])
-					i++;
+			{
+				if (line[++i])
+				{
+					printf("existo\n");
+					while(line[i] != 39 && line[i])
+						i++;
+				}
+				if (!line[i])
+				{
+					printf("ERROR:solo abro commillas pero no las cierro por lo que me tengo que quedar colgado\n");
+					exit (1);	
+				}
 			}
 			else if (line[i] == '"')
 			{
-				while(++line[i] != '"' && line[i])
-					i++;
+				if (line[++i])
+				{
+					printf("existo\n");
+					while(line[i] != '"' && line[i])
+						i++;
+				}
+				if (!line[i])
+				{
+					printf("ERROR:solo abro commillas pero no las cierro por lo que me tengo que quedar colgado\n");
+					exit (1);	
+				}
 			}
 			i++;
 		}
 		data = ft_substr(line, z, i-z);
-		printf("%s\n", data);
-//		free(data);
-		ft_addNodBack(&l_parseInit, data);
+		ft_addNodBack(list, data);
 		if (line[i] == '|' )
 			i++;
 		z = i;
 		i++;
 	}
-	printf("%s\n",line);
-	ft_printList(&l_parseInit);
-//	ft_cleanList();
+	ft_printList(list);
+	printf("Elimino la lista\n");
+	ft_cleanList(list);
+	ft_printList(list);
 }
 
 

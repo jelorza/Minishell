@@ -14,6 +14,14 @@ typedef struct s_pipes
 	
 } t_pipes;
 
+typedef struct s_struct{
+
+	t_pipes		*l_parseInit;
+//	t_redirect	*l_parseRedirect;
+
+}	t_struct;
+
+
 
 typedef struct	s_in
 {
@@ -35,6 +43,8 @@ void	ft_get_env(t_in *dt, char **envp);
 char	*ft_substr(char *s, int start, int len);
 void	ft_strlcpy(char *dest, char *line, int st, int fn);
 int		ft_strlen(char *line);
+char		*ft_strdup(char *s);
+char		*ft_memcpy(char *des, char *src, int n);
 int		ft_compare_str(char *str, char *model);
 
 //funciones de lectura de argumentos
@@ -59,14 +69,16 @@ void	ft_free(t_in *dt, int i);
 
 //funciones de limpieza de line (readline)
 //ft_parse_init.c
-void	ft_between_pipes(char *line);
+void	ft_between_pipes(char *line, t_pipes **list);
+void	ft_parse_line(char *line, t_struct *structInit);
 char	*substr(char *s, int start, int len);
+void	ft_struct_init(t_struct *structInit);
 
 //funciones de linked list
 //ft_linked_list.c
-t_pipes *ft_newNod(char *data);
-void	ft_addNodBack(t_pipes **l_list, char *data);
-void	ft_printList(t_pipes **l_list);
-void	ft_addNodFront(t_pipes **l_list, char *data);
-
+t_pipes *ft_newNod(char *data, t_pipes **list);
+void	ft_addNodBack(t_pipes **list, char *data);
+void	ft_printList(t_pipes **list);
+void	ft_addNodFront(t_pipes **list, char *data);
+void	ft_cleanList(t_pipes **list);
 #endif

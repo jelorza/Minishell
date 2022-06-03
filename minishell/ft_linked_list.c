@@ -1,34 +1,35 @@
 #include "minishell.h"
 
-t_pipes	*ft_newNod(char *data)
+t_pipes	*ft_newNod(char *data, t_pipes **list)
 {
 	static int id;
 	t_pipes *new;
 
-	//estoy pensando en meter un bool para saber si es un comando nuevo o no para resetear la variable statica.
-
+	if (*list == NULL)
+		id = 0;
 	new = malloc(sizeof(t_pipes));
 	if (!new)
 		return (0);
 	new->id = id;
-	new->data = data;
+	new->data = ft_strdup(data);
+	free(data);
 	new->next = NULL;
 	id++;
 	return(new);
 
 }
 
-void	ft_addNodBack(t_pipes **l_list, char *data)
+void	ft_addNodBack(t_pipes **list, char *data)
 {
 	t_pipes *new;
 	t_pipes *aux;
 
-	aux = *l_list;
-	new = ft_newNod(data);
+	aux = *list;
+	new = ft_newNod(data,list);
 	if(!new)
 		return ;
 	if (aux == NULL)
-		*l_list = new;
+		*list = new;
 	else
 	{
 		while (aux->next != NULL)
@@ -37,19 +38,18 @@ void	ft_addNodBack(t_pipes **l_list, char *data)
 	}
 }
 
-void	ft_addNodFront(t_pipes **l_list, char *data)
+void	ft_addNodFront(t_pipes **list, char *data)
 {
 	t_pipes *new;
 
-	new = ft_newNod(data);
-	if (*l_list)
-		new->next = *l_list;
-	*l_list = new;
+	new = ft_newNod(data,list);
+	if (*list)
+		new->next = *list;
+	*list = new;
 }
 
 void	ft_printList(t_pipes **list)
 {	
-	printf("desde print\n");
 	if (*list)
 	{
 		t_pipes *aux;
@@ -62,4 +62,20 @@ void	ft_printList(t_pipes **list)
 	}
 	else
 		printf("La lista esta vacia\n");
+}
+
+void	ft_cleanList(t_pipes **list)
+{
+	t_pipes *aux;
+	t_pipes *next;
+
+	aux = *list;
+	while (aux != NULL)
+	{
+		next = aux->next;
+		free(aux->data);
+		free(aux);
+		aux = next;
+	}
+	*list = NULL;
 }
