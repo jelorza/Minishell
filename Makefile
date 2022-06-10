@@ -2,8 +2,9 @@ NAME = minishell
 
 SRC = main.c\
 	  arg_utils_0.c\
-	  env_utils_0.c\
 	  aux_utils_0.c\
+	  env_utils_0.c\
+	  exe_utils_0.c\
 	  free_utils_0.c
 
 OBJ = $(SRC: .c=.o)  

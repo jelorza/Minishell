@@ -14,15 +14,15 @@ int main(int argc, char **argv, char **envp)
 	ft_get_env(&dt, envp);
 	while(1)
 	{
-		line = readline("minish> ");//texto de entrada de bash
+		line = readline(ROJO_T "bash-3.2$ " RESET_COLOR);//texto de entrada de bash
 		if (!line || line[0] == 'E')//compruebo fallo del line
 			break;
-		if (ft_break_line(line, &dt) == 1)//rompo por pipes
+		if (ft_break_line(line, &dt) == 1)//mando analizar la linea y lanzo el programa
 			break;
 		free(line);  
   	}
 	ft_free_1(&dt);
 	free(line);
-	system ("leaks minishell");
+//	system ("leaks minishell");
 	return (0);
 }

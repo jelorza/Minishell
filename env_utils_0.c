@@ -8,17 +8,21 @@ void	ft_get_env(t_in *dt, char **envp)
 	i = 0;
 	while (envp[i] != NULL)
 		i++;
+	dt->env = (char **) malloc (sizeof(char *) * (i + 1));
 	dt->env_name = (char **) malloc (sizeof(char *) * (i + 1));
 	dt->env_value = (char **) malloc (sizeof(char *) * (i + 1));
 	i = -1;
 	while (envp[++i] != NULL)
 	{
+		dt->env[i] = ft_strlcpy(envp[i], 0, ft_strlen(envp[i])); 
 		dt->env_name[i] = ft_split_env_1(envp[i]);
 		dt->env_value[i] = ft_split_env_2(envp[i]);
 //		printf("---%d---\n", i);
+//		printf("<%s>\n", dt->env[i]);
 //		printf("<%s>\n", dt->env_name[i]);
 //		printf("$%s$\n", dt->env_value[i]);
 	}
+	dt->env[i] = NULL;
 	dt->env_name[i] = NULL;
 	dt->env_value[i] = NULL;
 }
@@ -70,3 +74,21 @@ char	*ft_split_env_2(char *str)
 	res[j] = 00;
 	return (res);
 }
+
+//funcion que coje del env el path y saca todas las rutas para el access
+char	**ft_cut_root(t_in *dt)
+{
+	int		i;
+	char	**root;
+
+	i = -1;
+	root = NULL;
+	while (dt->env_name[++i] != NULL)
+	{
+		if (ft_compare_str (dt->env_name[i], "PATH") == 1)
+			break;
+	}
+	root = ft_split(dt->env_value[i], ':');
+	return (root);
+}
+

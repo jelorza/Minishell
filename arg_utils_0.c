@@ -22,10 +22,7 @@ int	ft_break_line(char *line, t_in *dt)
 		if (i != 0)
 			st = st + len + 1;
 		len = ft_count_arg_ind(line, st);
-		dt->data[i] = malloc (sizeof(char) * (len + 1));
-		if (dt->data[i] == NULL)
-			return (1);//hay que ver si queremos liberar aqui
-		ft_strlcpy (dt->data[i], line, st, len);
+		dt->data[i] = ft_strlcpy (line, st, len);
 		dt->redt[i] = 0;//pongo a 0 todos los tipos de redirecciones
 //		printf ("El argumento %d:\n-%s-\n", i, dt->data[i]);
 	}
@@ -71,6 +68,7 @@ int	ft_count_arg_ind(char *line, int st)
 //1- Los cmd con sus flags 
 //2- Las redirecciones, sean < o >
 //3- Resto de informacion entre comillas " o '
+//4- Lanza la ejecucion de los comandos
 void	ft_check_arg(t_in *dt)
 {
 	int	i;
@@ -82,6 +80,10 @@ void	ft_check_arg(t_in *dt)
 		ft_redf(dt->data[i], i, dt);//busco las redirecciones
 		ft_resf(dt->data[i], i, dt);//busco el resto
 	}
+	dt->cmd[i] = NULL;
+	dt->red[i] = NULL;
+	dt->rest[i] = NULL;
+	ft_exec(dt);
 }
 
 //funcion que busca el comando y lo guarda en el array cmd
@@ -116,8 +118,7 @@ void	ft_comf(char *data, int n, t_in *dt)
 				break;
 		}		
 	}
-	dt->cmd[n] = (char *)malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(dt->cmd[n], data, st, len);
+	dt->cmd[n] = ft_strlcpy(data, st, len);
 //	printf ("El comando %d:\n<%s>\n", n, dt->cmd[n]);
 }
 
@@ -156,10 +157,7 @@ void	ft_redf(char *data, int n, t_in *dt)
 			break;
 		}
 	}
-	dt->red[n] = (char *)malloc(sizeof(char) * (len + 1));
-	if (dt->red[n] == NULL)
-		exit (0);
-	ft_strlcpy(dt->red[n], data, st, len);
+	dt->red[n] = ft_strlcpy(data, st, len);
 //	printf ("La redireccion %d es del tipo %d:\n<%s>\n", n, dt->redt[n], dt->red[n]);
 }
 
@@ -194,9 +192,6 @@ void	ft_resf(char *data, int n, t_in *dt)
 			break;
 		}
 	}
-	dt->rest[n] = (char *)malloc(sizeof(char) * (len + 1));
-	if (dt->rest[n] == NULL)
-		exit (0);
-	ft_strlcpy(dt->rest[n], data, st, len);
+	dt->rest[n] = ft_strlcpy(data, st, len);
 //	printf ("El resto %d es:\n<%s>\n", n, dt->rest[n]);
 }
