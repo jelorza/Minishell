@@ -10,13 +10,10 @@ void	ft_free_0(t_in *dt)
 	{
 		free (dt->data[j]);
 		free (dt->cmd[j]);
-		free (dt->red[j]);
 		free (dt->rest[j]);
 	}
 	free (dt->data);
 	free (dt->cmd);
-	free (dt->red);
-	free (dt->redt);
 	free (dt->rest);
 }
 

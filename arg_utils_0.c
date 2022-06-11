@@ -10,10 +10,8 @@ int	ft_break_line(char *line, t_in *dt)
 	i = -1;
 	dt->data = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
 	dt->cmd = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
-	dt->red = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
-	dt->redt = (int *) malloc (sizeof (int) * (ft_count_arg(line) + 1));
 	dt->rest = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
-	if (dt->data == NULL || dt->cmd == NULL || dt->red == NULL || dt->rest == NULL || dt->redt == NULL)
+	if (dt->data == NULL || dt->cmd == NULL || dt->rest == NULL)
 		return (1);//aqui aun no hay nada que liberar
 	st = 0;
 	len = 0;
@@ -23,7 +21,6 @@ int	ft_break_line(char *line, t_in *dt)
 			st = st + len + 1;
 		len = ft_count_arg_ind(line, st);
 		dt->data[i] = ft_strlcpy (line, st, len);
-		dt->redt[i] = 0;//pongo a 0 todos los tipos de redirecciones
 //		printf ("El argumento %d:\n-%s-\n", i, dt->data[i]);
 	}
 	dt->data[i] = NULL;
@@ -71,7 +68,7 @@ int	ft_count_arg_ind(char *line, int st)
 //4- Lanza la ejecucion de los comandos
 void	ft_check_arg(t_in *dt)
 {
-	int	i;
+	int		i;
 
 	i = -1;
 	while (dt->data[++i] != NULL)
@@ -81,7 +78,6 @@ void	ft_check_arg(t_in *dt)
 		ft_resf(dt->data[i], i, dt);//busco el resto
 	}
 	dt->cmd[i] = NULL;
-	dt->red[i] = NULL;
 	dt->rest[i] = NULL;
 	ft_exec(dt);
 }
@@ -122,43 +118,62 @@ void	ft_comf(char *data, int n, t_in *dt)
 //	printf ("El comando %d:\n<%s>\n", n, dt->cmd[n]);
 }
 
-//función que va a guardar las redirecciones en el array red y su tipo en el array redt (< es 1 y > es 2)
+//función que va a guardar las redirecciones en la lista red, donde recogera el nombre del archivo, su tipo y el comando al que afecta (n)
 void	ft_redf(char *data, int n, t_in *dt)
 {
-	int	i;
-	int	st;
-	int	len;
+	int		i;
+	int		t;//guardo el tipo de redireccion
+	char	*file;//nombre del archivo
+	t_list	*new;
+	int		st;
+	int		len;
 
-	i = -1;
+	dt->red = NULL;
+	i = 0;
 	st = 0;
 	len = 0;
-	while (data[++i] != 00)
+	t = 0;
+	while (data[i] != 00)
 	{
-		if (data[i] == '<')
+		file = NULL;
+		if (data[i] == '<')//redirecciones de entrada
 		{
-			dt->redt[n] = 1;//tipo de redireccion
-			while (data[i] == 60 || data[i] == 32)
+			if (data[i + 1] == '<' && data[i + 1] != 00)
+				t = 3;//here dock
+			else 
+				t = 1;//redireccion de entrada
+			while ((data[i] == 60 || data[i] == 32) && data[i] != 00)
 				i++;
 			st = i;
-			while (data[i] >= 33 && data[i] <= 126)
+			while (data[i] >= 33 && data[i] <= 126 && data[i] != 00)
 				i++;
 			len = i - st;
-			break;
+			file = ft_strlcpy(data, st, len);
 		}
-		if (data[i] == '>')
+		else if (data[i] == '>')//redirecciones de entrada
 		{
-			dt->redt[n] = 2;//tipo de redireccion
-			while (data[i] == 62 || data[i] == 32)
+			if (data[i + 1] == '>' && data[i + 1] != 00)
+				t = 4;//redireccion de salida doble
+			else
+				t = 2;//redireccion de salida simple
+			while ((data[i] == 62 || data[i] == 32) && data[i] != 00)
 				i++;
 			st = i;
-			while (data[i] >= 33 && data[i] <= 126)
+			while (data[i] >= 33 && data[i] <= 126 && data[i] != 00)
 				i++;
 			len = i - st;
-			break;
+			file = ft_strlcpy(data, st, len);
 		}
+		if (file)
+		{
+			new = ft_new(file, n, t);
+			ft_add_back(&dt->red, new);
+		}
+		if (data[i])
+			i++;
 	}
-	dt->red[n] = ft_strlcpy(data, st, len);
-//	printf ("La redireccion %d es del tipo %d:\n<%s>\n", n, dt->redt[n], dt->red[n]);
+	dt->head = dt->red;//me guardo la cabeza de la lista
+	ft_print_list (&dt->red);
 }
 
 //función que va a guardar el resto de informacion de data en rest. Pueden ser cosas con " o '

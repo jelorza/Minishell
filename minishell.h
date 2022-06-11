@@ -10,6 +10,14 @@
 # define	ROJO_T 			"\x1b[31m"
 # define 	RESET_COLOR		"\x1b[0m"
 
+typedef struct s_list//lista para las redirecciones
+{
+	char			*file;//guardo el nombre del archivo
+	int				t;//Tipo de redireccion: 1 = < / 2 = > / 3 = << / 4 = >>
+	int				id;//id del comando al que afecta
+	struct s_list	*next;
+}	t_list;
+
 typedef struct	s_in
 {
 	char	**env;//puntero doble que guarda el env
@@ -18,22 +26,15 @@ typedef struct	s_in
 	char	*rootcmd;//puntero que guarda la ruta del ejecutable con el cmd y se va actualizando para cada cmd 
 	char	**data;//puntero doble con los argumentos entre pipes
 	char	**cmd;//puntero doble con los comd (tantos como data
-	char	**red;//puntero doble con las redirecciones (tantos como data
-	int		*redt;//tipo de redireccion 1 si es < y 2 si es >
+	t_list	*red;//lista con las redirecciones y su tipo
+	t_list	*head;//guardo la cabeza de la lista
 	char	**rest;//puntero doble con los restos (tantos como data
 	int		fdin;//guardo el fdin de entrada de datos
 	int		fdout;//guardo el fdout de salida
 	int		fdaux;//guardo el resultado para pasar de proceso en proceso
 
 }	t_in;
-/*
-typedef struct s_list//lista para las redirecciones
-{
-	char	*red;//guardo el nombre del archivo
-	int		n;//1 = < / 2 = << / 3 = > / 4 = >>
-	s_list	*next;
-}	t_list
-*/
+
 //main.c
 
 //funciones de lectura de argumentos
@@ -68,12 +69,19 @@ int		ft_exec(t_in *dt);
 int		ft_ch_buil(char *name);
 int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
-int		ft_ch_redir(T_in *dt, int n);
+int		ft_ch_redir(t_in *dt, int n);
 
 //funciones de liberacion de memoria
 //free_utils_0.c
 void	ft_free_0(t_in *dt);
 void	ft_free_1(t_in *dt);
 void	ft_free(t_in *dt, int i);
+
+//funciones auxiliares para crear o trabajar con listas
+//list_utils_0.c
+t_list	*ft_new(char *file, int n, int t);
+void	ft_add_front(t_list **list, t_list *new);
+void	ft_add_back(t_list **list, t_list *new);
+void	ft_print_list(t_list **list);
 
 #endif

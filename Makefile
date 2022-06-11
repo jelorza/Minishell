@@ -5,7 +5,8 @@ SRC = main.c\
 	  aux_utils_0.c\
 	  env_utils_0.c\
 	  exe_utils_0.c\
-	  free_utils_0.c
+	  free_utils_0.c\
+	  list_utils_0.c
 
 OBJ = $(SRC: .c=.o)  
 

@@ -47,8 +47,8 @@ int	ft_execve (t_in *dt, int n)
 }
 /*
 //funcion que chequea si el comando en cuestión tiene o no redirecciones:
-//* Si tiene una o varias de entrada, todas las redirecciones de entrada comprueba si existen y la ultima la abre y deja su valor en fdin de la estructura
-//* Si tiene una o varias de salida, todas las redirecciones de salida, las abre, y la ultima la abre y deja si valor en el fdout de la estructura
+//1- Si tiene una o varias de entrada, todas las redirecciones de entrada comprueba si existen y la ultima la abre y deja su valor en fdin de la estructura
+//2- Si tiene una o varias de salida, todas las redirecciones de salida, las abre, y la ultima la abre y deja si valor en el fdout de la estructura
 int	ft_ch_redir(t_in *dt, int n)
 {
 */
