@@ -18,6 +18,14 @@ typedef struct s_list//lista para las redirecciones
 	struct s_list	*next;
 }	t_list;
 
+typedef struct	s_cr//estructura para contabilizacion de redirecciones
+{
+	int		i;//cantidad de redirecciones de entrada, < o <<
+	int		s;//cantidad de redirecciones de slaida, > o >>
+	int		ti;//tipo de la ultima redireccion de entrada
+	int		ts;//tipo de la ultima redireccion de salida
+}	t_cr;
+
 typedef struct	s_in
 {
 	char	**env;//puntero doble que guarda el env
@@ -32,6 +40,7 @@ typedef struct	s_in
 	int		fdin;//guardo el fdin de entrada de datos
 	int		fdout;//guardo el fdout de salida
 	int		fdaux;//guardo el resultado para pasar de proceso en proceso
+	t_cr	*cr;//puntero a la estructura de redirecciones
 
 }	t_in;
 
@@ -70,6 +79,7 @@ int		ft_ch_buil(char *name);
 int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
 int		ft_ch_redir(t_in *dt, int n);
+void	ft_ch_c_redir(t_list *red, t_cr *cr);
 
 //funciones de liberacion de memoria
 //free_utils_0.c
@@ -83,5 +93,6 @@ t_list	*ft_new(char *file, int n, int t);
 void	ft_add_front(t_list **list, t_list *new);
 void	ft_add_back(t_list **list, t_list *new);
 void	ft_print_list(t_list **list);
+void	ft_destroy_list(t_in *dt);
 
 #endif

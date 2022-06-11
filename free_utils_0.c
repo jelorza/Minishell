@@ -14,6 +14,7 @@ void	ft_free_0(t_in *dt)
 	}
 	free (dt->data);
 	free (dt->cmd);
+	ft_destroy_list (dt);
 	free (dt->rest);
 }
 

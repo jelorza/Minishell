@@ -118,7 +118,7 @@ void	ft_comf(char *data, int n, t_in *dt)
 //	printf ("El comando %d:\n<%s>\n", n, dt->cmd[n]);
 }
 
-//función que va a guardar las redirecciones en la lista red, donde recogera el nombre del archivo, su tipo y el comando al que afecta (n)
+//función que va a guardar las redirecciones en la lista red, donde recogera el nombre del archivo, el tipo de redireccion y el comando al que afecta (n)
 void	ft_redf(char *data, int n, t_in *dt)
 {
 	int		i;
@@ -164,16 +164,17 @@ void	ft_redf(char *data, int n, t_in *dt)
 			len = i - st;
 			file = ft_strlcpy(data, st, len);
 		}
-		if (file)
+		if (file != NULL)
 		{
 			new = ft_new(file, n, t);
 			ft_add_back(&dt->red, new);
 		}
-		if (data[i])
+		if (data[i] != 00)
 			i++;
 	}
-	dt->head = dt->red;//me guardo la cabeza de la lista
-	ft_print_list (&dt->red);
+	dt->head = ft_new(NULL, 0, 0);//hay que liberar tambien la cabeza!!!
+	dt->head = dt->red;
+//	ft_print_list (&dt->red);
 }
 
 //función que va a guardar el resto de informacion de data en rest. Pueden ser cosas con " o '
