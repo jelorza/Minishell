@@ -29,7 +29,7 @@ void	ft_add_back(t_list **list, t_list *new)
 {
 	t_list	*aux;
 
-	if (*list == NULL)
+	if (!*list)
 		*list = new;
 	else
 	{
@@ -76,4 +76,5 @@ void	ft_destroy_list(t_in *dt)
 		free (dt->red);
 		c--;
 	}
+//	free (dt->head);por que no me deja liberar aqui el head??
 }

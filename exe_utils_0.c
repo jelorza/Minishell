@@ -62,16 +62,15 @@ int	ft_ch_redir(t_in *dt, int n)
 	cr->ti = 0;
 	cr->ts = 0;
 	dt->red = dt->head;
-	printf ("Valor: %s\n", dt->red->file);
-	printf ("id: %d\n", dt->red->id);
 	while (dt->red->next != NULL)
 	{
-		ft_ch_c_redir(dt->red, cr);
+		if (dt->red->id == n)
+			ft_ch_c_redir(dt->red, cr);
 		dt->red = dt->red->next;
 	}
 	if (dt->red->id == n)
 		ft_ch_c_redir(dt->red, cr);
-	printf ("Tengo %d de entrada y %d de salida, y la ultima de entrada es tipo %d y de salida %d\n", dt->cr->i, dt->cr->s, dt->cr->ti, dt->cr->ts);
+//	printf ("Tengo %d de entrada y %d de salida, y la ultima de entrada es tipo %d y de salida %d\n", dt->cr->i, dt->cr->s, dt->cr->ti, dt->cr->ts);
 	return (0);
 }
 

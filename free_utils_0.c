@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//funcion que libera los argumentos de la lina y se usa a la salida y por si falla el malloc
+//funcion que libera los argumentos de la linea. Se usa a la salida y por si falla el malloc
 void	ft_free_0(t_in *dt)
 {
 	int	j;
@@ -14,7 +14,7 @@ void	ft_free_0(t_in *dt)
 	}
 	free (dt->data);
 	free (dt->cmd);
-	ft_destroy_list (dt);
+	ft_destroy_list (dt);//libero aqui la lista y el head
 	free (dt->rest);
 }
 

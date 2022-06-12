@@ -25,6 +25,7 @@ int	ft_break_line(char *line, t_in *dt)
 	}
 	dt->data[i] = NULL;
 	ft_check_arg (dt);//nuevo chequeo de los datos de entrada para generar los arrays
+	ft_exec(dt);//lanzo la ejecucion
 	ft_free(dt, 0);//funcion que libera los argumentos
 	return (0);
 }
@@ -71,6 +72,7 @@ void	ft_check_arg(t_in *dt)
 	int		i;
 
 	i = -1;
+	dt->red = NULL;//reseteo la lista de red cada redline
 	while (dt->data[++i] != NULL)
 	{
 		ft_comf(dt->data[i], i, dt);//busco los comandos
@@ -79,7 +81,6 @@ void	ft_check_arg(t_in *dt)
 	}
 	dt->cmd[i] = NULL;
 	dt->rest[i] = NULL;
-	ft_exec(dt);
 }
 
 //funcion que busca el comando y lo guarda en el array cmd
@@ -128,7 +129,6 @@ void	ft_redf(char *data, int n, t_in *dt)
 	int		st;
 	int		len;
 
-	dt->red = NULL;
 	i = 0;
 	st = 0;
 	len = 0;
@@ -172,7 +172,7 @@ void	ft_redf(char *data, int n, t_in *dt)
 		if (data[i] != 00)
 			i++;
 	}
-	dt->head = ft_new(NULL, 0, 0);//hay que liberar tambien la cabeza!!!
+	dt->head = ft_new(NULL, 0, 0);//hay  cabeza y hay que liberarla tambien!!!
 	dt->head = dt->red;
 //	ft_print_list (&dt->red);
 }
