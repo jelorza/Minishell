@@ -37,6 +37,8 @@ int	ft_execve (t_in *dt, int n)
 
 	cmdf = ft_split(dt->cmd[n], ' ');
 	ft_ch_redir(dt, n);
+	if (ft_exe_redir(dt, n) == -1)
+		return (-1);
 	
 
 	i = -1;
@@ -47,6 +49,73 @@ int	ft_execve (t_in *dt, int n)
 	dt->cr = NULL;
 	return (0);
 }
+
+//funcion que va a ejecutar las redirecciones, es decir:
+//1 - Las de entrada:
+//	1.1 - Las de entrada de tipo < y que no sean la ultima va a comprobar si existen los archivosi. Si existen hace el cmd tal cual, y en caso de que no existan manda error y pasa al siguiente cmd, salvo que previamente tenga un << que abre el hear dock, dejará escribir, pero al final no realizará nada
+//	1.2 - Las de entrada de tipo <<. POR CONFIRMAR QUE HACE
+//2 - Las de salida:
+//	En todas las de salida (La unica diferencia entre ellas es que > machaca contenido y >> añade contenido a lo existente), lo que va a hacer es con todas las que no sean la ultima, creara los archivos, y la ultima redireccionara a la salida.
+int	ft_exe_redir(t_in *dt, int n)
+{
+//	int	i;
+
+//	if (ft_exe_red_int(dt, n) == -1);//haremos luego las de entrada
+	if (ft_exe_redir_out(dt, n) == -1)
+		return (-1);
+	return (0);
+}
+
+
+//funcion que ejecuta las redirecciones de salida. Si falla alguna apertura de archivo, retorna -1 y si no crea los archivos y redirecciona la salida del comando al último
+int	ft_exe_redir_out(t_in *dt, int n)
+{
+	dt->tout = 0;//reseteo el tipo de salida
+	dt->fdout = 0;//reseteo la salida
+	dt->red = dt->head;
+	while (dt->red->next != NULL)
+	{
+		if (dt->red->id == n && (dt->red->t == 2 || dt->red->t == 4))
+		{
+			dt->tout = dt->red->t;//guardo el tipo de redireccion de salida
+			if (dt->fdout != 0)//cierro el desc. anterior para volver abrir el defin.
+				close (dt->fdout);
+			if (dt->tout == 4)//abro archivo para añadir
+				dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
+			else//abro archivo para machacar
+				dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR, 0644);
+			if (dt->fdout == -1)//el archivo ya existia he de volver a abrirlo
+			{
+				if (dt->tout == 4)//abro archivo para añadir
+					dt->fdout = open (dt->red->file, O_RDWR | O_APPEND, 0644);
+				else//abro archivo para machacar
+					dt->fdout = open (dt->red->file, O_RDWR, 0644);
+			}
+		}
+		dt->red = dt->red->next;
+	}
+	if (dt->red->id == n && (dt->red->t == 2 || dt->red->t == 4))
+	{
+		dt->tout = dt->red->t;//guardo el tipo de redireccion de salida
+		if (dt->fdout != 0)//cierro el desc. anterior para volver abrir el defintivo
+			close (dt->fdout);
+		if (dt->tout == 4)//abro archivo para añadir
+			dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
+		else//abro archivo para machacar
+			dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR, 0644);
+		if (dt->fdout == -1)//el archivo ya existia
+		{
+			if (dt->tout == 4)//abro archivo para añadir
+				dt->fdout = open (dt->red->file, O_RDWR | O_APPEND , 0644);
+			else//abro archivo para machacar
+				dt->fdout = open (dt->red->file, O_RDWR, 0644);
+		}
+
+	}
+	return (0);
+}
+	
+
 
 //funcion que chequea si el comando en cuestión tiene o no redirecciones:
 //1- Si tiene una o varias de entrada, todas las redirecciones de entrada comprueba si existen y la ultima la abre y deja su valor en fdin de la estructura
@@ -74,7 +143,7 @@ int	ft_ch_redir(t_in *dt, int n)
 	return (0);
 }
 
-//funcion que rellena la estructura de contabilizacion de redirecciones en el bucle de la lista
+//funcion aux de la check redirecciones y rellena la estructura de contabilizacion de redirecciones en el bucle de la lista
 void	ft_ch_c_redir(t_list *red, t_cr *cr)
 {
 		if (red->t == 1)

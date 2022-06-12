@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
 
 # define	ROJO_T 			"\x1b[31m"
 # define 	RESET_COLOR		"\x1b[0m"
@@ -37,8 +38,9 @@ typedef struct	s_in
 	t_list	*red;//lista con las redirecciones y su tipo
 	t_list	*head;//guardo la cabeza de la lista
 	char	**rest;//puntero doble con los restos (tantos como data
-	int		fdin;//guardo el fdin de entrada de datos
-	int		fdout;//guardo el fdout de salida
+	int		fdin;//guardo el fdin de entrada que se ejecutara
+	int		fdout;//guardo el fdout de salida que se ejecutara
+	int		tout;//guardo el tipo de redireccion de salida del ultimo file en cada pipe
 	int		fdaux;//guardo el resultado para pasar de proceso en proceso
 	t_cr	*cr;//puntero a la estructura de redirecciones
 
@@ -80,6 +82,9 @@ int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
 int		ft_ch_redir(t_in *dt, int n);
 void	ft_ch_c_redir(t_list *red, t_cr *cr);
+int		ft_exe_redir(t_in *dt, int n);
+int		ft_exe_redir_int(t_in *dt, int n);
+int		ft_exe_redir_out(t_in *dt, int n);
 
 //funciones de liberacion de memoria
 //free_utils_0.c
