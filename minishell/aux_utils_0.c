@@ -83,12 +83,12 @@ char	*ft_substr(char *s, int start, int len)
 
 	i = 0;
 	j = 0;
-	ptr = (char *)malloc (sizeof(char) * (len + 1));
+	ptr = (char *)malloc (sizeof(char) * (len - start + 1));
 	if (!ptr)
 		return (0);
 	while (start--)
 		i++;
-	while (j < len)
+	while (i < len)
 	{
 		ptr[j] = s[i];
 		i++;

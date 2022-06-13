@@ -5,17 +5,29 @@
 void	ft_struct_init(t_struct *structInit)
 {
 	t_pipes *l_parseInit = NULL;
+	t_redir *l_parseRedir = NULL;
+	t_cmd *l_parseCmd = NULL;
+	t_rest *l_parseRest = NULL;
 	structInit->l_parseInit = l_parseInit;
+	structInit->l_parseRedir = l_parseRedir;
+	structInit->l_parseCmd = l_parseCmd;
+	structInit->l_parseRest = l_parseRest;
+}
+
+void	ft_cleanAllLists(t_struct *structInit)
+{	
+	ft_cleanListPipe(&structInit->l_parseInit);
+	ft_cleanListCmd(&structInit->l_parseCmd);
+	ft_cleanListRedir(&structInit->l_parseRedir);
+	ft_cleanListRest(&structInit->l_parseRest);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	char	*line;	
 	t_in	dt;
-//	t_pipes	*l_parseInit;
 	t_struct structInit;
 
-	//l_parseInit = NULL;
 	line = "Enter";
 	if (argc != 1 || ft_compare_str(*argv, "./minishell") != 1)
 	{
@@ -28,15 +40,16 @@ int main(int argc, char **argv, char **envp)
 	{
 		if (!ft_compare_str(line,"Enter"))
 			free(line); 
-		line = readline("minish> ");//texto de entrada de bash
+		line = readline(ROJO_T "minish> ");//texto de entrada de bash
 		ft_parse_line(line, &structInit);
 		//ft_between_pipes(line, &l_parseInit);
 //		if (ft_break_line(line, &dt) == 1)//rompo or pipes
 //			break;
+		ft_cleanAllLists(&structInit);
  	}
 //	ft_printList(&structInit.l_parseInit);
 //	ft_free_1(&dt);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 
 	return (0);
 }
