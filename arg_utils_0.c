@@ -11,7 +11,7 @@ int	ft_break_line(char *line, t_in *dt)
 	dt->data = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
 	dt->cmd = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
 	dt->rest = (char **) malloc (sizeof (char *) * (ft_count_arg(line) + 1));
-	if (dt->data == NULL || dt->cmd == NULL || dt->rest == NULL)
+	if (!dt->data || !dt->cmd || !dt->rest)
 		return (1);//aqui aun no hay nada que liberar
 	st = 0;
 	len = 0;
@@ -25,7 +25,11 @@ int	ft_break_line(char *line, t_in *dt)
 	}
 	dt->data[i] = NULL;
 	ft_check_arg (dt);//nuevo chequeo de los datos de entrada para generar los arrays
-	ft_exec(dt);//lanzo la ejecucion
+	if (ft_exec(dt) == -1)//lanzo la ejecucion y si da error de syntaxis corta la linea
+	{
+		ft_free(dt, 0);
+		return (-1);
+	}
 	ft_free(dt, 0);//funcion que libera los argumentos
 	return (0);
 }
@@ -38,7 +42,7 @@ int	ft_count_arg(char *line)
 
 	i = 0;
 	n = 1;
-	while (line[i] != 00)
+	while (line[i])
 	{
 		if (line[i] == '|')
 			n++;
@@ -53,7 +57,7 @@ int	ft_count_arg_ind(char *line, int st)
 	int	i;
 
 	i = 0;
-	while (line[st + i] != 00)
+	while (line[st + i])
 	{
 		if (line[st + i] == '|')
 			break;
@@ -72,8 +76,8 @@ void	ft_check_arg(t_in *dt)
 	int		i;
 
 	i = -1;
-	dt->red = NULL;//reseteo la lista de red cada redline
-	while (dt->data[++i] != NULL)
+	dt->red = ft_new(NULL, 0, 0);//reseteo la lista de red cada redline
+	while (dt->data[++i])
 	{
 		ft_comf(dt->data[i], i, dt);//busco los comandos
 		ft_redf(dt->data[i], i, dt);//busco las redirecciones
@@ -93,7 +97,7 @@ void	ft_comf(char *data, int n, t_in *dt)
 	i = -1;
 	st = 0;
 	len = 0;
-	while (data[++i] != 00)
+	while (data[++i])
 	{
 		if (data[i] >= 65 && data[i] <= 122)
 		{
@@ -101,7 +105,7 @@ void	ft_comf(char *data, int n, t_in *dt)
 			while (data[i] >= 65 && data[i] <= 122)
 				i++;
 			len = i - st;
-			while (data[i] != 00 && data[i] != 45)
+			while (data[i] && data[i] != 45)
 				i++;
 			if (data[i] == 45)
 			{
@@ -133,48 +137,46 @@ void	ft_redf(char *data, int n, t_in *dt)
 	st = 0;
 	len = 0;
 	t = 0;
-	while (data[i] != 00)
+	while (data[i])
 	{
 		file = NULL;
 		if (data[i] == '<')//redirecciones de entrada
 		{
-			if (data[i + 1] == '<' && data[i + 1] != 00)
+			t = 1;//redireccion de entrada
+			if (data[i + 1] == '<' && data[i + 1])
 				t = 3;//here dock
-			else 
-				t = 1;//redireccion de entrada
 			while ((data[i] == 60 || data[i] == 32) && data[i] != 00)
 				i++;
 			st = i;
-			while (data[i] >= 33 && data[i] <= 126 && data[i] != 00)
+			while (data[i] >= 33 && data[i] <= 126 && data[i])
 				i++;
 			len = i - st;
 			file = ft_strlcpy(data, st, len);
 		}
 		else if (data[i] == '>')//redirecciones de entrada
 		{
-			if (data[i + 1] == '>' && data[i + 1] != 00)
+			t = 2;//redireccion de salida simple
+			if (data[i + 1] == '>' && data[i + 1])
 				t = 4;//redireccion de salida doble
-			else
-				t = 2;//redireccion de salida simple
 			while ((data[i] == 62 || data[i] == 32) && data[i] != 00)
 				i++;
 			st = i;
-			while (data[i] >= 33 && data[i] <= 126 && data[i] != 00)
+			while (data[i] >= 33 && data[i] <= 126 && data[i])
 				i++;
 			len = i - st;
 			file = ft_strlcpy(data, st, len);
 		}
-		if (file != NULL)
+		if (file)
 		{
 			new = ft_new(file, n, t);
 			ft_add_back(&dt->red, new);
 		}
-		if (data[i] != 00)
+		if (data[i])
 			i++;
 	}
-	dt->head = ft_new(NULL, 0, 0);//hay  cabeza y hay que liberarla tambien!!!
-	dt->head = dt->red;
-//	ft_print_list (&dt->red);
+	if (dt->red)
+		dt->head = dt->red;
+//	ft_print_list (dt->red);
 }
 
 //función que va a guardar el resto de informacion de data en rest. Pueden ser cosas con " o '
@@ -193,7 +195,7 @@ void	ft_resf(char *data, int n, t_in *dt)
 		{
 			i++;
 			st = i;
-			while ((data[i] >= 35 && data[i] <= 126) || data[i] == 33)
+			while (((data[i] >= 35 && data[i] <= 126) || data[i] == 33) && data[i])
 				i++;
 			len = i - st;
 			break;
@@ -202,12 +204,12 @@ void	ft_resf(char *data, int n, t_in *dt)
 		{
 			i++;
 			st = i;
-			while ((data[i] >= 33 && data[i] <= 38) || (data[i] == 40 && data[i] <= 126))
+			while (((data[i] >= 33 && data[i] <= 38) || (data[i] == 40 && data[i] <= 126)) && data[i])
 				i++;
 			len = i - st;
 			break;
 		}
 	}
 	dt->rest[n] = ft_strlcpy(data, st, len);
-//	printf ("El resto %d es:\n<%s>\n", n, dt->rest[n]);
+//	printf ("El resto %d es:\n*%s*\n", n, dt->rest[n]);
 }

@@ -14,10 +14,15 @@ void	ft_free_0(t_in *dt)
 	}
 	free (dt->data);
 	free (dt->cmd);
-	ft_destroy_list (dt);//libero aqui la lista y el head
 	free (dt->rest);
+	dt->red = dt->head;
+	if (dt->red)
+		ft_destroy_list (dt);//libero aqui la lista y el head
+	else
+		printf ("Aqui si que entro\n");
 }
 
+//funcion que libera el enviroment solamente
 void	ft_free_1(t_in *dt)
 {
 	int	j;
@@ -30,11 +35,15 @@ void	ft_free_1(t_in *dt)
 	while (dt->env_value[++j] != NULL)
 		free (dt->env_value[j]);
 	free (dt->env_value);
+	j = -1;
+	while (dt->env[++j] != NULL)
+		free (dt->env[j]);
+	free (dt->env);
 }
 
 //funcion general para liberar. En función del int activa unas cosas u otras
 //i = 0 - libera todo lo de la linea, NO el env (cuando salimos normal de la linea)
-//i = 1 - libera todo lo de la linea y el env (cuando salimos por error del programa)
+//i = 1 - libera todo el env (cuando salimos normal o por error del programa)
 void	ft_free(t_in *dt, int i)
 {
 	if (i == 0 && dt->data != NULL)

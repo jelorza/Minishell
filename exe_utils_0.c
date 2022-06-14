@@ -7,10 +7,11 @@ int	ft_exec(t_in *dt)
 	char	*name;
 
 	i = -1;
-	while (dt->cmd[++i] != NULL)
+	dt->fdaux = -2;//inicio el descriptor auxiliar
+	while (dt->cmd[++i])
 	{
 		name = ft_get_name(dt->cmd[i]);
-		if (ft_ch_buil(name) >= 0 && ft_ch_buil(name) <= 6)//comprueba si es un builtin y devuelvo el numero del comando
+		if (ft_ch_buil(name) >= 0 && ft_ch_buil(name) <= 6)//comprueba si es un builtin y devuelvo el numero del comando builtin y si no -1
 		{	
 			printf ("El comando %s es un builtin\n", name);
 //			continua el programa ejecutandoo el builtn que toque
@@ -18,12 +19,16 @@ int	ft_exec(t_in *dt)
 		else if (ft_ch_cmde(dt, name) != -1)//comprueba si es un ejecutable y devuelvo el numero de la ruta del path
 		{	
 			printf ("El comando %s es un comando ejecutable\n", name);
-			if (ft_execve (dt, i) == -1)//si falla la ejecución del comando
-//				printf ("bash: %s: command error\n", name);
+			if (ft_execve (dt, i) == -1)//si falla la ejecución del comando o error de syntaxis
+			{
+				printf ("bash: %s: COMMAND ERROR\n", name);//NO SE QUE PONE BASH EN ESTE CASO Y TAMPOCO SE SI CORTA O SIGUE EJECUTANDO EL RESTO DE COMANDOS
+				free (dt->rootcmd);//libero la ruta con el cmd
+				return (-1);
+			}
 			free (dt->rootcmd);//libero la ruta con el cmd
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
-			printf ("bash: %s: command not found\n", name);//mensaje de error y alsiguiente comando
+			printf ("bash: %s: command not found\n", name);//mensaje de error y al siguiente comando
 		free (name);
 	}
 	return (0);
@@ -36,137 +41,45 @@ int	ft_execve (t_in *dt, int n)
 	int		i;
 
 	cmdf = ft_split(dt->cmd[n], ' ');
-	ft_ch_redir(dt, n);
-	if (ft_exe_redir(dt, n) == -1)
+	if (ft_ch_redir(dt, n) == -1)//solo falla por el malloc y en ese caso ha de retornar hasta el final
 		return (-1);
-	
+	if (ft_exe_redir(dt, n) == -1)//solo contemplo return -1 pq de falo algun malloc (errores de syntaxis tipo < > se analizan en el parseo). El resto de errores, que no exista el archivo int, falle la apertura de alguno de salida... ha de pasar al siguiente cmd habiendo enviado un error en texto
+		return (-1);
+	if (ft_exe_cmd(dt, cmdf) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
+		return (-1);
+
+
+
 
 	i = -1;
-	while (cmdf[++i] != NULL)//libero la bidimensional del comando con sus flags
+	while (cmdf[++i])//libero la bidimensional del comando con sus flags
 		free (cmdf[i]);
 	free(cmdf);
-	free(dt->cr);//reseteo la estructura de redirecciones
-	dt->cr = NULL;
+	if (dt->red)
+	{
+		free(dt->cr);//reseteo la estructura de redirecciones
+		dt->cr = NULL;
+	}
 	return (0);
 }
 
-//funcion que va a ejecutar las redirecciones, es decir:
-//1 - Las de entrada:
-//	1.1 - Las de entrada de tipo < y que no sean la ultima va a comprobar si existen los archivosi. Si existen hace el cmd tal cual, y en caso de que no existan manda error y pasa al siguiente cmd, salvo que previamente tenga un << que abre el hear dock, dejará escribir, pero al final no realizará nada
-//	1.2 - Las de entrada de tipo <<. POR CONFIRMAR QUE HACE
-//2 - Las de salida:
-//	En todas las de salida (La unica diferencia entre ellas es que > machaca contenido y >> añade contenido a lo existente), lo que va a hacer es con todas las que no sean la ultima, creara los archivos, y la ultima redireccionara a la salida.
-int	ft_exe_redir(t_in *dt, int n)
+//función que ejecuta el comando con los fdint y fdout de la estructura. Retornará -1 en caso de error
+int	ft_exe_cmd(t_in *dt, char **cmdf)
 {
-//	int	i;
+	int	fd[2];//descriptor del pipe
 
-//	if (ft_exe_red_int(dt, n) == -1);//haremos luego las de entrada
-	if (ft_exe_redir_out(dt, n) == -1)
+	if (pipe (fd) == -1)
+	{
+		perror ("Pipe error\n");
 		return (-1);
+	}
+	if (dt-> 
+	execve (dt->rootcmd, cmdf, dt->env);
 	return (0);
 }
 
 
-//funcion que ejecuta las redirecciones de salida. Si falla alguna apertura de archivo, retorna -1 y si no crea los archivos y redirecciona la salida del comando al último
-int	ft_exe_redir_out(t_in *dt, int n)
-{
-	dt->tout = 0;//reseteo el tipo de salida
-	dt->fdout = 0;//reseteo la salida
-	dt->red = dt->head;
-	while (dt->red->next != NULL)
-	{
-		if (dt->red->id == n && (dt->red->t == 2 || dt->red->t == 4))
-		{
-			dt->tout = dt->red->t;//guardo el tipo de redireccion de salida
-			if (dt->fdout != 0)//cierro el desc. anterior para volver abrir el defin.
-				close (dt->fdout);
-			if (dt->tout == 4)//abro archivo para añadir
-				dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
-			else//abro archivo para machacar
-				dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR, 0644);
-			if (dt->fdout == -1)//el archivo ya existia he de volver a abrirlo
-			{
-				if (dt->tout == 4)//abro archivo para añadir
-					dt->fdout = open (dt->red->file, O_RDWR | O_APPEND, 0644);
-				else//abro archivo para machacar
-					dt->fdout = open (dt->red->file, O_RDWR, 0644);
-			}
-		}
-		dt->red = dt->red->next;
-	}
-	if (dt->red->id == n && (dt->red->t == 2 || dt->red->t == 4))
-	{
-		dt->tout = dt->red->t;//guardo el tipo de redireccion de salida
-		if (dt->fdout != 0)//cierro el desc. anterior para volver abrir el defintivo
-			close (dt->fdout);
-		if (dt->tout == 4)//abro archivo para añadir
-			dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
-		else//abro archivo para machacar
-			dt->fdout = open (dt->red->file, O_CREAT | O_EXCL | O_RDWR, 0644);
-		if (dt->fdout == -1)//el archivo ya existia
-		{
-			if (dt->tout == 4)//abro archivo para añadir
-				dt->fdout = open (dt->red->file, O_RDWR | O_APPEND , 0644);
-			else//abro archivo para machacar
-				dt->fdout = open (dt->red->file, O_RDWR, 0644);
-		}
 
-	}
-	return (0);
-}
-	
-
-
-//funcion que chequea si el comando en cuestión tiene o no redirecciones:
-//1- Si tiene una o varias de entrada, todas las redirecciones de entrada comprueba si existen y la ultima la abre y deja su valor en fdin de la estructura
-//2- Si tiene una o varias de salida, todas las redirecciones de salida, las abre, y la ultima la abre y deja si valor en el fdout de la estructura
-int	ft_ch_redir(t_in *dt, int n)
-{
-	t_cr	*cr;
-
-	cr = (t_cr *) malloc (sizeof(t_cr));//creo el puntero a la estructura principal
-	dt->cr = cr;
-	cr->i = 0;//todo esto lo puedo resetear con un memset y gano lineas
-	cr->s = 0;
-	cr->ti = 0;
-	cr->ts = 0;
-	dt->red = dt->head;
-	while (dt->red->next != NULL)
-	{
-		if (dt->red->id == n)
-			ft_ch_c_redir(dt->red, cr);
-		dt->red = dt->red->next;
-	}
-	if (dt->red->id == n)
-		ft_ch_c_redir(dt->red, cr);
-//	printf ("Tengo %d de entrada y %d de salida, y la ultima de entrada es tipo %d y de salida %d\n", dt->cr->i, dt->cr->s, dt->cr->ti, dt->cr->ts);
-	return (0);
-}
-
-//funcion aux de la check redirecciones y rellena la estructura de contabilizacion de redirecciones en el bucle de la lista
-void	ft_ch_c_redir(t_list *red, t_cr *cr)
-{
-		if (red->t == 1)
-		{
-			cr->i++;
-			cr->ti = 1;
-		}
-		if (red->t == 3)
-		{
-			cr->i++;
-			cr->ti = 3;
-		}
-		if (red->t == 2)
-		{
-			cr->s++;
-			cr->ts = 2;
-		}
-		if (red->t == 4)
-		{
-			cr->s++;
-			cr->ts = 4;
-		}
-}
 
 //mira si el nombre del comando pertenece a los builtins, y en caso afirmativo devuelve el numero de comando de la lista builtin
 int	ft_ch_buil(char *name)
@@ -193,7 +106,7 @@ int	ft_ch_cmde(t_in *dt, char *name)
 
 	root = ft_cut_root(dt);
 	i = -1;
-	while (root[++i] != NULL)
+	while (root[++i])
 	{
 		rootb = ft_strjoin(root[i], "/");
 		free (root[i]);
@@ -203,7 +116,7 @@ int	ft_ch_cmde(t_in *dt, char *name)
 		{
 //			printf ("La ruta es:\n%s\n", dt->rootcmd);
 			j = i;
-			while (root[++j] != NULL)
+			while (root[++j])
 				free (root[j]);
 			free (root);
 			return (i);

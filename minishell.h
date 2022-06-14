@@ -38,7 +38,8 @@ typedef struct	s_in
 	t_list	*red;//lista con las redirecciones y su tipo
 	t_list	*head;//guardo la cabeza de la lista
 	char	**rest;//puntero doble con los restos (tantos como data
-	int		fdin;//guardo el fdin de entrada que se ejecutara
+	int		fdint;//guardo el fdin de entrada que se ejecutara
+	int		tint;//guardo el tipo de redireccion de entrada del ultimo file en cada pipe
 	int		fdout;//guardo el fdout de salida que se ejecutara
 	int		tout;//guardo el tipo de redireccion de salida del ultimo file en cada pipe
 	int		fdaux;//guardo el resultado para pasar de proceso en proceso
@@ -49,7 +50,6 @@ typedef struct	s_in
 //main.c
 
 //funciones de lectura de argumentos
-//arg_utils_0.c
 int		ft_break_line(char *line, t_in *dt);
 int		ft_count_arg(char *line);
 int		ft_count_arg_ind(char *line, int st);
@@ -80,11 +80,7 @@ int		ft_exec(t_in *dt);
 int		ft_ch_buil(char *name);
 int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
-int		ft_ch_redir(t_in *dt, int n);
-void	ft_ch_c_redir(t_list *red, t_cr *cr);
-int		ft_exe_redir(t_in *dt, int n);
-int		ft_exe_redir_int(t_in *dt, int n);
-int		ft_exe_redir_out(t_in *dt, int n);
+int		ft_exe_cmd(t_in *dt, char **cmdf);
 
 //funciones de liberacion de memoria
 //free_utils_0.c
@@ -97,7 +93,16 @@ void	ft_free(t_in *dt, int i);
 t_list	*ft_new(char *file, int n, int t);
 void	ft_add_front(t_list **list, t_list *new);
 void	ft_add_back(t_list **list, t_list *new);
-void	ft_print_list(t_list **list);
+void	ft_print_list(t_list *list);
 void	ft_destroy_list(t_in *dt);
+
+//funciones para gestionar las redirecciones
+//red_utils_0.c
+int		ft_ch_redir(t_in *dt, int n);
+void	ft_ch_redir_aux0(t_list *red, t_cr *cr);
+int		ft_exe_redir(t_in *dt, int n);
+int		ft_exe_redir_int(t_in *dt, int n);
+int		ft_exe_redir_out(t_in *dt, int n);
+int		ft_exe_redir_out_aux0(t_in *dt);
 
 #endif

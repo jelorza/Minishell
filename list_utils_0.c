@@ -40,29 +40,29 @@ void	ft_add_back(t_list **list, t_list *new)
 	}
 }
 
-void	ft_print_list(t_list **list)
+void	ft_print_list(t_list *list)
 {
 	t_list	*aux;
 	int		i;
 
 	i = 0;
-	aux = *list;
-	while (aux->next != NULL)
+	aux = list;
+	while (aux)
 	{
 		printf ("El nodo %d:\nPertenece al comando: %d\nTipo de redireccion: %d\nNombre del file: %s\n", i, aux->id, aux->t, aux->file);
 		aux = aux->next;
 		i++;
 	}
-	printf ("El nodo %d:\nPertenece al comando: %d\nTipo de redireccion: %d\nNombre del file: %s\n", i, aux->id, aux->t, aux->file);
 }
 
+//tengo un leak por redireccion que haga en cada pipe, sigo para adelante y luego la buscare!!!
 void	ft_destroy_list(t_in *dt)
 {
-	int	c;//cuento los nodos de la lista
+	int		c;//cuento los nodos de la lista
 
-	c = 1;
+	c = 0;
 	dt->red = dt->head;
-	while (dt->red->next != NULL)
+	while (dt->red)
 	{
 		c++;
 		dt->red = dt->red->next;
@@ -70,11 +70,12 @@ void	ft_destroy_list(t_in *dt)
 	while (c > 0)
 	{
 		dt->red = dt->head;
-		if (dt->red->next != NULL)
+		if (dt->red->next)
 			dt->head = dt->red->next;
 		free (dt->red->file);
 		free (dt->red);
 		c--;
 	}
-//	free (dt->head);por que no me deja liberar aqui el head??
+	dt->red = NULL;
+	dt->head = NULL;
 }
