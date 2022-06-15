@@ -2,30 +2,28 @@
 
 char	*ft_memcpy(char *dst, char *src, int n)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	if (!dst && !src)
-		return (NULL);
-	while (n--)
+//	if (!dst && !src)
+//		return (NULL);
+	while (i < n)
 	{
-		*(char *)(dst + i) = *(char *)(src + i);
+		dst[i] = src[i];
 		i++;
 	}
+	dst[i] = 00;
 	return (dst);
 }
 
 char	*ft_strdup(char *s1)
 {
 	char	*cpi;
-	int	i;
 
-	cpi = (char *)malloc(ft_strlen(s1) + 1 * sizeof(char));
+	cpi = malloc(sizeof(char *) * ft_strlen(s1) + 1);
 	if (!cpi)
 		return (00);
-	i = 0;
 	ft_memcpy(cpi, s1, ft_strlen(s1));
-	*(cpi + ft_strlen(s1)) = 00;
 	return (cpi);
 }
 
@@ -63,7 +61,7 @@ int	ft_compare_str(char *str, char *model)
 	int	i;
 
 	i = 0;
-	while (str[i] != 00)
+	while (str[i] && model[i])
 	{
 		if (str[i] == model[i])
 			i++;

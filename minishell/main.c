@@ -40,16 +40,12 @@ int main(int argc, char **argv, char **envp)
 	{
 		if (!ft_compare_str(line,"Enter"))
 			free(line); 
-		line = readline(ROJO_T "minish> ");//texto de entrada de bash
-		ft_parse_line(line, &structInit);
-		//ft_between_pipes(line, &l_parseInit);
-//		if (ft_break_line(line, &dt) == 1)//rompo or pipes
-//			break;
+		line = readline(ROJO_T "minish> " RESET_C);//texto de entrada de bash
+		ft_parse_line(line, &structInit, &dt);
 		ft_cleanAllLists(&structInit);
- 	}
+	}
 //	ft_printList(&structInit.l_parseInit);
 //	ft_free_1(&dt);
-	system ("leaks minishell");
-
+	//system ("leaks minishell");
 	return (0);
 }

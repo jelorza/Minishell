@@ -7,7 +7,7 @@
 # include <readline/history.h>
 
 # define	ROJO_T	"\x1b[31m"
-# define	RESET_COLOR	"\x1b[m"
+# define	RESET_C	"\x1b[m"
 
 typedef struct s_rest
 {
@@ -102,7 +102,10 @@ void	ft_free(t_in *dt, int i);
 void	ft_pipes_list(char *line, t_struct *structInit);
 int	ft_check_quotations(char *line, int i);
 void	ft_redir_list(t_struct *structInit);
-void	ft_parse_line(char *line, t_struct *structInit);
+void	ft_parse_line(char *line, t_struct *structInit, t_in *dt);
+char	*ft_expand_envs(char *line, t_in *dt);
+char 	*ft_checkEnv(char *line);
+int 	ft_count_$(char *line);
 char	*substr(char *s, int start, int len);
 void	ft_struct_init(t_struct *structInit);
 int	ft_check_and_create(char *line, t_struct *structInit, int id);
