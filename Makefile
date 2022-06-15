@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
-	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) $(SAN)
+	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) #$(SAN)
 
 clean:
 	$(RM) *.o

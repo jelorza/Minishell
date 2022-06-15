@@ -37,6 +37,17 @@ int	ft_strlen(char *line)
 	return (i);
 }
 
+//funcion que cuenta un array bidimensional
+int	ft_strlen_bi(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
 //compara dos cadenas entre si para ver si son o no iguales 
 int	ft_compare_str(char *str, char *model)
 {
@@ -167,3 +178,75 @@ char	*ft_strjoin(char *s1, char *s2)
 	des[i] = 00;
 	return (des);
 }
+
+//pipe function with errors control
+int	ft_pipe(int *fd)
+{
+	int	i;
+
+	i = pipe (fd);
+	if (i == -1)
+	{
+		perror ("Pipe error");
+		return (-1);
+	}
+	return (0);
+}
+
+//fork function with errors control
+int	ft_fork(void)
+{
+	int	pid;
+
+	pid = fork ();
+	if (pid == -1)
+	{
+		perror ("Fork error");
+		return (-1);
+	}
+	return (pid);
+}
+
+//close function with errors control
+int	ft_close(int descr)
+{
+	int	i;
+
+	i = close (descr);
+	if (i == -1)
+	{
+		perror ("Close error");
+		return (-1);
+	}
+	return (0);
+}
+
+//waitpid function with errors control
+int	ft_wait(int pid)
+{
+	int	res;
+	int	st;
+
+	res = waitpid(pid, &st, 0);
+	if (res == -1)
+	{
+		perror ("Waitpid error");
+		return (-1);
+	}
+	return (0);
+}
+
+//dup2 function with errors control
+int	ft_dup2(int desold, int desnew)
+{
+	int	i;
+
+	i = dup2 (desold, desnew);
+	if (i == -1)
+	{
+		perror ("Dup error");
+		return (-1);
+	}
+	return (0);
+}
+

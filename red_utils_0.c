@@ -27,10 +27,10 @@ int	ft_exe_redir_int(t_in *dt, int n)
 			dt->tint = dt->red->t;//guardo el último tipo de redireccion de entrada
 			if (dt->red->t == 1)//caso de que sea <
 			{
-				if (dt->fdint != -2)//cierro el descriptor anterior para volver a abrir el definitivo 
+				if (dt->fdint > 0)//cierro el descriptor anterior para volver a abrir el definitivo 
 					close (dt->fdint);
 				dt->fdint = open(dt->red->file, O_RDONLY);
-				if (dt->fdint == -1)//aqui hay que añadir la condición de que no haya ningunn hear dock
+				if (dt->fdint == -1)//aqui hay que añadir la condición de que no haya ningun hear dock
 				{
 					printf ("bash: %s: No such file or directory\n", dt->red->file);
 //					ft_hear_dock (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
@@ -47,6 +47,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		}
 		dt->red = dt->red->next;
 	}
+//	printf ("fdint: %d\n", dt->fdint);
 	return (0);
 }
 
@@ -66,6 +67,7 @@ int	ft_exe_redir_out(t_in *dt, int n)
 		}
 		dt->red = dt->red->next;
 	}
+//	printf ("fdout: %d\n", dt->fdout);
 	return (0);
 }
 

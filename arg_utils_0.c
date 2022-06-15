@@ -189,6 +189,7 @@ void	ft_resf(char *data, int n, t_in *dt)
 	i = -1;
 	st = 0;
 	len = 0;
+	dt->rest[n] = NULL;
 	while (data[++i] != 00)
 	{
 		if (data[i] == '\"')
@@ -210,6 +211,7 @@ void	ft_resf(char *data, int n, t_in *dt)
 			break;
 		}
 	}
-	dt->rest[n] = ft_strlcpy(data, st, len);
+	if (len != 0)
+		dt->rest[n] = ft_strlcpy(data, st, len);
 //	printf ("El resto %d es:\n*%s*\n", n, dt->rest[n]);
 }

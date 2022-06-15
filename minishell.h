@@ -7,6 +7,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # define	ROJO_T 			"\x1b[31m"
 # define 	RESET_COLOR		"\x1b[0m"
@@ -18,6 +20,12 @@ typedef struct s_list//lista para las redirecciones
 	int				id;//id del comando al que afecta
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_pid//lista para los forks y el pipe
+{
+	int	fd[2];//descriptores del pipe
+	int	pid;//pid del fork
+}	t_pid;
 
 typedef struct	s_cr//estructura para contabilizacion de redirecciones
 {
@@ -44,6 +52,7 @@ typedef struct	s_in
 	int		tout;//guardo el tipo de redireccion de salida del ultimo file en cada pipe
 	int		fdaux;//guardo el resultado para pasar de proceso en proceso
 	t_cr	*cr;//puntero a la estructura de redirecciones
+	int		fd[2];
 
 }	t_in;
 
@@ -62,10 +71,16 @@ void	ft_resf(char *data, int n, t_in *dt);
 //aux_utils_0.c
 char	*ft_strlcpy(char *line, int st, int fn);
 int		ft_strlen(char *line);
+int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
 char	*ft_get_name(char *str);
 char	**ft_split(char *s, char c);//split con sus tres estáticas
 char	*ft_strjoin(char *s1, char *s2);
+int		ft_fork(void);
+int		ft_pipe(int *fd);
+int		ft_close(int descr);
+int		ft_wait(int pid);
+int		ft_dup2(int desnew, int desold); 
 
 //funciones de recogida del env
 //env_utils_0.c
@@ -80,7 +95,10 @@ int		ft_exec(t_in *dt);
 int		ft_ch_buil(char *name);
 int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
-int		ft_exe_cmd(t_in *dt, char **cmdf);
+int		ft_exe_cmd(t_in *dt, char **cmdf, int n);
+int		ft_exe_cmd_st(t_in *dt, char **cmdf, int n);
+int		ft_exe_cmd_int(t_in *dt, char **cmdf, int n);
+int		ft_exe_cmd_end(t_in *dt, char **cmdf, int n);
 
 //funciones de liberacion de memoria
 //free_utils_0.c
