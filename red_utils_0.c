@@ -3,10 +3,13 @@
 //funcion que va a ejecutar las redirecciones:
 int	ft_exe_redir(t_in *dt, int n)
 {
-//	int	i;
+	int	i;
 
-	if (ft_exe_redir_int(dt, n) == -1)
+	i = ft_exe_redir_int(dt, n);
+	if (i == -1)
 		return (-1);
+	else if (i == -2)
+		return (-2);//caso de que no exista el archivo
 	if (ft_exe_redir_out(dt, n) == -1)
 		return (-1);
 	return (0);
@@ -32,7 +35,6 @@ int	ft_exe_redir_int(t_in *dt, int n)
 				dt->fdint = open(dt->red->file, O_RDONLY);
 				if (dt->fdint == -1)//aqui hay que añadir la condición de que no haya ningun hear dock
 				{
-					printf ("bash: %s: No such file or directory\n", dt->red->file);
 //					ft_hear_dock (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
 					return (-2);
 				}
@@ -94,11 +96,15 @@ int	ft_exe_redir_out_aux0(t_in *dt)
 }
 
 
-//funcion que chequea si el comando en cuestión tiene o no redirecciones y carga los valores de la estructura cr (contabilización de redirecciones) en caso afirmativo
+//funcion que chequea si el comando en cuestión tiene o no redirecciones o argumentos:
+//1- Lo primero que checkea son los argumentos y en caso de que haya, activa un HD vacio y cuando este termina retorna -2
+//2- Si no hay argumentos, carga los valores de la estructura cr (contabilización de redirecciones) y retorna 0
+//3- Retorna -1 en caso de errores en los malloc
 int	ft_ch_redir(t_in *dt, int n)
 {
 	t_cr	*cr;
 
+	ft_ch_arg_red(dt, n);
 	cr = (t_cr *) malloc (sizeof(t_cr));//creo el puntero a la estructura de redirecciones en la ppal
 	if (!cr)
 	{
@@ -145,3 +151,98 @@ void	ft_ch_redir_aux0(t_list *red, t_cr *cr)
 			cr->ts = 4;
 		}
 }
+
+//funcion que chequea los argumentos de redireccion:
+//1- Si tiene arg de redireccion y existen, habría que mirar si hay HD, para lanzarlo en vacio, y no coger las RINT posibles que haya
+//2- Si tienen arg de red. y no existen, habría que mirar si hay HD, para lanzarlo en vacio, y mandar mensaje de error
+//3- Si no hay argumentos, seguir el curso de las redirecciones
+int	ft_ch_arg_red(t_in *dt, int n)
+{
+	int		i;
+//	char	prueba[100] = "lsse - -la wer 'ter' '-' - 'er' pol";
+//	char	prueba[100] = "lsse '    ter  %' ";
+//	char	prueba[100] = "lsse -la";
+
+	i = 0;//numero de nodo de la lista
+
+//	argt = ft_ch_arg_aux(dt, n, i);
+	if (ft_ch_arg_red_aux(dt->cmd, dt, n) == -2)//cargo los datos de argumentos en la lista de arg y si no sigue el prgorama por las RINT
+	{
+		printf ("No hay argumentos\n");
+		return (-2);
+	}
+	return (0);
+}
+
+//funcion que detecta si hay redirecciones en esos argumentos. en caso de que no haya devuelve NULL
+int	ft_ch_arg_red_aux(char *str, t_in *dt, int n)
+{
+	char	*argt;
+	t_list	*new;//lista donde guardo los argumentos que voy encontrando por cada comando
+	int		i;
+	int		st;
+	int		len;
+
+	i = 0;
+	argt = NULL;
+	while (str[i])
+	{
+		while (str[i] != ' ' && str[i])
+			i++;
+		if (!str[i])
+			return (0);
+		i++;
+		if (str[i] == '-')
+		{
+			if (str[i + 1] && str[i + 1] == ' ')//caso de que sea solo un guion
+			{
+				argt = ft_strlcpy("-", 0, 1);
+				new = ft_new(argt, n, 0);//de primeras meto tipo 0
+				ft_add_back(&dt->arg, new);
+			}
+			while (str[i] != ' ' && str[i])
+				i++;
+			if (!str[i])
+				return (0);
+		}
+		else if (str[i] != '\'' && str[i] != '\"')//cuando el arg. no esta entre comillas
+		{
+			st = i;
+			while (str[i] && str[i] != ' ')
+				i++;
+			len = i - st;
+			argt = ft_strlcpy(str, st, len);
+			new = ft_new(argt, n, 0);//de primeras meto tipo 0
+			ft_add_back(&dt->arg, new);
+		}
+		else//cuando el argumento esta entre comillas
+		{
+			if (str[i] == '\'')
+			{
+				st = ++i;
+				while (str[i] && str[i] != '\'')
+					i++;
+				len = i - st;
+				argt = ft_strlcpy(str, st, len);
+				new = ft_new(argt, n, 0);//de primeras meto tipo 0
+				ft_add_back(&dt->arg, new);
+			}
+			else if (str[i] == '\"')
+			{
+				st = ++i;
+				while (str[i] && str[i] != '\"')
+					i++;
+				len = i - st;
+				argt = ft_strlcpy(str, st, len);
+				new = ft_new(argt, n, 0);//de primeras meto tipo 0
+				ft_add_back(&dt->arg, new);
+			}
+			i++;
+		}
+		i++;
+	}
+	dt->heada = dt->arg;
+	ft_print_list(dt->arg);
+	return (0);
+}
+

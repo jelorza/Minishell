@@ -23,6 +23,6 @@ int main(int argc, char **argv, char **envp)
   	}
 	ft_free_1(&dt);//libero el enviroment
 	free(line);
-	system ("leaks minishell");
+//	system ("leaks minishell");
 	return (0);
 }

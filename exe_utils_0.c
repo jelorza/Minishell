@@ -4,31 +4,28 @@
 int	ft_exec(t_in *dt)
 {
 	int		i;
-	char	*name;
 
 	i = -1;
 	dt->fdaux = -2;//inicio el descriptor auxiliar
 	while (dt->cmd[++i])
 	{
-		name = ft_get_name(dt->cmd[i]);
-		if (ft_ch_buil(name) >= 0 && ft_ch_buil(name) <= 6)//comprueba si es un builtin y devuelvo el numero del comando builtin y si no -1
-		{	
-			printf ("El comando %s es un builtin\n", name);
-//			continua el programa ejecutandoo el builtn que toque
-		}
-		else if (ft_ch_cmde(dt, name) != -1)//comprueba si es un ejecutable y devuelvo el numero de la ruta del path
-		{	
+		dt->ncmd = ft_get_name(dt->cmd[i]);
+		if ((ft_ch_buil(dt->ncmd) >= 0 && ft_ch_buil(dt->ncmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable y devuelvo el numero del builtin que sea o la ruta del path
+		{
 			if (ft_execve (dt, i) == -1)//si falla la ejecución del comando o error de syntaxis
 			{
-				printf ("bash: %s: COMMAND ERROR\n", name);//NO SE QUE PONE BASH EN ESTE CASO Y TAMPOCO SE SI CORTA O SIGUE EJECUTANDO EL RESTO DE COMANDOS
+				printf ("bash: %s: COMMAND ERROR\n", dt->ncmd);//NO SE QUE PONE BASH EN ESTE CASO Y TAMPOCO SE SI CORTA O SIGUE EJECUTANDO EL RESTO DE COMANDOS
 				free (dt->rootcmd);//libero la ruta con el cmd
 				return (-1);
 			}
 			free (dt->rootcmd);//libero la ruta con el cmd
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
-			printf ("bash: %s: command not found\n", name);//mensaje de error y al siguiente comando
-		free (name);
+		{
+			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
+		//	AQUI HAY QUE RESETEAR EL AUX PARA QUE SIGA EL CURSO CON LOS SIGUIENTES CMD, SOBRE TODO CUANDO EL ULTIMO ES WC PARA QUE SAQUE 0 0 0
+		}
+		free (dt->ncmd);//libero el nombre del comando
 	}
 	return (0);
 }
@@ -41,10 +38,10 @@ int	ft_execve (t_in *dt, int n)
 	int		i;
 
 	cmdf = ft_split(dt->cmd[n], ' ');
-	if (dt->rest[n])//amplio el cmd con los argumentos del resto
+	if (dt->rest[n])//amplio el cmd con los argumentos del resto si los hay
 	{
 		i = 0;
-		int	j=0;
+		int	j = 0;
 		while (cmdf[i])
 			i++;
 		cmdfaux = (char **) malloc (sizeof(char *) * (i + 2));
@@ -69,13 +66,18 @@ int	ft_execve (t_in *dt, int n)
 		free (cmdfaux);
 		cmdf[j] = NULL;
 	}
-	if (ft_ch_redir(dt, n) == -1)//solo falla por el malloc y en ese caso ha de retornar hasta el final
+	i = ft_ch_redir(dt, n);
+	if (i == -1)//solo falla por el malloc y en ese caso ha de retornar hasta el final
 		return (-1);
 	if (ft_exe_redir(dt, n) == -1)//solo contemplo return -1 pq de falo algun malloc (errores de syntaxis tipo < > se analizan en el parseo). El resto de errores, que no exista el archivo int, falle la apertura de alguno de salida... ha de pasar al siguiente cmd habiendo enviado un error en texto
-		return (-1);
-	if (ft_exe_cmd(dt, cmdf, n) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
-		return (-1);
-
+			return (-1);
+	else if (ft_exe_redir(dt, n) != -2)//en caso de que existan todas las redirecciones de entrada
+	{
+		if (ft_exe_cmd(dt, cmdf, n) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
+			return (-1);
+	}
+	else//en caso de que no exista algun archivo de entrada
+		printf ("bash: %s: No such file or directory\n", dt->red->file);
 
 
 
