@@ -17,7 +17,7 @@ void	ft_free_0(t_in *dt)
 	free (dt->rest);
 	dt->red = dt->head;
 	if (dt->red)
-		ft_destroy_list (dt);//libero aqui la lista y el head
+		ft_destroy_list (dt->red, dt->head);//libero aqui la lista y el head
 	else
 		printf ("Aqui si que entro\n");
 }

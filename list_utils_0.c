@@ -55,27 +55,27 @@ void	ft_print_list(t_list *list)
 	}
 }
 
-//tengo un leak por redireccion que haga en cada pipe, sigo para adelante y luego la buscare!!!
-void	ft_destroy_list(t_in *dt)
+//tengo un leak por listireccion que haga en cada pipe, sigo para adelante y luego la buscare!!!
+void	ft_destroy_list(t_list *list, t_list *head)
 {
 	int		c;//cuento los nodos de la lista
 
 	c = 0;
-	dt->red = dt->head;
-	while (dt->red)
+	list = head;
+	while (list)
 	{
 		c++;
-		dt->red = dt->red->next;
+		list = list->next;
 	}
 	while (c > 0)
 	{
-		dt->red = dt->head;
-		if (dt->red->next)
-			dt->head = dt->red->next;
-		free (dt->red->file);
-		free (dt->red);
-		c--;
+		list = head;
+		if (list->next)
+			head = list->next;
+		free (list->file);
+		free (list);
+	c--;
 	}
-	dt->red = NULL;
-	dt->head = NULL;
+	list = NULL;
+	head = NULL;
 }

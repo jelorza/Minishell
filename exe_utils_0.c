@@ -4,6 +4,7 @@
 int	ft_exec(t_in *dt)
 {
 	int		i;
+	int		j;
 
 	i = -1;
 	dt->fdaux = -2;//inicio el descriptor auxiliar
@@ -12,7 +13,8 @@ int	ft_exec(t_in *dt)
 		dt->ncmd = ft_get_name(dt->cmd[i]);
 		if ((ft_ch_buil(dt->ncmd) >= 0 && ft_ch_buil(dt->ncmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable y devuelvo el numero del builtin que sea o la ruta del path
 		{
-			if (ft_execve (dt, i) == -1)//si falla la ejecución del comando o error de syntaxis
+			j = ft_execve (dt, i);
+			if (j == -1)//si falla la ejecución del comando
 			{
 				printf ("bash: %s: COMMAND ERROR\n", dt->ncmd);//NO SE QUE PONE BASH EN ESTE CASO Y TAMPOCO SE SI CORTA O SIGUE EJECUTANDO EL RESTO DE COMANDOS
 				free (dt->rootcmd);//libero la ruta con el cmd
@@ -36,12 +38,15 @@ int	ft_execve (t_in *dt, int n)
 	char	**cmdf;//recojo en un doble puntero el cmd con sus flags para el execve
 	char	**cmdfaux;//recojo en un doble puntero el cmd con sus flags para el execve
 	int		i;
+	int		j;
 
 	cmdf = ft_split(dt->cmd[n], ' ');
-	if (dt->rest[n])//amplio el cmd con los argumentos del resto si los hay
+//amplio el cmd con los argumentos del resto si los hay y luego lo junto también en el dt->acmd
+////////////////////QUITAR TODO ESTO
+	if (dt->rest[n])
 	{
 		i = 0;
-		int	j = 0;
+		j = 0;
 		while (cmdf[i])
 			i++;
 		cmdfaux = (char **) malloc (sizeof(char *) * (i + 2));
@@ -61,23 +66,46 @@ int	ft_execve (t_in *dt, int n)
 		{
 			cmdf[j] = ft_strjoin("", cmdfaux[j]);
 			free(cmdfaux[j]);
+//			printf ("cmdf: %s\n", cmdf[j]);
 			j++;
 		}
 		free (cmdfaux);
 		cmdf[j] = NULL;
 	}
-	i = ft_ch_redir(dt, n);
-	if (i == -1)//solo falla por el malloc y en ese caso ha de retornar hasta el final
-		return (-1);
-	if (ft_exe_redir(dt, n) == -1)//solo contemplo return -1 pq de falo algun malloc (errores de syntaxis tipo < > se analizan en el parseo). El resto de errores, que no exista el archivo int, falle la apertura de alguno de salida... ha de pasar al siguiente cmd habiendo enviado un error en texto
-			return (-1);
-	else if (ft_exe_redir(dt, n) != -2)//en caso de que existan todas las redirecciones de entrada
+	i = 0;
+	while (cmdf[i] != NULL)
 	{
-		if (ft_exe_cmd(dt, cmdf, n) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
-			return (-1);
+		if (i == 0)
+			dt->acmd = ft_strjoin("", cmdf[i]);
+		else
+		{
+/*			char *aux = ft_strjoin(dt->acmd, "");
+			free (dt->acmd);
+			dt->acmd = ft_strjoin(aux, " '");
+			free (aux);
+*/			char *aux = ft_strjoin(dt->acmd, " ");
+			free (dt->acmd);
+			dt->acmd = ft_strjoin(aux, cmdf[i]);
+			free (aux);
+/*			aux = ft_strjoin(dt->acmd, "");
+			free (dt->acmd);
+			dt->acmd = ft_strjoin(aux, "'");
+			free (aux);
+*/		}
+		i++;
 	}
-	else//en caso de que no exista algun archivo de entrada
-		printf ("bash: %s: No such file or directory\n", dt->red->file);
+////////////////////QUITAR HASTA AQUI
+	if (ft_ch_redir (dt, n) == -1)//solo por si falla el malloc y en ese caso ha de retornar hasta el final
+		return (-1);
+	i = ft_exe_redir(dt, n);
+	if (i == -1)//solo contemplo return -1 pq de fallo algun malloc (errores de syntaxis tipo < > se analizan en el parseo). El resto de errores, que no exista el archivo int, falle la apertura de alguno de salida... ha de pasar al siguiente cmd habiendo enviado un error en texto
+		return (-1);
+	else if (i == -2)//en caso de que no existan todas las redirecciones de entrada retorno hasta el siguiente comando
+		return (-2);
+//	ft_ch_arg_red(dt, n);//chequeo ahora las redirecciones por argumento, y no saco errores pues los saca el execve directamente
+	if (ft_exe_cmd(dt, cmdf, n) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
+			return (-1);
+	
 
 
 
@@ -85,11 +113,14 @@ int	ft_execve (t_in *dt, int n)
 	while (cmdf[++i])//libero la bidimensional del comando con sus flags
 		free (cmdf[i]);
 	free(cmdf);
+	free(dt->acmd);
 	if (dt->red)
 	{
 		free(dt->cr);//reseteo la estructura de redirecciones
 		dt->cr = NULL;
 	}
+//	if (dt->arg)
+//		ft_destroy_list(dt->arg, dt->heada);
 	return (0);
 }
 

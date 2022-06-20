@@ -36,7 +36,8 @@ typedef struct	s_in
 	char	**env_value;//puntero doble con los valores de variables de entorno
 	char	*rootcmd;//puntero que guarda la ruta del ejecutable con el cmd y se va actualizando para cada cmd 
 	char	**data;//puntero doble con los argumentos entre pipes
-	char	**cmd;//puntero doble con los comd (tantos como data
+	char	**cmd;//puntero doble con los comd (tantos como data (esto luego sera lista)
+	char	*acmd;//array con comando + flags + arg;
 	char	*ncmd;//array con el nombre del comando y se va actualizando con cada cmd 
 	char	**rest;//puntero doble con los restos (tantos como data
 	t_list	*red;//lista con las redirecciones y su tipo
@@ -66,7 +67,7 @@ void	ft_resf(char *data, int n, t_in *dt);
 
 //funciones auxiliares de ayuda
 //aux_utils_0.c
-char	*ft_strlcpy(char *line, int st, int fn);
+char	*ft_strlcpy(char *line, int st, int len);
 int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
@@ -109,7 +110,7 @@ t_list	*ft_new(char *file, int n, int t);
 void	ft_add_front(t_list **list, t_list *new);
 void	ft_add_back(t_list **list, t_list *new);
 void	ft_print_list(t_list *list);
-void	ft_destroy_list(t_in *dt);
+void	ft_destroy_list(t_list *list, t_list *head);
 
 //funciones para gestionar las redirecciones
 //red_utils_0.c
@@ -120,7 +121,8 @@ int		ft_exe_redir_int(t_in *dt, int n);
 int		ft_exe_redir_out(t_in *dt, int n);
 int		ft_exe_redir_out_aux0(t_in *dt);
 int		ft_ch_arg_red(t_in *dt, int n);
-//int		ft_ch_arg_red_aux(t_in *dt, int n, int nodo);
 int		ft_ch_arg_red_aux(char *str, t_in *dt, int n);
+//int		ft_ch_arg_red_aux(t_in *dt, int n, int nodo);
+int		ft_ch_arg_red_exist(t_in *dt, int n);
 
 #endif

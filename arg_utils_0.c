@@ -196,7 +196,7 @@ void	ft_resf(char *data, int n, t_in *dt)
 		{
 			i++;
 			st = i;
-			while (((data[i] >= 35 && data[i] <= 126) || data[i] == 33) && data[i])
+			while (((data[i] >= 32 && data[i] <= 126) && data[i] != 34) && data[i])
 				i++;
 			len = i - st;
 			break;
@@ -205,7 +205,7 @@ void	ft_resf(char *data, int n, t_in *dt)
 		{
 			i++;
 			st = i;
-			while (((data[i] >= 33 && data[i] <= 38) || (data[i] == 40 && data[i] <= 126)) && data[i])
+			while (((data[i] >= 32 && data[i] <= 126) && data[i] != 39) && data[i])
 				i++;
 			len = i - st;
 			break;

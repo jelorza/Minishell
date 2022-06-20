@@ -1,5 +1,60 @@
 #include "minishell.h"
 
+//funcion que chequea si el comando en cuestión tiene o no redirecciones:
+//Primero analizará si tiene o no redireccion de entrada. 
+//Luego mira redirecciones de salida.
+//Retorna -1 en caso de Malloc error
+int	ft_ch_redir(t_in *dt, int n)
+{
+	t_cr	*cr;
+
+	dt->fdint = -2;//reinicio el fdint
+	cr = (t_cr *) malloc (sizeof(t_cr));//creo el puntero a la estructura de redirecciones en la ppal
+	if (!cr)
+	{
+		perror ("Malloc error\n");
+		return (-1);
+	}
+	dt->cr = cr;
+	cr->i = 0;//todo esto lo puedo resetear con un memset y gano lineas
+	cr->s = 0;
+	cr->ti = 0;
+	cr->ts = 0;
+	dt->red = dt->head;
+	while (dt->red)
+	{
+		if (dt->red->id == n)
+			ft_ch_redir_aux0(dt->red, cr);
+		dt->red = dt->red->next;
+	}
+	return (0);
+}
+
+//funcion aux de la check redirecciones y rellena la estructura de contabilizacion de redirecciones en el bucle de la lista
+void	ft_ch_redir_aux0(t_list *red, t_cr *cr)
+{
+		if (red->t == 1)
+		{
+			cr->i++;
+			cr->ti = 1;
+		}
+		if (red->t == 3)
+		{
+			cr->i++;
+			cr->ti = 3;
+		}
+		if (red->t == 2)
+		{
+			cr->s++;
+			cr->ts = 2;
+		}
+		if (red->t == 4)
+		{
+			cr->s++;
+			cr->ts = 4;
+		}
+}
+
 //funcion que va a ejecutar las redirecciones:
 int	ft_exe_redir(t_in *dt, int n)
 {
@@ -21,7 +76,6 @@ int	ft_exe_redir(t_in *dt, int n)
 int	ft_exe_redir_int(t_in *dt, int n)
 {
 	dt->tint = 0;//reseteo el tipo de entrada
-	dt->fdint = -2;//reseteo la entrada
 	dt->red = dt->head;
 	while (dt->red)
 	{
@@ -36,6 +90,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 				if (dt->fdint == -1)//aqui hay que añadir la condición de que no haya ningun hear dock
 				{
 //					ft_hear_dock (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
+					printf ("bash: %s: No such file or directory\n", dt->red->file);
 					return (-2);
 				}
 			}
@@ -49,7 +104,8 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		}
 		dt->red = dt->red->next;
 	}
-//	printf ("fdint: %d\n", dt->fdint);
+	if (dt->fdint == -2)
+		dt->fdint = dt->fdint;
 	return (0);
 }
 
@@ -91,106 +147,55 @@ int	ft_exe_redir_out_aux0(t_in *dt)
 			dt->fdout = open (dt->red->file, O_RDWR | O_TRUNC, 0644);
 	}
 	if (dt->fdout == -1)//fallo a la hora de abrir o crear el archivo de salida. Mandamos mensaje de error pero no retornamos -1, pq ha de seguir con el siguiente cmd
-		perror ("Open error\n");
-	return (0);
-}
-
-
-//funcion que chequea si el comando en cuestión tiene o no redirecciones o argumentos:
-//1- Lo primero que checkea son los argumentos y en caso de que haya, activa un HD vacio y cuando este termina retorna -2
-//2- Si no hay argumentos, carga los valores de la estructura cr (contabilización de redirecciones) y retorna 0
-//3- Retorna -1 en caso de errores en los malloc
-int	ft_ch_redir(t_in *dt, int n)
-{
-	t_cr	*cr;
-
-	ft_ch_arg_red(dt, n);
-	cr = (t_cr *) malloc (sizeof(t_cr));//creo el puntero a la estructura de redirecciones en la ppal
-	if (!cr)
 	{
-		perror ("Malloc error\n");
+		perror ("Open error\n");
 		return (-1);
 	}
-	dt->cr = cr;
-	cr->i = 0;//todo esto lo puedo resetear con un memset y gano lineas
-	cr->s = 0;
-	cr->ti = 0;
-	cr->ts = 0;
-	dt->red = dt->head;
-	while (dt->red)
-	{
-		if (dt->red->id == n)
-			ft_ch_redir_aux0(dt->red, cr);
-		dt->red = dt->red->next;
-	}
-//	printf ("Tengo %d de entrada y %d de salida, y la ultima de entrada es tipo %d y de salida %d\n", dt->cr->i, dt->cr->s, dt->cr->ti, dt->cr->ts);
 	return (0);
-}
-
-//funcion aux de la check redirecciones y rellena la estructura de contabilizacion de redirecciones en el bucle de la lista
-void	ft_ch_redir_aux0(t_list *red, t_cr *cr)
-{
-		if (red->t == 1)
-		{
-			cr->i++;
-			cr->ti = 1;
-		}
-		if (red->t == 3)
-		{
-			cr->i++;
-			cr->ti = 3;
-		}
-		if (red->t == 2)
-		{
-			cr->s++;
-			cr->ts = 2;
-		}
-		if (red->t == 4)
-		{
-			cr->s++;
-			cr->ts = 4;
-		}
 }
 
 //funcion que chequea los argumentos de redireccion:
-//1- Si tiene arg de redireccion y existen, habría que mirar si hay HD, para lanzarlo en vacio, y no coger las RINT posibles que haya
-//2- Si tienen arg de red. y no existen, habría que mirar si hay HD, para lanzarlo en vacio, y mandar mensaje de error
-//3- Si no hay argumentos, seguir el curso de las redirecciones
+//0- Si da error de mallocs o cualquier otro error retorno -1.
+//1- Si tiene arg de redireccion y existen, habría que mirar si hay HD, para lanzarlo en vacio, y no coger las RINT posibles que haya. En este caso retorna 0.
+//2- Si tienen arg de red. Y no existen, habría que mirar si hay HD, para lanzarlo en vacio, y mandar mensaje de error. Retorno -3.
+//3- Si no hay argumentos, seguir el curso de las redirecciones. Retorno -2
 int	ft_ch_arg_red(t_in *dt, int n)
 {
-	int		i;
+	int		argt;
 //	char	prueba[100] = "lsse - -la wer 'ter' '-' - 'er' pol";
 //	char	prueba[100] = "lsse '    ter  %' ";
 //	char	prueba[100] = "lsse -la";
+//	char	prueba[100] = "ls 'adios'";
 
-	i = 0;//numero de nodo de la lista
-
-//	argt = ft_ch_arg_aux(dt, n, i);
-	if (ft_ch_arg_red_aux(dt->cmd, dt, n) == -2)//cargo los datos de argumentos en la lista de arg y si no sigue el prgorama por las RINT
-	{
-		printf ("No hay argumentos\n");
+//	argt = ft_ch_arg_red_aux(prueba, dt, n);
+	argt = ft_ch_arg_red_aux(dt->acmd, dt, n);
+	if (argt == -2)//caso de que no hay argumentos
 		return (-2);
-	}
+	argt = ft_ch_arg_red_exist(dt, n);
+	if (argt == -2)//caso de que no existe algun argumento
+		return (-3);
 	return (0);
 }
 
-//funcion que detecta si hay redirecciones en esos argumentos. en caso de que no haya devuelve NULL
+//funcion que detecta si hay redirecciones en esos argumentos. Si hay retorna 0 y si no retorna -2.
 int	ft_ch_arg_red_aux(char *str, t_in *dt, int n)
 {
 	char	*argt;
-	t_list	*new;//lista donde guardo los argumentos que voy encontrando por cada comando
+	t_list	*new;
 	int		i;
 	int		st;
 	int		len;
 
 	i = 0;
 	argt = NULL;
+	dt->arg = NULL;
+//	printf ("str: %s\n", str);
 	while (str[i])
 	{
 		while (str[i] != ' ' && str[i])
 			i++;
 		if (!str[i])
-			return (0);
+			break;
 		i++;
 		if (str[i] == '-')
 		{
@@ -203,9 +208,9 @@ int	ft_ch_arg_red_aux(char *str, t_in *dt, int n)
 			while (str[i] != ' ' && str[i])
 				i++;
 			if (!str[i])
-				return (0);
+				break;
 		}
-		else if (str[i] != '\'' && str[i] != '\"')//cuando el arg. no esta entre comillas
+		else if (str[i] != '\'' && str[i] != '"')//cuando el arg. no esta entre comillas
 		{
 			st = i;
 			while (str[i] && str[i] != ' ')
@@ -227,22 +232,47 @@ int	ft_ch_arg_red_aux(char *str, t_in *dt, int n)
 				new = ft_new(argt, n, 0);//de primeras meto tipo 0
 				ft_add_back(&dt->arg, new);
 			}
-			else if (str[i] == '\"')
+			else if (str[i] == '"')
 			{
 				st = ++i;
-				while (str[i] && str[i] != '\"')
+				while (str[i] && str[i] != '"')
 					i++;
 				len = i - st;
 				argt = ft_strlcpy(str, st, len);
 				new = ft_new(argt, n, 0);//de primeras meto tipo 0
 				ft_add_back(&dt->arg, new);
 			}
-			i++;
 		}
-		i++;
+//		i++;
 	}
-	dt->heada = dt->arg;
-	ft_print_list(dt->arg);
-	return (0);
+	if (dt->arg != NULL)
+	{
+		dt->heada = dt->arg;
+//		ft_print_list(dt->arg);
+		return (0);
+	}
+	return (-2);
 }
 
+//funcion que va a detectar si las redirecciones de argumento que hay, existen o no. Si existen todas, abro la última y la meto en el fdint de la estructura y retorna 0, y si no existe alguna, retorna -2
+int	ft_ch_arg_red_exist(t_in *dt, int n)
+{
+	dt->arg = dt->heada;
+	while (dt->arg)
+	{
+		if (dt->arg->id == n)
+		{
+			if (dt->fdint > 0)//cierro el descriptor anterior para volver a abrir el definitivo
+				close (dt->fdint);
+			dt->fdint = open(dt->arg->file, O_RDONLY);
+/*			if (dt->fdint == -1)//caso de que no exista algun argumento
+			{
+//				ft_hear_dock (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
+				printf ("%s: %s: No such file or directory\n", dt->ncmd, dt->arg->file);
+				return (-2);
+			}
+*/		}
+		dt->arg = dt->arg->next;
+	}
+	return (0);
+}
