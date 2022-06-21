@@ -42,8 +42,10 @@ typedef struct	s_in
 	char	**rest;//puntero doble con los restos (tantos como data
 	t_list	*red;//lista con las redirecciones y su tipo
 	t_list	*head;//guardo la cabeza de la lista red
-	t_list	*arg;//lista con los argumentos "redireccion" del cmd (Tipo 1 existe y Tipo 2 no existe)
-	t_list	*heada;//guardo la cabeza de la lista arg
+//	t_list	*arg;//lista con los argumentos "redireccion" del cmd (Tipo 1 existe y Tipo 2 no existe)
+//	t_list	*heada;//guardo la cabeza de la lista arg
+	t_list	*hd;//lista de here docs (Tipo 1 si NO es predominante y tipo 2 si es predominante)
+	t_list	*headh;//cabeza de la lista de hr
 	int		fdint;//guardo el fdin de entrada que se ejecutara
 	int		tint;//guardo el tipo de redireccion de entrada del ultimo file en cada pipe
 	int		fdout;//guardo el fdout de salida que se ejecutara
@@ -104,6 +106,11 @@ void	ft_free_0(t_in *dt);
 void	ft_free_1(t_in *dt);
 void	ft_free(t_in *dt, int i);
 
+//funciones que realizan el here dock (HD)
+//here_doc_0.c
+int		ft_ch_HD(t_in *dt, int n);
+void	ft_exe_null_HD(char *str);
+
 //funciones auxiliares para crear o trabajar con listas
 //list_utils_0.c
 t_list	*ft_new(char *file, int n, int t);
@@ -120,9 +127,9 @@ int		ft_exe_redir(t_in *dt, int n);
 int		ft_exe_redir_int(t_in *dt, int n);
 int		ft_exe_redir_out(t_in *dt, int n);
 int		ft_exe_redir_out_aux0(t_in *dt);
-int		ft_ch_arg_red(t_in *dt, int n);
-int		ft_ch_arg_red_aux(char *str, t_in *dt, int n);
+//int		ft_ch_arg_red(t_in *dt, int n);
+//int		ft_ch_arg_red_aux(char *str, t_in *dt, int n);
 //int		ft_ch_arg_red_aux(t_in *dt, int n, int nodo);
-int		ft_ch_arg_red_exist(t_in *dt, int n);
+//int		ft_ch_arg_red_exist(t_in *dt, int n);
 
 #endif

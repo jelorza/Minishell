@@ -6,6 +6,7 @@ SRC = main.c\
 	  env_utils_0.c\
 	  exe_utils_0.c\
 	  free_utils_0.c\
+	  here_doc.c\
 	  list_utils_0.c\
 	  red_utils_0.c
 
@@ -22,7 +23,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
-	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) $(SAN)
+	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) #$(SAN)
 
 clean:
 	$(RM) *.o

@@ -89,7 +89,8 @@ int	ft_exe_redir_int(t_in *dt, int n)
 				dt->fdint = open(dt->red->file, O_RDONLY);
 				if (dt->fdint == -1)//aqui hay que añadir la condición de que no haya ningun hear dock
 				{
-//					ft_hear_dock (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
+//					ft_ch_HD (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
+					ft_exe_null_HD("fin");
 					printf ("bash: %s: No such file or directory\n", dt->red->file);
 					return (-2);
 				}
@@ -97,9 +98,6 @@ int	ft_exe_redir_int(t_in *dt, int n)
 			if (dt->red->t == 3)//caso que sea <<
 			{
 				printf ("Caso de hear dock\n");//Lo dejo para luego!!!
-//Aquí habrá que analizar si la redirección predominante es < o <<.
-//1 - Si es <: habrá que comprobar si existen todos los < anteriores y abrir todos los << e ir cerrandolos consecutivamente, pero la información solo la cogera del < ultimo
-//2 - Si es <<: habrá que abrir todos los << e ir cerrandolos consecutivamente, y cogerá la informacion del último de ellos. Con los < tendrá que comprobar si existen todos, y en caso de que alguno no existe, una vez cerrados todos los << dara el mensaje de error 
 			}
 		}
 		dt->red = dt->red->next;
@@ -153,7 +151,7 @@ int	ft_exe_redir_out_aux0(t_in *dt)
 	}
 	return (0);
 }
-
+/*
 //funcion que chequea los argumentos de redireccion:
 //0- Si da error de mallocs o cualquier otro error retorno -1.
 //1- Si tiene arg de redireccion y existen, habría que mirar si hay HD, para lanzarlo en vacio, y no coger las RINT posibles que haya. En este caso retorna 0.
@@ -265,14 +263,14 @@ int	ft_ch_arg_red_exist(t_in *dt, int n)
 			if (dt->fdint > 0)//cierro el descriptor anterior para volver a abrir el definitivo
 				close (dt->fdint);
 			dt->fdint = open(dt->arg->file, O_RDONLY);
-/*			if (dt->fdint == -1)//caso de que no exista algun argumento
+			if (dt->fdint == -1)//caso de que no exista algun argumento
 			{
 //				ft_hear_dock (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
 				printf ("%s: %s: No such file or directory\n", dt->ncmd, dt->arg->file);
 				return (-2);
 			}
-*/		}
+		}
 		dt->arg = dt->arg->next;
 	}
 	return (0);
-}
+}*/

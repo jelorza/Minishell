@@ -25,7 +25,6 @@ int	ft_exec(t_in *dt)
 		else//devuelve error porque no es ni builtin ni ejecutable
 		{
 			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
-		//	AQUI HAY QUE RESETEAR EL AUX PARA QUE SIGA EL CURSO CON LOS SIGUIENTES CMD, SOBRE TODO CUANDO EL ULTIMO ES WC PARA QUE SAQUE 0 0 0
 		}
 		free (dt->ncmd);//libero el nombre del comando
 	}
@@ -127,8 +126,6 @@ int	ft_execve (t_in *dt, int n)
 //función que ejecuta el comando con los fdint y fdout de la estructura. Retornará -1 en caso de error
 int	ft_exe_cmd(t_in *dt, char **cmdf, int n)
 {
-//	t_pid	pid;
-
 	if (n == 0 && n != ft_strlen_bi(dt->cmd) - 1)//proceso del primer comando y no es el unico
 	{
 		if (ft_exe_cmd_st(dt, cmdf, n) == -1)
