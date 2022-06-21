@@ -75,6 +75,7 @@ void	ft_strlcpy(char *dest, char *line, int st, int fn);
 int		ft_strlen(char *line);
 char		*ft_strdup(char *s);
 char		*ft_memcpy(char *des, char *src, int n);
+char		*ft_strjoin(char *s1, char *s2);
 int		ft_compare_str(char *str, char *model);
 
 //funciones de lectura de argumentos
@@ -105,14 +106,18 @@ void	ft_redir_list(t_struct *structInit);
 void	ft_parse_line(char *line, t_struct *structInit, t_in *dt);
 char	*ft_expand_envs(char *line, t_in *dt);
 char 	*ft_checkEnv(char *line);
-int 	ft_count_$(char *line);
+int 	ft_charCounter(char *line, char c);
 char	*substr(char *s, int start, int len);
 void	ft_struct_init(t_struct *structInit);
 int	ft_check_and_create(char *line, t_struct *structInit, int id);
+char	*ft_replaceInLine(char *line, char *old, char *new);
+int	ft_checkInEnvList(char *env, t_in *dt);
 void	ft_div_in_lists(t_struct *structInit);
 void	ft_cleanAllLists(t_struct *structInit);
 char	ft_redir_type(char type, char nType, char nnType);
 int	ft_checkRedirect(char *line, char i);
+void	ft_printAllLists(t_struct *structInit);
+int	ft_checkAndCreate(t_struct *structInit, int bool, char *data);
 
 //funciones de linked list
 //ft_linked_list.c
