@@ -55,12 +55,12 @@ int	ft_charCounter(char *line, char c)
 			i++;
 			while(line[i] != '"' && line[i] )
 			{	
-				if (line[i] == '$')
+				if (line[i] == c)
 					count++;
 				i++;
 			}
 		}
-		ft_checkIf39(line, i);
+		i = ft_checkIf39(line, i);
 		if(line[i] == c)
 			count++;
 	}
@@ -78,11 +78,29 @@ int	ft_checkIf39(char *line, int i)
 	return (i);
 }
 
+char	*ft_checkIf$(char *line, int i)
+{
+	char *env;
+	int z;
+
+	i++;
+	z = i;
+	while( line[i] != ' ' && line[i] && line[i] != 39 && line[i] != '"')
+		i++;
+	if (line[i - 1] == '"' || line[i - 1] == 39)
+	{
+		if (line[i - 2] == 39)
+			i--;
+		i--;
+	}
+	env = ft_substr(line,z,i);
+	return (env);
+}
+
 char	*ft_checkEnv(char *line)
 {
 	int i;
 	int z;
-	char *env;
 
 	i = -1;
 	z = 0;
@@ -94,37 +112,13 @@ char	*ft_checkEnv(char *line)
 			while(line[i] != '"' && line[i])
 			{	
 				if (line[i] == '$')
-				{	
-					i++;
-					z = i;
-					while( line[i] != ' ' && line[i] && line[i] != 39 && line[i] != '"')
-						i++;
-					if (line[i - 1] == '"' || line[i - 1] == 39)
-					{
-						if (line[i - 2] == 39)
-							i--;
-						i--;
-					}
-					env = ft_substr(line,z,i);
-					return (env);
-					break ;
-				}
+					return(ft_checkIf$(line, i));
 				i++;
 			}
 		}
-		ft_checkIf39(line, i);
+		i = ft_checkIf39(line, i);
 		if (line[i] == '$')
-		{
-			i++;
-			z = i;
-			while( line[i] != ' ' && line[i] && line[i] != '"' && line[i] != 39)
-				i++;
-			if (line[i - 1] == '"' || line[i - 1] == 39) 
-				i--;
-			env = ft_substr(line,z,i);
-			return (env);
-			break ;
-		}
+			return (ft_checkIf$(line, i));
 	}
 	return (NULL);
 }
@@ -186,7 +180,6 @@ char	*ft_replaceInLine(char *line, char *old, char *new)
 					result = ft_replaceIfEnv(line,c,new,result);
 					free(line);
 					return (result);
-					exit(0);
 				}
 				else
 				{
@@ -344,6 +337,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 				i++;
 			}
 			data = ft_substr(line, z, i);
+			printf("data red -> %s \n", data);
 			ft_addNodBack(dt, data, type, id);
 		}
 		else if (line[i] && line[i] != '<' && line[i] != '>')
@@ -356,6 +350,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 			if (line[i])
 				i++;
 			data = ft_substr(line, z, i);
+			printf("data cmd -> %s \n", data);
 			if (dt -> l_parseCmd == NULL || ft_checkAndCreate(dt, 0, data) != id)
 				ft_addNodBack(dt, data, 'c', id);
 			else

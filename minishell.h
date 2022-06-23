@@ -43,7 +43,6 @@ typedef struct	s_in
 	t_list	*hdR;//cabeza de la lista redirecciones
 	t_list	*l_parseCmd;//lista de comandos(type 1 = builtin)
 	t_list	*hdC;//cabeza de la lista Cmd
-	t_list	*l_parseRest;//lista de restos
 	t_list	*hd;//lista de here docs (HD)
 	t_list	*hdH;//cabeza de la lista de hr
 	int		fdint;//guardo el fdin de entrada que se ejecutara
@@ -160,9 +159,8 @@ int		ft_check_and_create(char *line, t_in *dt, int id);
 char	ft_redir_type(char type, char nType, char nnType);
 void	ft_printAllLists(t_in *dt);
 int		ft_checkAndCreate(t_in *dt, int bool, char *data);
-int		ft_checkIf39(char *line, int i);
-
-void	ft_redir_list(t_in *dt);//no las veo usadas en ningun lado
+int		ft_checkIf39(char *line, int i); //Check if has '
+char		*ft_checkIf$(char *line, int i);
 
 //funciones para gestionar las redirecciones
 //red_utils_0.c
