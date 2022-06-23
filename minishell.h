@@ -81,6 +81,7 @@ int		ft_compare_str(char *str, char *model);
 char	*ft_get_name(char *str);
 char	**ft_split(char *s, char c);//split con sus tres estáticas
 char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoinAux(char *s1, char *s2); //He tenido que crear ese join para poder liberar los dos datos de entrada (jon);
 int		ft_fork(void);
 int		ft_pipe(int *fd);
 int		ft_close(int descr);
@@ -130,12 +131,10 @@ void	ft_addNodBack(t_in *dt, char *data, char type, int id);
 void	ft_printListPipe(t_list **list);
 void	ft_printListCmd(t_list **list);
 void	ft_printListRedir(t_list **list);
-void	ft_printListRest(t_list **list);
 void	ft_addNodFront(t_list **list, char *data);
 void	ft_cleanListPipe(t_list **list);
 void	ft_cleanListCmd(t_list **list);
 void	ft_cleanListRedir(t_list **list);
-void	ft_cleanListRest(t_list **list);
 
 //funciones auxiliares para crear o trabajar con listas
 //list_utils_0.c
@@ -163,8 +162,6 @@ void	ft_printAllLists(t_in *dt);
 int		ft_checkAndCreate(t_in *dt, int bool, char *data);
 
 void	ft_redir_list(t_in *dt);//no las veo usadas en ningun lado
-char	*substr(char *s, int start, int len);//no las veo usadas en ningun lado
-int		ft_checkRedirect(char *line, char i);//no las veo usadas en ningun lado
 
 //funciones para gestionar las redirecciones
 //red_utils_0.c

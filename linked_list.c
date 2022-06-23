@@ -1,20 +1,5 @@
 #include "minishell.h"
 
-t_list	*ft_newNodRest(char *data, t_list **list, int id)
-{
-	t_list *new;
-	list = NULL;
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return (0);
-	new->id = id;
-	new->data = ft_strdup(data);
-	new->type = 0;
-	free(data);
-	new->next = NULL;
-	return(new);
-}
-
 t_list	*ft_newNodCmd(char *data, t_list **list, int id)
 {
 	t_list *new;
@@ -130,44 +115,9 @@ void	ft_addNodBack(t_in *dt, char *data, char list, int id)
 			aux->next = new;
 		}
 	}
-	else if (list == 's')
-	{
-		t_list *new;
-		t_list *aux;
-		new = ft_newNodRest(data,&dt->l_parseRest, id);
-		aux = dt->l_parseRest;
-		if(!new)
-			return ;
-		if (aux == NULL)
-			dt->l_parseRest = new;
-		else
-		{
-			while (aux->next != NULL)
-				aux = aux->next;
-			aux->next = new;
-		}
-	}
 	else
-		printf("mierda\n");
+		printf("Redireccion sin controlar\n");
 }
-
-
-void	ft_printListRest(t_list **list)
-{	
-	if (*list)
-	{
-		t_list *aux;
-		aux = *list;
-		while(aux != NULL)
-		{	
-			printf("nodo %s pertenece a %d\n", aux->data, aux->id );
-			aux = aux->next;
-		}
-	}
-	else
-		printf("La lista esta vacia\n");
-}
-
 
 void	ft_printListCmd(t_list **list)
 {	
@@ -193,7 +143,7 @@ void	ft_printListRedir(t_list **list)
 		aux = *list;
 		while(aux != NULL)
 		{	
-			printf("nodo %s pertenece a %d y es de tipo %c\n", aux->data, aux->id, aux->type);
+			printf("nodo %s pertenece a %d y es de tipo %d\n", aux->data, aux->id, aux->type);
 			aux = aux->next;
 		}
 	}
@@ -215,22 +165,6 @@ void	ft_printListPipe(t_list **list)
 	}
 	else
 		printf("La lista esta vacia\n");
-}
-
-void	ft_cleanListRest(t_list **list)
-{
-	t_list *aux;
-	t_list *next;
-
-	aux = *list;
-	while (aux != NULL)
-	{
-		next = aux->next;
-		free(aux->data);
-		free(aux);
-		aux = next;
-	}
-	*list = NULL;
 }
 
 void	ft_cleanListPipe(t_list **list)

@@ -6,42 +6,15 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 {
 	line = ft_expand_envs(line, dt); // Checar si entre pipes se encuentra un $. Si es asi sustituirla por la variable de entorno.
 	ft_pipes_list(line, dt); // crea la lista de pipes con la linea como dato.	
-	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect, rest)
-//	ft_joinCmds(dt);
+	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
 	ft_printAllLists(dt); // Imprimir listas
-//	AQUI EMPIEZA LA PARTE DE PABLO:
-	if (ft_exec(dt) == -1)
+	free (line);
+/*	if (ft_exec(dt) == -1)
 	{
 		return (-1);
-	}
+	}*/
 	return (0);
 }	
-
-void	ft_joinCmds(t_in *dt)
-{
-	t_list *aux;
-	char *joined;
-	aux = dt -> l_parseCmd;
-	joined = malloc(1);
-	while(aux)
-	{
-		if (aux -> id == 0)
-		{
-			printf("entraaa??\n");
-			printf("nodos de 1 son ->) %s y pertenece a %d\n", aux->data, aux ->id);
-//			joined = ft_strjoin("df", aux -> data) ;
-			aux = aux -> next;
-		}
-		else if (aux -> id == 1)
-		{
-			printf("nodos de 1 son ->) %s y pertenece a %d\n", aux->data, aux ->id);
-			aux = aux -> next;
-		}	
-		else 
-			aux = aux -> next;
-
-	}
-}
 
 char	*ft_expand_envs(char *line, t_in *dt)
 {
@@ -357,6 +330,8 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 				i++;
 			else if (type == '5')
 				return (0);
+			else if (type == '6') 
+				return(1);
 			i++;
 			if (line[i] == ' ')
 			{
@@ -408,7 +383,7 @@ int ft_checkAndCreate (t_in *dt, int bool, char *data)
 			aux = aux->next;
 	}
 	if (bool == 1)
-		aux -> data = ft_strjoin(aux -> data, data);
+		aux -> data = ft_strjoinAux(aux -> data, data);
 	ret = aux -> id;
 	return(ret);
 }
@@ -416,11 +391,13 @@ int ft_checkAndCreate (t_in *dt, int bool, char *data)
 
 char	ft_redir_type(char type, char nType, char nnType)
 {
-	if ((type == '<' && nType == '<' && nnType =='<') || (type == '>' && nType == '>' && nnType == '>'))
+	if (type == '>' && nType == '>' && nnType == '>')
 	{
 		printf("syntas error near unexpected token `%c'\n", nnType);
 		return('5');
 	}
+	else if(type == '<' && nType == '<' && nnType =='<')
+		return('6');
 	else if (type == '<' && nType != '<')
 		return ('1');
 	else if (type == '>' && nType != '>')
@@ -441,6 +418,4 @@ void	ft_printAllLists(t_in *dt)
 	ft_printListCmd(&dt->l_parseCmd);
 	printf("Lista de redir\n");
 	ft_printListRedir(&dt->l_parseRedir);
-//	printf("Lista de rest\n");
-//	ft_printListRest(&dt->l_parseRest);
 }

@@ -179,6 +179,32 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (des);
 }
 
+char	*ft_strjoinAux(char *s1, char *s2)
+{
+	char	*des;
+	int		i;
+	int		j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	des = (char *)malloc ((ft_strlen (s1) + ft_strlen (s2)) + 1);
+	if (des == NULL)
+		return (NULL);
+	i = -1;
+	while (s1[++i] != 00)
+		des[i] = s1[i];
+	j = -1;
+	while (s2[++j] != 00)
+	{
+		des[i] = s2[j];
+		i++;
+	}
+	des[i] = 00;
+	free(s1);
+	free(s2);
+	return (des);
+}
+
 //pipe function with errors control
 int	ft_pipe(int *fd)
 {
