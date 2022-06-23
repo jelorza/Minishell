@@ -30,8 +30,8 @@ char	*ft_expand_envs(char *line, t_in *dt)
 		env[0] = ft_checkEnv(env[2]); // Guardo el nombre de la env en caso de que exista
 		if (ft_checkInEnvList(env[0],dt)) //Si existe variable de entorno entra
 		{
-			isEnv = ft_checkInEnvList(env[0], dt);
-			env[1] = ft_strdup(dt->env_value[isEnv]); //guardo el valor de la env
+			isEnv = ft_checkInEnvList(env[0], dt); // Devuelve la posicion del array en la que esta la env
+			env[1] = ft_strdup(dt->env_value[isEnv]); //Duardo el valor de la env
 			env[2] = ft_replaceInLine(env[2], env[0], env[1]); //En la linea, sustituio el nombre del env por su valor
 			free(env[1]);
 			free(env[0]);
@@ -60,16 +60,22 @@ int	ft_charCounter(char *line, char c)
 				i++;
 			}
 		}
-		if (line[i] == 39)
-		{
-			i++;
-			while(line[i] != 39 && line[i])
-				i++;
-		}
+		ft_checkIf39(line, i);
 		if(line[i] == c)
 			count++;
 	}
 	return(count);
+}
+
+int	ft_checkIf39(char *line, int i)
+{
+	if (line[i] == 39)
+	{
+		i++;
+		while(line[i] != 39 && line[i])
+			i++;
+	}
+	return (i);
 }
 
 char	*ft_checkEnv(char *line)
@@ -106,12 +112,7 @@ char	*ft_checkEnv(char *line)
 				i++;
 			}
 		}
-		if (line[i] == 39)
-		{
-			i++;
-			while(line[i] != 39 && line[i])
-				i++;
-		}
+		ft_checkIf39(line, i);
 		if (line[i] == '$')
 		{
 			i++;
@@ -141,90 +142,83 @@ int	ft_checkInEnvList(char *env, t_in *dt)
 	return (0);
 }
 
+char	*ft_replaceIfEnv(char *line, int *c, char *new, char *result)
+{
+	int z = 0;
+
+	while (new[z])
+	{
+		result[c[1]] = new[z];
+		c[1]++;
+		z++;
+	}
+	while (line[c[0]] != ' ' && line[c[0]] && line[c[0]] != '"' && line[c[0]] != 39)
+		c[0]++;
+	while (line[c[0]])
+	{
+		result[c[1]] = line[c[0]];
+		c[0]++;
+		c[1]++;
+	}
+	result[c[1]] = 00;
+	return (result);
+}
+
 char	*ft_replaceInLine(char *line, char *old, char *new)
 {
-	int i;
-	int z;
-	int y;
+	int c[2]; //counters
 	char *result;
 
-	y = 0;
-	i = -1;
-	z = 0;
+	c[0] = -1; //i
+	c[1] = 0; //y
 	result = malloc(sizeof(char *) * (ft_strlen(line) - ft_strlen(old) + ft_strlen(new)) + 1);
-	while (line[++i])
+	while (line[++c[0]])
 	{
-		if(line[i] == '"')
+		if(line[c[0]] == '"')
 		{
-			result[y] = line[i];
-			y++;
-			i++;
-			while(line[i] != '"' && line[i] )
+			result[c[1]] = line[c[0]];
+			c[0]++;
+			c[1]++;
+			while(line[c[0]] != '"' && line[c[0]] )
 			{
-				if (line[i] == '$')
+				if (line[c[0]] == '$')
 				{
-					while (new[z])
-					{
-						result[y] = new[z];
-						y++;
-						z++;
-					}
-					while (line[i] != ' ' && line[i] && line[i] != '"' && line[i] != 39)
-						i++;
-					while (line[i])
-					{
-						result[y] = line[i];
-						y++;
-						i++;
-					}
-					result[y] = 00;
+					result = ft_replaceIfEnv(line,c,new,result);
+					free(line);
 					return (result);
 					exit(0);
 				}
 				else
 				{
-					result[y] = line[i];
-					y++;
-					i++;
+					result[c[1]] = line[c[0]];
+					c[0]++;
+					c[1]++;
 				}
 			}
 		}
-		if (line[i] == 39)
+		if (line[c[0]] == 39)
 		{
-			result[y] = line[i];
-			y++;
-			while (line[++i] != 39 && line[i])
+			result[c[1]] = line[c[0]];
+			c[1]++;
+			while (line[++c[0]] != 39 && line[c[0]])
 			{
-				result[y] = line[i];
-				y++;
+				result[c[1]] = line[c[0]];
+				c[1]++;
 			}
 		}
-		if (line[i] == '$')
+		if (line[c[0]] == '$')
 		{
-			while (new[z])
-			{
-				result[y] = new[z];
-				y++;
-				z++;
-			}
-			while (line[i] != ' ' && line[i] && line[i] != '"' && line[i] != 39)
-				i++;
-			while (line[i])
-			{
-				result[y] = line[i];
-				y++;
-				i++;
-			}
+			result = ft_replaceIfEnv(line,c,new,result);
 			break ;
 		}
 		else
 		{
-			result[y] = line[i];
-			y++;
+			result[c[1]] = line[c[0]];
+			c[1]++;
 		}
 	}
 	free(line);
-	result[y] = 00;
+	result[c[1]] = 00;
 	return (result);
 }
 

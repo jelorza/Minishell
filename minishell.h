@@ -160,6 +160,7 @@ int		ft_check_and_create(char *line, t_in *dt, int id);
 char	ft_redir_type(char type, char nType, char nnType);
 void	ft_printAllLists(t_in *dt);
 int		ft_checkAndCreate(t_in *dt, int bool, char *data);
+int		ft_checkIf39(char *line, int i);
 
 void	ft_redir_list(t_in *dt);//no las veo usadas en ningun lado
 
