@@ -11,8 +11,6 @@ int	ft_exec(t_in *dt)
 	while (dt->l_parseCmd)
 	{
 		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-		dt->rootcmd = NULL;
-		dt->cmdf = NULL;
 		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable y devuelvo el numero del builtin que sea o la ruta del path
 		{
 			if (ft_execve (dt, dt->l_parseCmd->id) == -1)
@@ -22,14 +20,11 @@ int	ft_exec(t_in *dt)
 				free (dt->ncmd);
 				return (-1);
 			}
-			if (dt->rootcmd)
-				free (dt->rootcmd);//libero la ruta con el cmd
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
 		{
 			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 		}
-		free (dt->ncmd);//libero el nombre del comando
 		dt->l_parseCmd = dt->l_parseCmd->next;
 	}
 	return (0);
@@ -40,7 +35,7 @@ int	ft_execve (t_in *dt, int n)
 {
 	int		i;
 
-	dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS
+	dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
 	if (ft_ch_redir (dt, n) == -1)//solo por si falla el malloc y en ese caso ha de retornar hasta el final
 		return (-1);
 	i = ft_exe_redir(dt, n);
@@ -50,17 +45,7 @@ int	ft_execve (t_in *dt, int n)
 		return (-2);
 	if (ft_exe_cmd(dt, n) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
 			return (-1);
-
-
-	i = -1;
-	while (dt->cmdf[++i])//libero la bidimensional del comando con sus flags
-		free (dt->cmdf[i]);
-	free(dt->cmdf);
-	if (dt->l_parseRedir)
-	{
-		free(dt->cr);//reseteo la estructura de redirecciones
-		dt->cr = NULL;
-	}
+	ft_free(dt, 0);//Libero las variables que se actualizan con cada comando del pipe
 	return (0);
 }
 
@@ -72,53 +57,25 @@ int	ft_exe_cmd(t_in *dt, int n)
 	{
 		if (ft_exe_cmd_st(dt) == -1)
 			return (-1);
-		if (dt->tint == 3)
-			ft_erase_aux (dt->env);
 	}
 	else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
 	{
 		if (ft_exe_cmd_int(dt) == -1)
 			return (-1);
-		if (dt->tint == 3)
-			ft_erase_aux (dt->env);
 	}
 	else if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
 	{
 		if (ft_exe_cmd_end(dt) == -1)
 			return (-1);
-		if (dt->tint == 3)
-			ft_erase_aux (dt->env);
 	}
 	return (0);
 }
 
-//función que borra el archivo auxiliar generado con un HD predominante
-void	ft_erase_aux(char **env)
-{
-	char	**rm;
-	int		pid;
-	int		i;
-
-	i = -1;
-	rm = ft_split ("rm .aux_HD.txt.tmp", ' ');
-	pid = fork();
-	if (pid == 0)
-	{
-		execve ("/bin/rm", rm, env);
-		exit(0);
-	}
-	else
-		ft_wait(pid);
-	while (rm[++i])
-		free (rm[i]);
-	free (rm);
-}
-
 //EXPLICACION DE ENTRADAS:
-//- Lo primero que evalua son los restos, pero no por redirecciones, si no por argumentos del propio comando que ejecuta el execve
-//- Después las redirecciones
-//- Después el auxiliar, si lo tiene
+//- Lo primero que evalua son las redirecciones
+//- Después, y en caso de comandos int y finales, si tiene aux del cmd anterior
 //- Por último la STD
+//- Y en caso de que tenga argumentos de redireccion, el propio execve va a pasar en moto de todo lo anterior y ejecuto el comando con esa redireccion por arg.
 //EXPLICACION DE SALIDAS:
 //- Lo primero que evalúa son las redirecciones
 //- Despues por defecto, el primer comando y los intermedios siempre mando su resultado al aux

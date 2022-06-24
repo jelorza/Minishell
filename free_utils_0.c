@@ -1,25 +1,23 @@
 #include "minishell.h"
-/*
+
 //funcion que libera los argumentos de la linea. Se usa a la salida y por si falla el malloc
 void	ft_free_0(t_in *dt)
 {
 	int	j;
 
 	j = -1;
-	while (dt->data[++j] != NULL)
-	{
-		free (dt->data[j]);
-		free (dt->cmd[j]);
-		free (dt->rest[j]);
-	}
-	free (dt->data);
-	free (dt->cmd);
-	free (dt->rest);
-	dt->red = dt->head;
-	if (dt->red)
-		ft_destroy_list (dt->red, dt->head);//libero aqui la lista y el head
+	while (dt->cmdf[++j])
+		free (dt->cmdf[j]);
+	free (dt->cmdf);
+	dt->cmdf = NULL;
+	free (dt->ncmd);
+	dt->ncmd = NULL;
+	free (dt->rootcmd);
+	dt->rootcmd = NULL;
+	free (dt->cr);
+	dt->cr = NULL;
 }
-*/
+
 //funcion que libera el enviroment solamente
 void	ft_free_1(t_in *dt)
 {
@@ -44,8 +42,8 @@ void	ft_free_1(t_in *dt)
 //i = 1 - libera todo el env (cuando salimos normal o por error del programa)
 void	ft_free(t_in *dt, int i)
 {
-//	if (i == 0 && dt->data != NULL)
-//		ft_free_0(dt);
+	if (i == 0)//Revisar esta historia por si acaso!!!
+		ft_free_0(dt);
 	if (i == 1 && dt->env_name != NULL && dt->env_value != NULL)
 		ft_free_1(dt);
 }

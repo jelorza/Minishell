@@ -120,7 +120,7 @@ void	ft_free(t_in *dt, int i);
 //here_doc_0.c
 int		ft_ch_HD(t_in *dt, int n);
 void	ft_exe_null_HD(char *str);
-int		ft_exe_HD(char *str, int fdint);
+int		ft_exe_HD(char *str, int fdint, char **env);
 
 //funciones de linked list
 //linked_list.c

@@ -26,10 +26,7 @@ int	ft_ch_HD(t_in *dt, int n)
 			dt->l_parseRedir = dt->l_parseRedir->next;
 		}
 	}
-	if (dt->hd)
-		dt->hdH = dt->hd;
 //	ft_print_list(dt->hd);
-	
 	return (0);
 }
 
@@ -48,16 +45,14 @@ void	ft_exe_null_HD(char *str)
 }
 
 //funcion que es activada cuando hay un HD predominante y va guardando linea a linea retornando el descriptor para fdint
-int	ft_exe_HD(char *str, int fdint)
+int	ft_exe_HD(char *str, int fdint, char **env)
 {
 	char	*line;
 
 	fdint = open (".aux_HD.txt.tmp", O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
-//	fdint = open (".aux_HD.txt.tmp", O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (fdint == -1)
 	{
-		printf ("Open error\n");
-		return (-1);
+		fdint = open (".aux_HD.txt.tmp", O_RDWR | O_TRUNC, 0644);
 	}
 	line = readline("> ");
 	while (ft_compare_str(line, str) != 1)
@@ -74,5 +69,28 @@ int	ft_exe_HD(char *str, int fdint)
 	free(line);
 	close (fdint);
 	fdint = open (".aux_HD.txt.tmp", O_RDONLY);
+	ft_erase_aux (env);
 	return (fdint);
+}
+
+//función que borra el archivo auxiliar generado con un HD predominante
+void	ft_erase_aux(char **env)
+{
+	char	**rm;
+	int		pid;
+	int		i;
+
+	i = -1;
+	rm = ft_split ("rm .aux_HD.txt.tmp", ' ');
+	pid = fork();
+	if (pid == 0)
+	{
+		execve ("/bin/rm", rm, env);
+		exit(0);
+	}
+	else
+		ft_wait(pid);
+	while (rm[++i])
+		free (rm[i]);
+	free (rm);
 }
