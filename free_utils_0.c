@@ -12,9 +12,11 @@ void	ft_free_0(t_in *dt)
 	dt->cmdf = NULL;
 	free (dt->ncmd);
 	dt->ncmd = NULL;
-	free (dt->rootcmd);
+	if (dt->rootcmd)
+		free (dt->rootcmd);
 	dt->rootcmd = NULL;
-	free (dt->cr);
+	if (dt->cr)
+		free (dt->cr);
 	dt->cr = NULL;
 }
 

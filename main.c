@@ -35,16 +35,20 @@ int main(int argc, char **argv, char **envp)
 	while(1)
 	{
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
-		if (ft_compare_str(line, "E") == 1 || !line)
+		if (!line)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
+		{
 			break;
+//			system ("leaks minishell");
+//			return (dt.ret);
+		}
 		free (line);
 		ft_cleanAllLists(&dt);
 	}
 	ft_free_1(&dt);//libero el enviroment
 	ft_cleanAllLists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (0);
 }

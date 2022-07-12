@@ -45,6 +45,8 @@ typedef struct	s_in
 	t_list	*hdC;//cabeza de la lista Cmd
 	t_list	*hd;//lista de here docs (HD)
 	t_list	*hdH;//cabeza de la lista de hr
+	int		nc;//guardo el numero de cmd que hay en la lista para la funcion exit
+	int		ret;//guardo el valor retornado en cada funciony se va actualizando
 	int		fdint;//guardo el fdin de entrada que se ejecutara
 	int		tint;//guardo el tipo de redireccion de entrada del ultimo file en cada pipe
 	int		fdout;//guardo el fdout de salida que se ejecutara
@@ -91,6 +93,12 @@ char	*ft_substr(char *s, int start, int len);
 char	*ft_strdup(char *s);
 char	*ft_memcpy(char *des, char *src, int n);
 
+//funciones que ejecutan los builtins
+//builtin_utils_o.c
+int		ft_builtin(t_in *dt, int n);
+int		ft_exe_cd(t_in *dt);
+int		ft_exe_pwd(t_in *dt);
+int		ft_exe_exit(t_in *dt, int n);
 
 //funciones de recogida del env
 //env_utils_0.c
@@ -106,9 +114,9 @@ int		ft_ch_buil(char *name, t_list *list);
 int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
 int		ft_exe_cmd(t_in *dt, int n);
-int		ft_exe_cmd_st(t_in *dt);
-int		ft_exe_cmd_int(t_in *dt);
-int		ft_exe_cmd_end(t_in *dt);
+int		ft_exe_cmd_st(t_in *dt, int n);
+int		ft_exe_cmd_int(t_in *dt, int n);
+int		ft_exe_cmd_end(t_in *dt, int n);
 
 //funciones de liberacion de memoria
 //free_utils_0.c

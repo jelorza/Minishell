@@ -3,28 +3,32 @@
 //funcion que va a comprobar si el comando es un builtin o un ejecutable, en caso de que ninguno sea, devuelve error y pasa al siguiente comando
 int	ft_exec(t_in *dt)
 {
-	dt->fdaux = -2;//inicio el descriptor auxiliar
+	dt->fdaux = -2;//inicio el descriptor auxiliar 
+	dt->ret = -2;//inicio el valor de retorno
+	dt->rootcmd = NULL;//inicio la ruta del comando
 	dt->hdI = dt->l_parseInit;//guardo las cabezas de las listas
 	dt->hdC = dt->l_parseCmd;
 	dt->hdR = dt->l_parseRedir;
 	dt->l_parseCmd = dt->hdC;
-	while (dt->l_parseCmd)
+	dt->nc = ft_listlen(dt->l_parseCmd);
+	dt->l_parseCmd = dt->hdC;
+	while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
 	{
 		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
 		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable y devuelvo el numero del builtin que sea o la ruta del path
 		{
-			if (ft_execve (dt, dt->l_parseCmd->id) == -1)
+			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Caso para el cmando exit
 			{
-				printf ("bash: %s: COMMAND ERROR\n", dt->ncmd);//NO SE QUE PONE BASH EN ESTE CASO Y TAMPOCO SE SI CORTA O SIGUE EJECUTANDO EL RESTO DE COMANDOS
-				free (dt->rootcmd);//libero la ruta con el cmd
-				free (dt->ncmd);
+				ft_free(dt, 0);
 				return (-1);
 			}
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
 		{
+			dt->ret = 127;//el valor retornado en este caso es 127
 			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 		}
+		ft_free(dt, 0);
 		dt->l_parseCmd = dt->l_parseCmd->next;
 	}
 	return (0);
@@ -42,10 +46,13 @@ int	ft_execve (t_in *dt, int n)
 	if (i == -1)//solo contemplo return -1 pq de fallo algun malloc (errores de syntaxis tipo < > se analizan en el parseo). El resto de errores, que no exista el archivo int, falle la apertura de alguno de salida... ha de pasar al siguiente cmd habiendo enviado un error en texto
 		return (-1);
 	else if (i == -2)//en caso de que no existan todas las redirecciones de entrada retorno hasta el siguiente comando
+	{
+		dt->ret = 1;//en este caso el valor retornado creo que es 1;
 		return (-2);
+	}
 	if (ft_exe_cmd(dt, n) == -1)//lanzo la ejecución de los comandos para generar un fdaux y pasárselo al siguiente comando, si fuera el caso
 			return (-1);
-	ft_free(dt, 0);//Libero las variables que se actualizan con cada comando del pipe
+//	ft_free(dt, 0);//Libero las variables que se actualizan con cada comando del pipe
 	return (0);
 }
 
@@ -53,19 +60,21 @@ int	ft_execve (t_in *dt, int n)
 int	ft_exe_cmd(t_in *dt, int n)
 {
 	dt->l_parseInit = dt->hdI;
-	if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
+	if (ft_compare_str(dt->ncmd, "cd") == 1)//el builtin de cd lo saco de los forks para poder ejecutar el proceso en el padre
+		ft_exe_cd(dt);
+	else if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
 	{
-		if (ft_exe_cmd_st(dt) == -1)
+		if (ft_exe_cmd_st(dt, n) == -1)
 			return (-1);
 	}
 	else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
 	{
-		if (ft_exe_cmd_int(dt) == -1)
+		if (ft_exe_cmd_int(dt, n) == -1)
 			return (-1);
 	}
 	else if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
 	{
-		if (ft_exe_cmd_end(dt) == -1)
+		if (ft_exe_cmd_end(dt, n) == -1)
 			return (-1);
 	}
 	return (0);
@@ -82,7 +91,7 @@ int	ft_exe_cmd(t_in *dt, int n)
 //- El último comando manda la salida a la redireccion o a la estandar
 
 //funcion que ejecuta el primer comando si hay varios
-int	ft_exe_cmd_st(t_in *dt)
+int	ft_exe_cmd_st(t_in *dt, int n)
 {
 	int	fd[2];
 	int	pid;
@@ -113,10 +122,7 @@ int	ft_exe_cmd_st(t_in *dt)
 		if (dt->l_parseCmd->type != 1)
 			execve (dt->rootcmd, dt->cmdf, dt->env);
 		else
-		{
-			printf ("Es un builtin\n");
-//			ft_builtin (dt, n);
-		}
+			ft_builtin (dt, n);
 		exit(0);
 	}
 	else//el padre
@@ -130,7 +136,7 @@ int	ft_exe_cmd_st(t_in *dt)
 }
 
 //funcion que ejecuta los cmd intermedios
-int	ft_exe_cmd_int(t_in *dt)
+int	ft_exe_cmd_int(t_in *dt, int n)
 {
 	int	fd[2];
 	int	pid;
@@ -164,10 +170,7 @@ int	ft_exe_cmd_int(t_in *dt)
 		if (dt->l_parseCmd->type != 1)
 			execve (dt->rootcmd, dt->cmdf, dt->env);
 		else
-		{
-			printf ("Es un builtin\n");
-//			ft_builtin (dt, n);
-		}
+			ft_builtin (dt, n);
 		exit(0);
 	}
 	else
@@ -184,7 +187,7 @@ int	ft_exe_cmd_int(t_in *dt)
 }
 
 //funcion que ejecuta los comandos finales y si solo hay uno
-int	ft_exe_cmd_end(t_in *dt)
+int	ft_exe_cmd_end(t_in *dt, int n)
 {
 	int	pid;
 
@@ -212,10 +215,7 @@ int	ft_exe_cmd_end(t_in *dt)
 		if (dt->l_parseCmd->type != 1)
 			execve (dt->rootcmd, dt->cmdf, dt->env);
 		else
-		{
-			printf ("Es un builtin\n");
-//			ft_builtin (dt, n);
-		}
+			ft_builtin (dt, n);
 		exit(0);
 	}
 	else
@@ -223,6 +223,11 @@ int	ft_exe_cmd_end(t_in *dt)
 		ft_wait (pid);
 		if (dt->fdaux > 0)
 			ft_close (dt->fdaux);
+	}
+	if (dt->nc == 1 && ft_compare_str(dt->ncmd, "exit") == 1)//caso de salida del programa con exit
+	{
+		return (-1);
+//		exit (dt->ret);
 	}
 	return (0);
 }

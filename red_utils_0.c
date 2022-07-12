@@ -79,7 +79,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 	char	*cmdnex;//guardo el nombre del cmd que no existe
 
 	i = 0;
-	dt->tint = 0;//reseteo el tipo de entrada
+	dt->tint = 0;//reseteo el tipo de redireccion de entrada
 	cmdnex = NULL;
 	dt->hd = NULL;
 	dt->l_parseRedir = dt->hdR;
@@ -118,7 +118,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		dt->l_parseRedir = dt->l_parseRedir->next;
 	}
 	dt->hdH = dt->hd;
-	if (dt->tint == 3)
+	if (dt->tint == 3)//caso de que el HD sea la redireccion de entrada predominante
 	{
 		while (dt->hd->next)
 		{
@@ -129,7 +129,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		if (dt->fdint == -1)
 			return (-1);
 	}
-	else if (dt->tint != 3 && dt->hd)
+	else if (dt->tint != 3 && dt->hd)//caso de que un archivo de entrada sea la redireccion de entrada predominante pero exista algun HD previo
 	{
 		while (dt->hd)//si hay algun HD
 		{

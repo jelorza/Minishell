@@ -61,7 +61,7 @@ int	ft_compare_str(char *str, char *model)
 		else
 			break;
 	}
-	if (str[i] == 00)
+	if (model[i] == 00 && str[i] == 00)
 		return (1);//Caso de que coincidan
 	return (0);//Caso de que NO coincidan
 }

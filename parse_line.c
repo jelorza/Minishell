@@ -7,12 +7,10 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 	line = ft_expand_envs(line, dt); // Checar si entre pipes se encuentra un $. Si es asi sustituirla por la variable de entorno.
 	ft_pipes_list(line, dt); // crea la lista de pipes con la linea como dato.	
 	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
-	ft_printAllLists(dt); // Imprimir listas
+//	ft_printAllLists(dt); // Imprimir listas
 	free (line);
-/*	if (ft_exec(dt) == -1)
-	{
+	if (ft_exec(dt) == -1)
 		return (-1);
-	}*/
 	return (0);
 }	
 
@@ -337,7 +335,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 				i++;
 			}
 			data = ft_substr(line, z, i);
-			printf("data red -> %s \n", data);
+//			printf("data red -> %s \n", data);
 			ft_addNodBack(dt, data, type, id);
 		}
 		else if (line[i] && line[i] != '<' && line[i] != '>')
@@ -350,7 +348,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 			if (line[i])
 				i++;
 			data = ft_substr(line, z, i);
-			printf("data cmd -> %s \n", data);
+//			printf("data cmd -> %s \n", data);
 			if (dt -> l_parseCmd == NULL || ft_checkAndCreate(dt, 0, data) != id)
 				ft_addNodBack(dt, data, 'c', id);
 			else
