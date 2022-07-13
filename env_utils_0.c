@@ -25,6 +25,17 @@ void	ft_get_env(t_in *dt, char **envp)
 	dt->env[i] = NULL;
 	dt->env_name[i] = NULL;
 	dt->env_value[i] = NULL;
+	ft_env_act(dt);//actualizo el env si me hacen un cd (PWD & OLDPWD)
+}
+
+//funcion que me actualiza cada redline el enviroment
+void	ft_env_act(t_in *dt)
+{
+	char	*aux;
+
+	dt->nc = 1;
+	aux = getenv("OLDPWD");
+	printf ("<%s>\n", aux);
 }
 
 //funcion que extrae el nombre de las variablles de entorno y las guarda en un array bidimensional env_name

@@ -1,7 +1,6 @@
 NAME = minishell
 
 SRC = main.c\
-	  arg_utils_0.c\
 	  aux_utils_0.c\
 	  builtin_utils_0.c\
 	  env_utils_0.c\
@@ -26,7 +25,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
-	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) #$(SAN)
+	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) $(SAN)
 
 clean:
 	$(RM) *.o

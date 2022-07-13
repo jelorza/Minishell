@@ -75,7 +75,7 @@ char	*ft_get_name(char *str)
 	i = -1;
 	while (str[++i] != 00)
 	{
-		if (str[i] == ' ')
+		if (str[i] == ' ')//cambiarlo por caracter no imprimible
 			break;
 	}
 	name = ft_strlcpy(str, 0, i);
@@ -327,3 +327,23 @@ char	*ft_substr(char *s, int start, int len)
 	ptr[j] = '\0';
 	return (ptr);
 }
+
+long	ft_atoi(char *str)
+{
+	int		i;
+	long	r;
+
+	i = 0;
+	r = 0;
+	while (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] > 47 && str[i] < 58)
+	{
+		r = (str[i] - '0') + (r * 10);
+		i++;
+	}
+	if (str[i] == 00 || str[i] == ' ')
+		return (r);
+	return (-1);
+}
+

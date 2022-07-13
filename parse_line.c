@@ -10,7 +10,9 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 //	ft_printAllLists(dt); // Imprimir listas
 	free (line);
 	if (ft_exec(dt) == -1)
+	{
 		return (-1);
+	}
 	return (0);
 }	
 

@@ -46,7 +46,7 @@ typedef struct	s_in
 	t_list	*hd;//lista de here docs (HD)
 	t_list	*hdH;//cabeza de la lista de hr
 	int		nc;//guardo el numero de cmd que hay en la lista para la funcion exit
-	int		ret;//guardo el valor retornado en cada funciony se va actualizando
+	int		status;//guardo el valor a retornar por el programa
 	int		fdint;//guardo el fdin de entrada que se ejecutara
 	int		tint;//guardo el tipo de redireccion de entrada del ultimo file en cada pipe
 	int		fdout;//guardo el fdout de salida que se ejecutara
@@ -59,19 +59,6 @@ typedef struct	s_in
 //main.c
 void	ft_struct_init(t_in *dt);
 void	ft_cleanAllLists(t_in *dt);
-
-//funciones de lectura de argumentos
-//arg_utils_0.c
-int		ft_break_line(char *line, t_in *dt);
-int		ft_count_arg(char *line);
-int		ft_count_arg_ind(char *line, int st);
-void	ft_check_arg(t_in *dt);//**funcion que guarda los datos y lanza la ejecucion
-void	ft_comf(char *data, int n, t_in *dt);
-void	ft_redf(char *data, int n, t_in *dt);
-void	ft_resf(char *data, int n, t_in *dt);
-
-void	ft_intf(char *datai, t_in *dt);
-
 
 //funciones auxiliares de ayuda
 //aux_utils_0.c
@@ -92,17 +79,20 @@ void	ft_erase_aux(char **env);
 char	*ft_substr(char *s, int start, int len);
 char	*ft_strdup(char *s);
 char	*ft_memcpy(char *des, char *src, int n);
+long	ft_atoi(char *str);
 
 //funciones que ejecutan los builtins
 //builtin_utils_o.c
 int		ft_builtin(t_in *dt, int n);
 int		ft_exe_cd(t_in *dt);
+int		ft_exe_env(t_in *dt);
 int		ft_exe_pwd(t_in *dt);
-int		ft_exe_exit(t_in *dt, int n);
+int		ft_exe_exit(t_in *dt);
 
 //funciones de recogida del env
 //env_utils_0.c
 void	ft_get_env(t_in *dt, char **envp);
+void	ft_env_act(t_in *dt);
 char	*ft_split_env_1(char *env);
 char	*ft_split_env_2(char *env);
 char	**ft_cut_root(t_in *dt);

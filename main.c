@@ -10,6 +10,7 @@ void	ft_struct_init(t_in *dt)
 	dt->env = NULL;
 	dt->env_name = NULL;
 	dt->env_value = NULL;
+	dt->status = -1;//inicio el valor de retorno
 }
 
 void	ft_cleanAllLists(t_in *dt)
@@ -31,24 +32,22 @@ int main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	ft_struct_init(&dt);
-	ft_get_env(&dt, envp);
 	while(1)
 	{
+		ft_get_env(&dt, envp);
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
 		if (!line)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
 			break;
-//			system ("leaks minishell");
-//			return (dt.ret);
 		}
 		free (line);
+		ft_free_1(&dt);//libero el enviroment
 		ft_cleanAllLists(&dt);
 	}
-	ft_free_1(&dt);//libero el enviroment
 	ft_cleanAllLists(&dt);
 	free (line);
-	system ("leaks minishell");
-	return (0);
+//	system ("leaks minishell");
+	return (dt.status);
 }

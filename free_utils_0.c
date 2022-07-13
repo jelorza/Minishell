@@ -6,18 +6,28 @@ void	ft_free_0(t_in *dt)
 	int	j;
 
 	j = -1;
-	while (dt->cmdf[++j])
-		free (dt->cmdf[j]);
-	free (dt->cmdf);
-	dt->cmdf = NULL;
-	free (dt->ncmd);
-	dt->ncmd = NULL;
+	if (dt->cmdf)
+	{
+		while (dt->cmdf[++j])
+			free (dt->cmdf[j]);
+		free (dt->cmdf);
+		dt->cmdf = NULL;
+	}
+	if (dt->ncmd)
+	{
+		free (dt->ncmd);
+		dt->ncmd = NULL;
+	}
 	if (dt->rootcmd)
+	{
 		free (dt->rootcmd);
-	dt->rootcmd = NULL;
+		dt->rootcmd = NULL;
+	}
 	if (dt->cr)
+	{
 		free (dt->cr);
-	dt->cr = NULL;
+		dt->cr = NULL;
+	}
 }
 
 //funcion que libera el enviroment solamente
