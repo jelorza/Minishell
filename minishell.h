@@ -35,7 +35,9 @@ typedef struct	s_in
 	char	**env_name;//puntero doble con el nombre de variables de entorno
 	char	**env_value;//puntero doble con los valores de variables de entorno
 	char	*ncmd;//array con el nombre del comando y se va actualizando con cada cmd
-	char	*rootcmd;//puntero que guarda la ruta del ejecutable con el cmd y se va actualizando para cada cmd 
+	char	*rootcmd;//puntero que guarda la ruta del ejecutable con el cmd y se va actualizando para cada cmd
+	char	*root;//guardo la ruta inicial, para el PWD del env
+	char	*rootold;//guardo la ultima ruta para el OLDPWD del env
 	char	**cmdf;//array bidimensional con el comando y sus argumentos y se va actualizando
 	t_list	*l_parseInit;//lista inicial de pipes
 	t_list	*hdI;//cabeza de la lista pipes

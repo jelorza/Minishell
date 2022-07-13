@@ -10,6 +10,8 @@ void	ft_struct_init(t_in *dt)
 	dt->env = NULL;
 	dt->env_name = NULL;
 	dt->env_value = NULL;
+	dt->root = NULL;
+	dt->rootold = NULL;
 	dt->status = -1;//inicio el valor de retorno
 }
 
@@ -32,22 +34,22 @@ int main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	ft_struct_init(&dt);
+	ft_get_env(&dt, envp);//me guardo el env y la ruta inicial
 	while(1)
 	{
-		ft_get_env(&dt, envp);
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
-		if (!line)
+		if (!line || ft_compare_str(line, "E") == 1)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
 			break;
 		}
 		free (line);
-		ft_free_1(&dt);//libero el enviroment
 		ft_cleanAllLists(&dt);
 	}
+	ft_free_1(&dt);//libero el enviroment
 	ft_cleanAllLists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (dt.status);
 }

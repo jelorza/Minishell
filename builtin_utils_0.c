@@ -51,8 +51,17 @@ int	ft_exe_cd(t_in *dt)
 			dt->status = 1;
 			return (-1);
 		}
-		if (dt->nc != 1)
+		if (dt->nc != 1)//si el comando cd no esta solo, vuelvo a la ruta donde estaba
 			chdir(path);
+		else//si cambio de ruta, he de cambiar el PWD y el OLDPWD del env
+		{
+			free (dt->rootold);
+			dt->rootold = ft_strlcpy(dt->root, 0, ft_strlen(dt->root));
+			free (dt->root);
+			getcwd(path, 200);
+			dt->root = ft_strlcpy(path, 0, ft_strlen(path));
+			ft_env_act(dt);
+		}
 	}
 	dt->status = 0;
 	return (0);

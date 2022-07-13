@@ -47,6 +47,9 @@ void	ft_free_1(t_in *dt)
 	while (dt->env[++j] != NULL)
 		free (dt->env[j]);
 	free (dt->env);
+	free (dt->root);
+	if (dt->rootold)
+		free (dt->rootold);
 }
 
 //funcion general para liberar. En función del int activa unas cosas u otras

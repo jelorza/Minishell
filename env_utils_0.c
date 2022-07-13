@@ -17,25 +17,43 @@ void	ft_get_env(t_in *dt, char **envp)
 		dt->env[i] = ft_strlcpy(envp[i], 0, ft_strlen(envp[i])); 
 		dt->env_name[i] = ft_split_env_1(envp[i]);
 		dt->env_value[i] = ft_split_env_2(envp[i]);
-//		printf("---%d---\n", i);
-//		printf("<%s>\n", dt->env[i]);
-//		printf("<%s>\n", dt->env_name[i]);
-//		printf("$%s$\n", dt->env_value[i]);
+		if (ft_compare_str(dt->env_name[i], "PWD"))//me guardo la ruta inicial para cambiar el env con un cd
+			dt->root = ft_strlcpy(dt->env_value[i], 0, ft_strlen(dt->env_value[i]));
+		if (ft_compare_str(dt->env_name[i], "OLDPWD"))//me guardo la ruta old inicial para cambiar el env con un cd
+			dt->rootold = ft_strlcpy(dt->env_value[i], 0, ft_strlen(dt->env_value[i]));
 	}
 	dt->env[i] = NULL;
 	dt->env_name[i] = NULL;
 	dt->env_value[i] = NULL;
-	ft_env_act(dt);//actualizo el env si me hacen un cd (PWD & OLDPWD)
 }
 
 //funcion que me actualiza cada redline el enviroment
 void	ft_env_act(t_in *dt)
 {
-	char	*aux;
+	int	i;
 
-	dt->nc = 1;
-	aux = getenv("OLDPWD");
-	printf ("<%s>\n", aux);
+	i = 0;
+	while (dt->env_name[i])//busco la posicion del PWD
+	{
+		if (ft_compare_str(dt->env_name[i], "PWD") == 1)
+			break;
+		i++;
+	}
+	free (dt->env_value[i]);
+	dt->env_value[i] = ft_strlcpy(dt->root, 0, ft_strlen(dt->root));
+	free (dt->env[i]);
+	dt->env[i] = ft_strjoin("PWD=", dt->env_value[i]);
+	i = 0;
+	while (dt->env_name[i])//busco la posicion del OLDPWD
+	{
+		if (ft_compare_str(dt->env_name[i], "OLDPWD") == 1)
+			break;
+		i++;
+	}
+	free (dt->env_value[i]);
+	dt->env_value[i] = ft_strlcpy(dt->rootold, 0, ft_strlen(dt->rootold));
+	free (dt->env[i]);
+	dt->env[i] = ft_strjoin("OLDPWD=", dt->env_value[i]);
 }
 
 //funcion que extrae el nombre de las variablles de entorno y las guarda en un array bidimensional env_name
