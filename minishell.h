@@ -112,6 +112,7 @@ int		ft_exe_cmd_builtin_st(t_in *dt, int n);
 int		ft_exe_cmd_builtin_int(t_in *dt, int n);
 int		ft_exe_cmd_builtin_end(t_in *dt, int n);
 int		ft_builtin_fork(t_in *dt, int n);
+int		ft_exe_cmd_builtin_st_aux(t_in *dt, int n);
 int		ft_exe_cmd_exe_st(t_in *dt);
 int		ft_exe_cmd_exe_int(t_in *dt);
 int		ft_exe_cmd_exe_end(t_in *dt);

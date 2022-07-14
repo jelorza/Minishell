@@ -28,8 +28,12 @@ int	ft_exec(t_in *dt)
 			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 		}
 		ft_free(dt, 0);
+		printf ("El puntero Pipe: %p\n", dt->l_parseInit->data);//PQ HE DE LIBERAR ESTO??
+		printf ("El puntero Cmd: %p\n", dt->l_parseCmd->data);//PQ HE DE LIBERAR ESTO??
+		free (dt->l_parseCmd->data);//PQ ME PIDE IBERAR ESTO AQUI??
 		dt->l_parseCmd = dt->l_parseCmd->next;
 	}
+//	free (dt->hdC->data);
 	return (0);
 }
 
@@ -74,19 +78,14 @@ int	ft_exe_cmd(t_in *dt, int n)
 int	ft_exe_cmd_builtin(t_in *dt, int n)
 {
 	dt->l_parseInit = dt->hdI;
-/*	if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
-	{
-		if (ft_exe_cmd_builtin_st(dt, n) == -1)
-			return (-1);
-	}
-	else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
-	{
-		if (ft_exe_cmd_builtin_int(dt, n) == -1)
-			return (-1);
-	}
-*/	if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
+	if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
 	{
 		if (ft_exe_cmd_builtin_end(dt, n) == -1)
+			return (-1);
+	}
+	else//proceso del primer comando y no es el unico o es comando intermedio
+	{
+		if (ft_exe_cmd_builtin_st(dt, n) == -1)
 			return (-1);
 	}
 	return (0);
@@ -124,19 +123,36 @@ int	ft_exe_cmd_exe(t_in *dt, int n)
 //- Despues por defecto, el primer comando y los intermedios siempre mando su resultado al aux
 //- El último comando manda la salida a la redireccion o a la estandar
 
+//funcion que ejecuta el primer comando si hay varios
+int	ft_exe_cmd_builtin_st(t_in *dt, int n)
+{
+	if (ft_compare_str(dt->ncmd, "pwd") == 1 || ft_compare_str(dt->ncmd, "env") == 1)//separo estos dos builtins porque devuelven cosas que pueden gestionar los otros comandos
+	{
+		if (ft_exe_cmd_builtin_st_aux(dt, n) == -1)
+			return (-1);
+		return(0);
+	}
+	if (dt->fdout > 0)//cuando tengo out file
+		ft_close (dt->fdout);
+	if (dt->fdint > 0)//cuando tengo int file
+		ft_close (dt->fdint);
+	if (dt->fdaux > 0)//cuando tengo aux
+	{
+		ft_close (dt->fdaux);
+		dt->fdaux = -2;
+	}
+	if (ft_builtin(dt, n) == -1)
+		return (-1);
+	return (0);
+}
+
 //funcion que ejecuta los comandos finales y si solo hay uno
 int	ft_exe_cmd_builtin_end(t_in *dt, int n)
 {
 	if (dt->fdint > 0)//si tengo archivo de entrada
-	{
-//		ft_dup2 (dt->fdint, STDIN_FILENO);
 		ft_close (dt->fdint);
-	}
 	else if (dt->fdaux > 0)//en caso de no tener int file pero si aux del anterior
-	{
-//		ft_dup2 (dt->fdaux, STDIN_FILENO);
 		ft_close (dt->fdaux);
-	}
 //por defecto si no se cumple ninguna de las anteriores coge del STD
 //SALIDAS
 	if (dt->fdout > 0)//si tengo archivo de salida
@@ -164,7 +180,7 @@ int	ft_builtin_fork (t_in *dt, int n)
 	pid = ft_fork();
 	if (pid == -1)
 		return (-1);
-	if (pid == 0)
+	else if (pid == 0)
 	{
 		ft_dup2 (dt->fdout, STDOUT_FILENO);
 		ft_close (dt->fdout);
@@ -176,6 +192,46 @@ int	ft_builtin_fork (t_in *dt, int n)
 		ft_wait (pid);
 		if (dt->fdaux > 0)
 			ft_close (dt->fdaux);
+	}
+	return (0);
+}
+
+//funcion que ejecuta el primer comando para los builtins pwd y env y en caso de que haya redireccion de salida
+int	ft_exe_cmd_builtin_st_aux(t_in *dt, int n)
+{
+	int	fd[2];
+	int	pid;
+
+	ft_pipe (fd);
+	pid = ft_fork ();
+	if (pid == -1)
+		return (-1);
+	else if (pid == 0)//entro en el hijo
+	{
+		ft_close (fd[0]);
+		//ENTRADAS
+		if (dt->fdint > 0)//cuando tengo int file
+			ft_close (dt->fdint);
+//si no tengo int file entra por el STD
+		//SALIDAS
+		if (dt->fdout > 0)//cuando tengo archivo de salida
+		{
+			ft_dup2 (dt->fdout, STDOUT_FILENO);
+			ft_close (dt->fdout);
+		}
+		else//cuando no tengo out file
+			ft_dup2 (fd[1], STDOUT_FILENO);
+		ft_close (fd[1]);
+		if (ft_builtin(dt, n) == -1)
+			return (-1);
+		exit(0);
+	}
+	else//el padre
+	{
+		ft_close (fd[1]);
+		ft_wait(pid);
+		dt->fdaux = dup (fd[0]);
+		ft_close (fd[0]);
 	}
 	return (0);
 }

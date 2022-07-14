@@ -38,6 +38,7 @@ int main(int argc, char **argv, char **envp)
 	while(1)
 	{
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
+		add_history (line);//añadido el history al minishell
 		if (!line || ft_compare_str(line, "E") == 1)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
@@ -50,6 +51,6 @@ int main(int argc, char **argv, char **envp)
 	ft_free_1(&dt);//libero el enviroment
 	ft_cleanAllLists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (dt.status);
 }
