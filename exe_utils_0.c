@@ -28,12 +28,12 @@ int	ft_exec(t_in *dt)
 			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 		}
 		ft_free(dt, 0);
-		printf ("El puntero Pipe: %p\n", dt->l_parseInit->data);//PQ HE DE LIBERAR ESTO??
-		printf ("El puntero Cmd: %p\n", dt->l_parseCmd->data);//PQ HE DE LIBERAR ESTO??
-		free (dt->l_parseCmd->data);//PQ ME PIDE IBERAR ESTO AQUI??
+//		printf ("El puntero Cmd: %p\n", dt->l_parseCmd->data);//PQ HE DE LIBERAR ESTO??
+//		printf ("El ptr: %p\n", dt->hdC);
+//		free (dt->l_parseCmd->data);//PQ ME PIDE IBERAR ESTO AQUI??
 		dt->l_parseCmd = dt->l_parseCmd->next;
 	}
-//	free (dt->hdC->data);
+//	free (dt->hdC);
 	return (0);
 }
 

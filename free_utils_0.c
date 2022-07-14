@@ -28,6 +28,16 @@ void	ft_free_0(t_in *dt)
 		free (dt->cr);
 		dt->cr = NULL;
 	}
+	if (dt->hdC)
+	{
+		free (dt->hdC);
+		dt->hdC = NULL;
+	}
+	if (dt->hdC)
+	{
+		free (dt->hdC);
+		dt->hdC = NULL;
+	}
 }
 
 //funcion que libera el enviroment solamente
