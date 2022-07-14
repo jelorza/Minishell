@@ -106,9 +106,15 @@ int		ft_ch_buil(char *name, t_list *list);
 int		ft_ch_cmde(t_in *dt, char *name);
 int		ft_execve(t_in *dt, int n);
 int		ft_exe_cmd(t_in *dt, int n);
-int		ft_exe_cmd_st(t_in *dt, int n);
-int		ft_exe_cmd_int(t_in *dt, int n);
-int		ft_exe_cmd_end(t_in *dt, int n);
+int		ft_exe_cmd_builtin(t_in *dt, int n);
+int		ft_exe_cmd_exe(t_in *dt, int n);
+int		ft_exe_cmd_builtin_st(t_in *dt, int n);
+int		ft_exe_cmd_builtin_int(t_in *dt, int n);
+int		ft_exe_cmd_builtin_end(t_in *dt, int n);
+int		ft_builtin_fork(t_in *dt, int n);
+int		ft_exe_cmd_exe_st(t_in *dt);
+int		ft_exe_cmd_exe_int(t_in *dt);
+int		ft_exe_cmd_exe_end(t_in *dt);
 
 //funciones de liberacion de memoria
 //free_utils_0.c

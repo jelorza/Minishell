@@ -19,7 +19,7 @@ int	ft_exec(t_in *dt)
 		dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
 		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable
 		{
-			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuastion menos el exit cuando va suelto
+			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestio
 				return (-1);
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
@@ -52,35 +52,64 @@ int	ft_execve (t_in *dt, int n)
 	return (0);
 }
 
-//función que ejecuta el comando con los fdint y fdout de la estructura. Retornará -1 en caso de error
+//función que mira si es un builtin o un exe y manda a la funcion de ejecucion correspondiente
 //Los builtins no los meto en el fork, porque ejecutarían solo en el hijo y no se vería el resultado en el padre
 int	ft_exe_cmd(t_in *dt, int n)
 {
 	if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6))//comprueba si es un builtin
 	{
-		if (ft_builtin(dt, n) == -1)
+		if (ft_exe_cmd_builtin(dt, n) == -1)
 			return (-1);
-		return (0);
 	}
 	else//ejecuto los ejecutables
 	{
-		dt->l_parseInit = dt->hdI;
-		if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
-		{
-			if (ft_exe_cmd_st(dt, n) == -1)
-				return (-1);
-		}
-		else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
-		{
-			if (ft_exe_cmd_int(dt, n) == -1)
-				return (-1);
-		}
-		else if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
-		{
-			if (ft_exe_cmd_end(dt, n) == -1)
-				return (-1);
-		}
+		if (ft_exe_cmd_exe(dt, n) == -1)
+			return (-1);
 		dt->status = 0;
+	}
+	return (0);
+}
+
+//funcion que distribuye los comandos builtins en funcion de si es inicial, intermedio o final
+int	ft_exe_cmd_builtin(t_in *dt, int n)
+{
+	dt->l_parseInit = dt->hdI;
+/*	if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
+	{
+		if (ft_exe_cmd_builtin_st(dt, n) == -1)
+			return (-1);
+	}
+	else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
+	{
+		if (ft_exe_cmd_builtin_int(dt, n) == -1)
+			return (-1);
+	}
+*/	if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
+	{
+		if (ft_exe_cmd_builtin_end(dt, n) == -1)
+			return (-1);
+	}
+	return (0);
+}
+
+//funcion que distribuye los comandos ejecutables en funcion de si es inicial, intermedio o final
+int	ft_exe_cmd_exe(t_in *dt, int n)
+{
+	dt->l_parseInit = dt->hdI;
+	if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
+	{
+		if (ft_exe_cmd_exe_st(dt) == -1)
+			return (-1);
+	}
+	else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
+	{
+		if (ft_exe_cmd_exe_int(dt) == -1)
+			return (-1);
+	}
+	else if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
+	{
+		if (ft_exe_cmd_exe_end(dt) == -1)
+			return (-1);
 	}
 	return (0);
 }
@@ -95,8 +124,64 @@ int	ft_exe_cmd(t_in *dt, int n)
 //- Despues por defecto, el primer comando y los intermedios siempre mando su resultado al aux
 //- El último comando manda la salida a la redireccion o a la estandar
 
+//funcion que ejecuta los comandos finales y si solo hay uno
+int	ft_exe_cmd_builtin_end(t_in *dt, int n)
+{
+	if (dt->fdint > 0)//si tengo archivo de entrada
+	{
+//		ft_dup2 (dt->fdint, STDIN_FILENO);
+		ft_close (dt->fdint);
+	}
+	else if (dt->fdaux > 0)//en caso de no tener int file pero si aux del anterior
+	{
+//		ft_dup2 (dt->fdaux, STDIN_FILENO);
+		ft_close (dt->fdaux);
+	}
+//por defecto si no se cumple ninguna de las anteriores coge del STD
+//SALIDAS
+	if (dt->fdout > 0)//si tengo archivo de salida
+	{
+		if (ft_compare_str(dt->ncmd, "pwd") == 1 || ft_compare_str(dt->ncmd, "env") == 1)
+		{
+			if (ft_builtin_fork (dt, n) == -1)
+				return (-1);
+		}
+		ft_close (dt->fdout);
+	}
+	else//si no tengo archivo de salida ejecuto el programa normal
+	{
+		if (ft_builtin(dt, n) == -1)
+			return (-1);
+	}
+	return (0);
+}
+
+//funcion que para devolver la salida a la STDOUT ejecuta un fork para los comandos builtin PWD y ENV
+int	ft_builtin_fork (t_in *dt, int n)
+{
+	int	pid;
+
+	pid = ft_fork();
+	if (pid == -1)
+		return (-1);
+	if (pid == 0)
+	{
+		ft_dup2 (dt->fdout, STDOUT_FILENO);
+		ft_close (dt->fdout);
+		ft_builtin(dt, n);
+		exit (0);
+	}
+	else
+	{
+		ft_wait (pid);
+		if (dt->fdaux > 0)
+			ft_close (dt->fdaux);
+	}
+	return (0);
+}
+
 //funcion que ejecuta el primer comando si hay varios
-int	ft_exe_cmd_st(t_in *dt, int n)
+int	ft_exe_cmd_exe_st(t_in *dt)
 {
 	int	fd[2];
 	int	pid;
@@ -124,10 +209,7 @@ int	ft_exe_cmd_st(t_in *dt, int n)
 		else//cuando no tengo out file
 			ft_dup2 (fd[1], STDOUT_FILENO);
 		ft_close (fd[1]);
-		if (dt->l_parseCmd->type != 1)
-			execve (dt->rootcmd, dt->cmdf, dt->env);
-		else
-			ft_builtin (dt, n);
+		execve (dt->rootcmd, dt->cmdf, dt->env);
 		exit(0);
 	}
 	else//el padre
@@ -141,7 +223,7 @@ int	ft_exe_cmd_st(t_in *dt, int n)
 }
 
 //funcion que ejecuta los cmd intermedios
-int	ft_exe_cmd_int(t_in *dt, int n)
+int	ft_exe_cmd_exe_int(t_in *dt)
 {
 	int	fd[2];
 	int	pid;
@@ -172,10 +254,7 @@ int	ft_exe_cmd_int(t_in *dt, int n)
 		else//no tengo archivo de salida. 
 			ft_dup2 (fd[1], STDOUT_FILENO);
 		ft_close (fd[1]);
-		if (dt->l_parseCmd->type != 1)
-			execve (dt->rootcmd, dt->cmdf, dt->env);
-		else
-			ft_builtin (dt, n);
+		execve (dt->rootcmd, dt->cmdf, dt->env);
 		exit(0);
 	}
 	else
@@ -192,7 +271,7 @@ int	ft_exe_cmd_int(t_in *dt, int n)
 }
 
 //funcion que ejecuta los comandos finales y si solo hay uno
-int	ft_exe_cmd_end(t_in *dt, int n)
+int	ft_exe_cmd_exe_end(t_in *dt)
 {
 	int	pid;
 
@@ -217,10 +296,7 @@ int	ft_exe_cmd_end(t_in *dt, int n)
 			ft_close (dt->fdout);
 		}
 //por defecto si no hay archivo de salida coge la STD
-		if (dt->l_parseCmd->type != 1)
-			execve (dt->rootcmd, dt->cmdf, dt->env);
-		else
-			ft_builtin (dt, n);
+		execve (dt->rootcmd, dt->cmdf, dt->env);
 		exit(0);
 	}
 	else
@@ -228,10 +304,6 @@ int	ft_exe_cmd_end(t_in *dt, int n)
 		ft_wait (pid);
 		if (dt->fdaux > 0)
 			ft_close (dt->fdaux);
-	}
-	if (dt->nc == 1 && ft_compare_str(dt->ncmd, "exit") == 1)//caso de salida del programa con exit
-	{
-		return (-1);
 	}
 	return (0);
 }
