@@ -3,23 +3,24 @@
 //funcion que va a comprobar si el comando es un builtin o un ejecutable, en caso de que ninguno sea, devuelve error y pasa al siguiente comando
 int	ft_exec(t_in *dt)
 {
+	t_list	*aux;
+
 	dt->fdaux = -2;//inicio el descriptor auxiliar 
 	dt->rootcmd = NULL;//inicio la ruta del comando
 	dt->cmdf = NULL;//inicio la bidimensional del comando
 	dt->cr = NULL;//inicio el puntero a la estructura de redirecciones
 	dt->hdI = dt->l_parseInit;//guardo las cabezas de las listas
-	dt->hdC = dt->l_parseCmd;
 	dt->hdR = dt->l_parseRedir;
-	dt->l_parseCmd = dt->hdC;
-	dt->nc = ft_listlen(dt->l_parseCmd);
-	dt->l_parseCmd = dt->hdC;
-	while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
+	aux = dt->l_parseCmd;
+	dt->nc = ft_listlen(aux);
+	aux = dt->l_parseCmd;
+	while (aux)//recorro la lista de comandos ejecutandolos
 	{
-		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-		dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
-		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable
+		dt->ncmd = ft_get_name(aux->data);
+		dt->cmdf = ft_split(aux->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
+		if ((ft_ch_buil(dt->ncmd, aux) >= 0 && ft_ch_buil(dt->ncmd, aux) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable
 		{
-			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestio
+			if (ft_execve (dt, aux->id) == -1)//Ejecuto el comando en cuestio
 			{
 				return (-1);
 			}
@@ -30,10 +31,7 @@ int	ft_exec(t_in *dt)
 			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 		}
 		ft_free(dt, 0);
-//		printf ("El puntero Cmd: %p\n", dt->l_parseCmd->data);//PQ HE DE LIBERAR ESTO??
-//		printf ("El ptr: %p\n", dt->hdC);
-//		free (dt->l_parseCmd->data);//PQ ME PIDE IBERAR ESTO AQUI??
-		dt->l_parseCmd = dt->l_parseCmd->next;
+		aux = aux->next;
 	}
 	return (0);
 }

@@ -44,7 +44,6 @@ typedef struct	s_in
 	t_list	*l_parseRedir;//lista de redirecciones
 	t_list	*hdR;//cabeza de la lista redirecciones
 	t_list	*l_parseCmd;//lista de comandos(type 1 = builtin)
-	t_list	*hdC;//cabeza de la lista Cmd
 	t_list	*hd;//lista de here docs (HD)
 	t_list	*hdH;//cabeza de la lista de hr
 	int		nc;//guardo el numero de cmd que hay en la lista para la funcion exit
@@ -121,7 +120,6 @@ int		ft_exe_cmd_exe_end(t_in *dt);
 //free_utils_0.c
 void	ft_free_0(t_in *dt);
 void	ft_free_1(t_in *dt);
-void	ft_free_2(t_in *dt);
 void	ft_free(t_in *dt, int i);
 
 //funciones que realizan el here dock (HD)

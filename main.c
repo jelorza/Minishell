@@ -17,7 +17,6 @@ void	ft_struct_init(t_in *dt)
 
 void	ft_cleanAllLists(t_in *dt)
 {
-	ft_free(dt, 2);
 	ft_cleanListPipe(&dt->l_parseInit);
 	ft_cleanListCmd(&dt->l_parseCmd);
 	ft_cleanListRedir(&dt->l_parseRedir);
