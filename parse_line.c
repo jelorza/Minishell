@@ -6,6 +6,7 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 {
 	line = ft_expand_envs(line, dt); // Checar si entre pipes se encuentra un $. Si es asi sustituirla por la variable de entorno.
 	ft_pipes_list(line, dt); // crea la lista de pipes con la linea como dato.	
+	ft_remove_quot(dt);
 	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
 //	ft_printAllLists(dt); // Imprimir listas
 	free (line);
@@ -15,6 +16,42 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 	}
 	return (0);
 }	
+
+void	ft_remove_quot(t_in *dt)
+{
+	int i;
+	char *aux;
+
+	aux = ft_strdup(dt->l_parseInit->data);
+	i = 0;
+	while (aux[i])
+	{
+		if (aux[i] == '"' )
+		{
+			dt->l_parseInit->data[i] = 1;
+			while (aux[++i] != '"' && aux[i])
+			{
+				dt->l_parseInit->data[i] = aux[i] ;
+			}
+			dt->l_parseInit->data[i] = 1;
+		}
+		else if (aux[i] == 39)
+		{
+			dt->l_parseInit->data[i] = 1;
+			while (aux[++i] != 39 && aux[i])
+			{
+				dt->l_parseInit->data[i] = aux[i] ;
+			}
+			dt->l_parseInit->data[i] = 1;
+		}
+		else
+		{
+			dt->l_parseInit->data[i] = aux[i];
+		}
+		i++;
+	}
+	free(aux);
+}
 
 char	*ft_expand_envs(char *line, t_in *dt)
 {

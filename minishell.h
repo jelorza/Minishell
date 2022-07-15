@@ -152,6 +152,7 @@ int		ft_listlen(t_list *list);
 //funciones de limpieza de line (readline)
 //parse_init.c
 int		ft_parse_line(char *line, t_in *dt);
+void	ft_remove_quot(t_in *dt);
 char	*ft_expand_envs(char *line, t_in *dt);
 int 	ft_charCounter(char *line, char c);
 char 	*ft_checkEnv(char *line);
