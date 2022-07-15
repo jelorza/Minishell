@@ -121,6 +121,7 @@ int		ft_exe_cmd_exe_end(t_in *dt);
 //free_utils_0.c
 void	ft_free_0(t_in *dt);
 void	ft_free_1(t_in *dt);
+void	ft_free_2(t_in *dt);
 void	ft_free(t_in *dt, int i);
 
 //funciones que realizan el here dock (HD)

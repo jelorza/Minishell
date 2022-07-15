@@ -28,16 +28,6 @@ void	ft_free_0(t_in *dt)
 		free (dt->cr);
 		dt->cr = NULL;
 	}
-	if (dt->hdC)
-	{
-		free (dt->hdC);
-		dt->hdC = NULL;
-	}
-	if (dt->hdC)
-	{
-		free (dt->hdC);
-		dt->hdC = NULL;
-	}
 }
 
 //funcion que libera el enviroment solamente
@@ -62,6 +52,22 @@ void	ft_free_1(t_in *dt)
 		free (dt->rootold);
 }
 
+void	ft_free_2(t_in *dt)
+{
+	if (dt->hdC)
+	{
+		free (dt->hdC->data);
+		dt->hdC->data = NULL;
+//		free (dt->hdC);
+	}
+/*	if (dt->hdR)
+	{
+		free (dt->hdR->data);
+		dt->hdR->data = NULL;
+		free (dt->hdR);
+	}*/
+}
+
 //funcion general para liberar. En función del int activa unas cosas u otras
 //i = 0 - libera todo lo de la linea, NO el env (cuando salimos normal de la linea)
 //i = 1 - libera todo el env (cuando salimos normal o por error del programa)
@@ -71,4 +77,6 @@ void	ft_free(t_in *dt, int i)
 		ft_free_0(dt);
 	if (i == 1 && dt->env_name != NULL && dt->env_value != NULL)
 		ft_free_1(dt);
+	if (i == 2)
+		ft_free_2(dt);
 }

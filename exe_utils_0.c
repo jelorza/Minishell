@@ -20,7 +20,9 @@ int	ft_exec(t_in *dt)
 		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable
 		{
 			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestio
+			{
 				return (-1);
+			}
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
 		{
@@ -33,7 +35,6 @@ int	ft_exec(t_in *dt)
 //		free (dt->l_parseCmd->data);//PQ ME PIDE IBERAR ESTO AQUI??
 		dt->l_parseCmd = dt->l_parseCmd->next;
 	}
-//	free (dt->hdC);
 	return (0);
 }
 
