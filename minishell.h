@@ -45,7 +45,6 @@ typedef struct	s_in
 	t_list	*hdR;//cabeza de la lista redirecciones
 	t_list	*l_parseCmd;//lista de comandos(type 1 = builtin)
 	t_list	*hd;//lista de here docs (HD)
-	t_list	*hdH;//cabeza de la lista de hr
 	int		nc;//guardo el numero de cmd que hay en la lista para la funcion exit
 	int		status;//guardo el valor a retornar por el programa
 	int		fdint;//guardo el fdin de entrada que se ejecutara
