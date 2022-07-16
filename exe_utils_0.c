@@ -123,7 +123,7 @@ int	ft_exe_cmd_exe(t_in *dt, int n)
 //funcion que ejecuta el primer comando si hay varios
 int	ft_exe_cmd_builtin_st(t_in *dt, int n)
 {
-	if (ft_compare_str(dt->ncmd, "pwd") == 1 || ft_compare_str(dt->ncmd, "env") == 1)//separo estos dos builtins porque devuelven cosas que pueden gestionar los otros comandos
+	if (ft_compare_str(dt->ncmd, "pwd") == 1 || ft_compare_str(dt->ncmd, "env") == 1 || ft_compare_str(dt->ncmd, "echo") == 1)//separo estos dos builtins porque devuelven cosas que pueden gestionar los otros comandos
 	{
 		if (ft_exe_cmd_builtin_st_aux(dt, n) == -1)
 			return (-1);
@@ -154,7 +154,7 @@ int	ft_exe_cmd_builtin_end(t_in *dt, int n)
 //SALIDAS
 	if (dt->fdout > 0)//si tengo archivo de salida
 	{
-		if (ft_compare_str(dt->ncmd, "pwd") == 1 || ft_compare_str(dt->ncmd, "env") == 1)
+		if (ft_compare_str(dt->ncmd, "pwd") == 1 || ft_compare_str(dt->ncmd, "env") == 1 || ft_compare_str(dt->ncmd, "echo") == 1)
 		{
 			if (ft_builtin_fork (dt, n) == -1)
 				return (-1);
