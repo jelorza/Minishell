@@ -371,7 +371,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 		z = i;
 		if (line[i] && (line[i] == '<' || line[i] == '>')) // por redireccionamineto
 		{
-			type = ft_redir_type(line[i], line [i + 1], line [i + 2], line [i + 3]);
+			type = ft_redir_type(line, i);
 			if (type == '3' || type == '4')
 				i++;
 			else if (type == '5')
@@ -435,34 +435,59 @@ int ft_checkAndCreate (t_in *dt, int bool, char *data)
 }
 
 
-char	ft_redir_type(char type, char nType, char nnType, char nnnType)
+char	ft_redir_type(char *line, int i)
 {
-	if (type == '>' && nType == '>' && nnType == '>' && nnnType == '>')
+	int z;
+
+	z = i;
+	i++;
+	if (line[i] == ' ')
 	{
-		printf("syntas error near unexpected token `%c%c' \n", nnType, nnnType);
+		while (line[i] == ' ')
+			i++;
+		if (line[i] == '<' || line[i] == '>')
+		{
+			printf("syntas error near unexpected token `%c' \n", line[i]);
+			return('5');
+		}
+	}	
+	i = z;
+	if (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>' && line[i + 3] == '>')
+	{
+		printf("syntas error near unexpected token `%c%c' \n", line[i + 2], line[i + 3]);
 		return('5');
 	}
-	else if (type == '>' && nType == '>' && nnType == '>')
+	else if (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>')
 	{
-		printf("syntas error near unexpected token `%c'\n", nnType);
+		printf("syntas error near unexpected token `%c' \n", line[i + 2]);
 		return('5');
 	}
-	else if(type == '<' && nType == '<' && nnType =='<' && nnnType == '<')
+	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<' && line[i + 3] == '<' && line[i + 4] == '<' && line[i + 5] == '<')
 	{
-		printf("syntas error near unexpected token `%c'\n", nnType);
+		printf("syntas error near unexpected token `%c%c%c' \n", line[i + 2], line[i + 3], line[i + 4]);
 		return('5');
 	}
-	else if (type == '<' && nType != '<')
+	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<' && line[i + 3] == '<' && line[i + 4] == '<')
+	{
+		printf("syntas error near unexpected token `%c%c' \n", line[i + 2], line[i + 3]);
+		return('5');
+	}
+	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<' && line[i + 3] == '<')
+	{
+		printf("syntas error near unexpected token `%c' \n", line[i + 2]);
+		return('5');
+	}
+	else if (line[i] == '<' && line[i + 1] != '<')
 		return ('1');
-	else if (type == '>' && nType != '>')
+	else if (line[i] == '>' && line[i + 1] != '>')
 		return ('2');
-	else if (type == '<' && nType == '<' && nnType == '<')
+	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		return ('6');
-	else if (type == '<' && nType == '<')
+	else if (line[i] == '<' && line[i + 1] == '<')
 	{
 		return ('3');
 	}
-	else if (type == '>' && nType == '>') 
+	else if (line[i] == '>' && line[i + 1] == '>') 
 		return ('4');
 	else
 		return (0);

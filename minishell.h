@@ -162,7 +162,7 @@ int	ft_pipes_list(char *line, t_in *dt);
 int		ft_check_quotations(char *line, int i);
 void	ft_div_in_lists(t_in *dt);
 int		ft_check_and_create(char *line, t_in *dt, int id);
-char	ft_redir_type(char type, char nType, char nnType, char nnnType);
+char	ft_redir_type(char *line, int i);
 void	ft_printAllLists(t_in *dt);
 int		ft_checkAndCreate(t_in *dt, int bool, char *data);
 int		ft_checkIf39(char *line, int i); //Check if has '
