@@ -17,6 +17,9 @@ void	ft_struct_init(t_in *dt)
 
 void	ft_cleanAllLists(t_in *dt)
 {
+	dt->l_parseRedir = dt->hdR;
+	dt->l_parseInit = dt->hdI;
+	dt->l_parseCmd = dt->hdC;
 	ft_cleanListPipe(&dt->l_parseInit);
 	ft_cleanListCmd(&dt->l_parseCmd);
 	ft_cleanListRedir(&dt->l_parseRedir);
@@ -52,6 +55,6 @@ int main(int argc, char **argv, char **envp)
 	ft_free_0(&dt);
 	ft_cleanAllLists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (dt.status);
 }
