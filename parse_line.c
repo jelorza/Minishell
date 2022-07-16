@@ -264,7 +264,7 @@ int	ft_pipes_list(char *line, t_in *dt)
 		i++;
 	if (line[i] == '|')
 	{
-		printf("syntax error near unexpected token `|'\n");
+		printf("bash: syntax error near unexpected token `|'\n");
 		return (-1);
 	}
 	while (i < ft_strlen(line))
@@ -284,7 +284,7 @@ int	ft_pipes_list(char *line, t_in *dt)
 				i++;
 			if (line[i] == '|')
 			{
-				printf("syntax error near unexpected token `|'\n");
+				printf("bash: syntax error near unexpected token `|'\n");
 				return(-1);
 			}
 			else
