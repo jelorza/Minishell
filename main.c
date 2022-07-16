@@ -5,13 +5,9 @@
 void	ft_struct_init(t_in *dt)
 {
 	dt->l_parseInit = NULL;
-	dt->hdI = NULL;
 	dt->l_parseRedir = NULL;
-	dt->hdR = NULL;
 	dt->l_parseCmd = NULL;
-	dt->hdC = NULL;
 	dt->hd = NULL;
-	dt->hdH = NULL;
 	dt->env = NULL;
 	dt->env_name = NULL;
 	dt->env_value = NULL;
@@ -23,13 +19,17 @@ void	ft_struct_init(t_in *dt)
 void	ft_cleanAllLists(t_in *dt)
 {
 	dt->l_parseInit = dt->hdI;
-	if (dt->hdC)
 	dt->l_parseCmd = dt->hdC;
-	if (dt->hdR)
-		dt->l_parseRedir = dt->hdR;
 	ft_cleanListPipe(&dt->l_parseInit);
 	ft_cleanListCmd(&dt->l_parseCmd);
-	ft_cleanListRedir(&dt->l_parseRedir);
+//	printf ("<%s>\n", dt->hdR->data);
+	dt->l_parseRedir = dt->hdR;
+//	printf ("<%s>\n", dt->l_parseRedir->data);
+/*	if (dt->l_parseRedir)
+	{	
+		dt->l_parseRedir = dt->hdR;
+	}
+*/	ft_cleanListRedir(&dt->l_parseRedir);
 }
 
 int main(int argc, char **argv, char **envp)

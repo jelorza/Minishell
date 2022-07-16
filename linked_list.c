@@ -3,6 +3,7 @@
 t_list	*ft_newNodCmd(char *data, t_list **list, int id)
 {
 	t_list *new;
+
 	list = NULL;
 	new = malloc(sizeof(t_list));
 	if (!new)

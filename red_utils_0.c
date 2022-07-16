@@ -98,13 +98,13 @@ int	ft_exe_redir_int(t_in *dt, int n)
 					cmdnex = ft_strjoin("", dt->l_parseRedir->data);//me guardo la RIN que no existe
 					n = -1;//condicion para activar en la función ch_HD que hay una redireccion que no existe
 					ft_ch_HD (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
-					dt->hd = dt->hdH;//me guardo la cabeza de la lista HD
+					dt->hdH = dt->hd;//me guardo la cabeza de la lista HD
 					while (dt->hd)//si hay algun HD
 					{
 						ft_exe_null_HD(dt->hd->data);
 						dt->hd = dt->hd->next;
 					}
-//					dt->hd = dt->hdH;
+					dt->hd = dt->hdH;
 					ft_destroy_list(&dt->hd);
 					printf ("bash: %s: No such file or directory\n", cmdnex);
 					return (-2);
@@ -117,7 +117,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		}
 		dt->l_parseRedir = dt->l_parseRedir->next;
 	}
-	dt->hd = dt->hdH;
+	dt->hdH = dt->hd;
 	if (dt->tint == 3)//caso de que el HD sea la redireccion de entrada predominante
 	{
 		while (dt->hd->next)
