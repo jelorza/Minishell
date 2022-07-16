@@ -62,6 +62,6 @@ int main(int argc, char **argv, char **envp)
 	ft_free_0(&dt);
 	ft_cleanAllLists(&dt);
 	free (line);
-	system ("leaks minishell");
+//	system ("leaks minishell");
 	return (dt.status);
 }

@@ -77,7 +77,6 @@ int	ft_exe_redir_int(t_in *dt, int n)
 {
 	int 	i;
 	char	*cmdnex;//guardo el nombre del cmd que no existe
-	t_list	*aux;//auxiliar para el HD
 
 	i = 0;
 	dt->tint = 0;//reseteo el tipo de redireccion de entrada
@@ -99,11 +98,11 @@ int	ft_exe_redir_int(t_in *dt, int n)
 					cmdnex = ft_strjoin("", dt->l_parseRedir->data);//me guardo la RIN que no existe
 					n = -1;//condicion para activar en la función ch_HD que hay una redireccion que no existe
 					ft_ch_HD (dt, n);//antes de retornar hay que activar el hear dock aunque no vaya a hacer nada el programa con ello
-					aux = dt->hd;
-					while (aux)//si hay algun HD
+					dt->hd = dt->hdH;//me guardo la cabeza de la lista HD
+					while (dt->hd)//si hay algun HD
 					{
-						ft_exe_null_HD(aux->data);
-						aux = aux->next;
+						ft_exe_null_HD(dt->hd->data);
+						dt->hd = dt->hd->next;
 					}
 //					dt->hd = dt->hdH;
 					ft_destroy_list(&dt->hd);
@@ -118,24 +117,24 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		}
 		dt->l_parseRedir = dt->l_parseRedir->next;
 	}
-	aux = dt->hd;
+	dt->hd = dt->hdH;
 	if (dt->tint == 3)//caso de que el HD sea la redireccion de entrada predominante
 	{
-		while (aux->next)
+		while (dt->hd->next)
 		{
-			ft_exe_null_HD(aux->data);
-			aux = aux->next;
+			ft_exe_null_HD(dt->hd->data);
+			dt->hd = dt->hd->next;
 		}
-		dt->fdint = ft_exe_HD(aux->data, dt->fdint, dt->env);
+		dt->fdint = ft_exe_HD(dt->hd->data, dt->fdint, dt->env);
 		if (dt->fdint == -1)
 			return (-1);
 	}
-	else if (dt->tint != 3 && aux)//caso de que un archivo de entrada sea la redireccion de entrada predominante pero exista algun HD previo
+	else if (dt->tint != 3 && dt->hd)//caso de que un archivo de entrada sea la redireccion de entrada predominante pero exista algun HD previo
 	{
-		while (aux)//si hay algun HD
+		while (dt->hd)//si hay algun HD
 		{
-			ft_exe_null_HD(aux->data);
-			aux = aux->next;
+			ft_exe_null_HD(dt->hd->data);
+			dt->hd = dt->hd->next;
 		}
 	}
 	ft_destroy_list(&dt->hd);
