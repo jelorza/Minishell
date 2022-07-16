@@ -23,7 +23,7 @@ void	ft_cleanAllLists(t_in *dt)
 	ft_cleanListPipe(&dt->l_parseInit);
 	ft_cleanListCmd(&dt->l_parseCmd);
 //	printf ("<%s>\n", dt->hdR->data);
-	dt->l_parseRedir = dt->hdR;
+//	dt->l_parseRedir = dt->hdR;
 //	printf ("<%s>\n", dt->l_parseRedir->data);
 /*	if (dt->l_parseRedir)
 	{	
@@ -53,6 +53,7 @@ int main(int argc, char **argv, char **envp)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
+			ft_cleanAllLists(&dt);
 			break;
 		}
 		free (line);
@@ -60,8 +61,8 @@ int main(int argc, char **argv, char **envp)
 	}
 	ft_free_1(&dt);//libero el enviroment
 	ft_free_0(&dt);
-	ft_cleanAllLists(&dt);
+//	ft_cleanAllLists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (dt.status);
 }
