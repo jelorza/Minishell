@@ -22,12 +22,12 @@ void	ft_struct_init(t_in *dt)
 
 void	ft_cleanAllLists(t_in *dt)
 {
-	if (dt->hdI)
-		ft_cleanListPipe(&dt->hdI);
-	if (dt->hdC)
-		ft_cleanListPipe(&dt->hdC);
-	if (dt->hdR)
-		ft_cleanListPipe(&dt->hdR);
+	dt->l_parseInit = dt->hdI;
+	ft_cleanListPipe(&dt->l_parseInit);
+	dt->l_parseCmd = dt->hdC;
+	ft_cleanListCmd(&dt->l_parseCmd);
+	dt->l_parseRedir = dt->hdR;
+	ft_cleanListRedir(&dt->l_parseRedir);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -52,7 +52,7 @@ int main(int argc, char **argv, char **envp)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
-			ft_printAllLists(&dt);
+			ft_cleanAllLists(&dt);
 			break;
 		}
 		free (line);
@@ -60,7 +60,6 @@ int main(int argc, char **argv, char **envp)
 	}
 	ft_free_1(&dt);//libero el enviroment
 	ft_free_0(&dt);
-	ft_cleanAllLists(&dt);
 	free (line);
 	system ("leaks minishell");
 	return (dt.status);
