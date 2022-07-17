@@ -5,9 +5,13 @@
 void	ft_struct_init(t_in *dt)
 {
 	dt->l_parseInit = NULL;
+	dt->hdI = NULL;
 	dt->l_parseRedir = NULL;
+	dt->hdR = NULL;
 	dt->l_parseCmd = NULL;
+	dt->hdC = NULL;
 	dt->hd = NULL;
+	dt->hdH = NULL;
 	dt->env = NULL;
 	dt->env_name = NULL;
 	dt->env_value = NULL;
@@ -18,18 +22,12 @@ void	ft_struct_init(t_in *dt)
 
 void	ft_cleanAllLists(t_in *dt)
 {
-	dt->l_parseInit = dt->hdI;
-	dt->l_parseCmd = dt->hdC;
-	ft_cleanListPipe(&dt->l_parseInit);
-	ft_cleanListCmd(&dt->l_parseCmd);
-//	printf ("<%s>\n", dt->hdR->data);
-//	dt->l_parseRedir = dt->hdR;
-//	printf ("<%s>\n", dt->l_parseRedir->data);
-/*	if (dt->l_parseRedir)
-	{	
-		dt->l_parseRedir = dt->hdR;
-	}
-*/	ft_cleanListRedir(&dt->l_parseRedir);
+	if (dt->hdI)
+		ft_cleanListPipe(&dt->hdI);
+	if (dt->hdC)
+		ft_cleanListPipe(&dt->hdC);
+	if (dt->hdR)
+		ft_cleanListPipe(&dt->hdR);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -48,12 +46,13 @@ int main(int argc, char **argv, char **envp)
 	while(1)
 	{
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
+//		line = readline("bash del jonpol$ ");//texto de entrada de bash
 		add_history (line);//añadido el history al minishell
 		if (!line || ft_compare_str(line, "E") == 1)
 			break; 
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
-			ft_cleanAllLists(&dt);
+			ft_printAllLists(&dt);
 			break;
 		}
 		free (line);
@@ -61,7 +60,7 @@ int main(int argc, char **argv, char **envp)
 	}
 	ft_free_1(&dt);//libero el enviroment
 	ft_free_0(&dt);
-//	ft_cleanAllLists(&dt);
+	ft_cleanAllLists(&dt);
 	free (line);
 	system ("leaks minishell");
 	return (dt.status);

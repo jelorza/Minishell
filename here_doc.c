@@ -10,7 +10,7 @@ int	ft_ch_HD(t_in *dt, int n)
 
 	if (n != -1)//caso de tener un HD antes de encontrar alguna redireccion que no exista
 	{
-		new = ft_new(dt->l_parseRedir->data, n, 0);
+		new = ft_new(ft_strdup(dt->l_parseRedir->data), n, 0);
 		ft_add_back(&dt->hd, new);
 		return (0);
 	}
@@ -20,7 +20,7 @@ int	ft_ch_HD(t_in *dt, int n)
 		{
 			if (dt->l_parseRedir->type == 3)
 			{
-				new = ft_new(dt->l_parseRedir->data, n, 0);
+				new = ft_new(ft_strdup(dt->l_parseRedir->data), n, 0);
 				ft_add_back(&dt->hd, new);
 			}
 			dt->l_parseRedir = dt->l_parseRedir->next;

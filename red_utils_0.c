@@ -21,6 +21,7 @@ int	ft_ch_redir(t_in *dt, int n)
 	cr->ti = 0;
 	cr->ts = 0;
 	dt->l_parseRedir = dt->hdR;
+	dt->l_parseRedir = dt->hdR;
 	while (dt->l_parseRedir)
 	{
 		if (dt->l_parseRedir->id == n)
@@ -138,6 +139,9 @@ int	ft_exe_redir_int(t_in *dt, int n)
 		}
 	}
 	ft_destroy_list(&dt->hd);
+//	dt->l_parseRedir = dt->hdR;
+//	printf ("Compruebo:\n");
+//	ft_printAllLists(dt);
 	return (0);
 }
 
