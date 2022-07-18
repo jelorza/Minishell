@@ -10,7 +10,7 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 	}
 	ft_remove_quot(dt);
 	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
-//	ft_printAllLists(dt); // Imprimir listas
+	ft_printAllLists(dt); // Imprimir listas
 	free (line);
 	if (ft_exec(dt) == -1)
 		return (-1);
@@ -71,8 +71,8 @@ char	*ft_expand_envs(char *line, t_in *dt)
 			env[1] = ft_strdup(dt->env_value[isEnv]); //Duardo el valor de la env
 			env[2] = ft_replaceInLine(env[2], env[0], env[1]); //En la linea, sustituio el nombre del env por su valor
 			free(env[1]);
-			free(env[0]);
 		}
+		free(env[0]);
 		n--;
 	}
 	return (env[2]);
