@@ -15,7 +15,7 @@ int	ft_exec(t_in *dt)
 	while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
 	{
 		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-		dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
+		dt->cmdf = ft_split(dt->l_parseCmd->data, 1);//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
 		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 		{
 			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
