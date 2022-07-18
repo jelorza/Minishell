@@ -11,20 +11,20 @@ int	ft_builtin(t_in *dt, int n)
 	if (i == 0)
 		ft_exe_cd(dt);
 //	if (i == 1)
-//		dt->status = ft_exe_echo(dt, n);
+//		STATUS = ft_exe_echo(dt, n);
 	else if (i == 2)
-		dt->status =  ft_exe_env(dt);
+		STATUS =  ft_exe_env(dt);
 	else if (i == 3)
 	{
 		if (ft_exe_exit(dt) == -1)
 			return (-1);
 	}
 //	else if (i == 4)
-//		dt->status = ft_exe_export(dt, n);
+//		STATUS = ft_exe_export(dt, n);
 	else if (i == 5)
-		dt->status = ft_exe_pwd(dt);
+		STATUS = ft_exe_pwd();
 //	else if (i == 6)
-//		dt->status = ft_exe_unset(dt, n);
+//		STATUS = ft_exe_unset(dt, n);
 	return (0);
 }
 
@@ -48,7 +48,7 @@ int	ft_exe_cd(t_in *dt)
 			else
 				printf("bash: cd: %s: Not a directory\n", dt->cmdf[1]);
 			close (fd);
-			dt->status = 1;
+			STATUS = 1;
 			return (-1);
 		}
 		if (dt->nc != 1)//si el comando cd no esta solo, vuelvo a la ruta donde estaba
@@ -63,7 +63,7 @@ int	ft_exe_cd(t_in *dt)
 			ft_env_act(dt);
 		}
 	}
-	dt->status = 0;
+	STATUS = 0;
 	return (0);
 }
 
@@ -89,7 +89,7 @@ int	ft_exe_exit(t_in *dt)
 	aux = 0;
 	if (ft_strlen_bi(dt->cmdf) > 2)//caso de demasiados argumentos en exit, y en ese caso retorna 1 y no hace nada
 	{
-		dt->status = 1;
+		STATUS = 1;
 		if (dt->nc == 1)
 			printf ("exit\n");
 		printf ("bash: exit: too many arguments\n");
@@ -100,7 +100,7 @@ int	ft_exe_exit(t_in *dt)
 		aux = ft_atoi(dt->cmdf[1]);
 		if (aux == -1)
 		{
-			dt->status = 1;
+			STATUS = 1;
 			if (dt->nc == 1)
 				printf ("exit\n");
 			printf ("bash: exit: %s: numeric argument required\n", dt->cmdf[1]);
@@ -109,12 +109,12 @@ int	ft_exe_exit(t_in *dt)
 		}
 		if (aux > 256)
 			aux = aux % 256;
-		dt->status = aux;
+		STATUS = aux;
 	}
 	if (dt->nc == 1)//caso de que exit este solo
 	{
-		if (dt->status == -1)//si no esta iniciado el status lo pongo a 0
-			dt->status = 0;
+		if (STATUS == -1)//si no esta iniciado el status lo pongo a 0
+			STATUS = 0;
 		printf ("exit\n");
 		return (-1);
 	}
@@ -122,17 +122,16 @@ int	ft_exe_exit(t_in *dt)
 }
 
 //funcionpara el pwd
-int	ft_exe_pwd(t_in *dt)
+int	ft_exe_pwd()
 {
 	char path[200];
 
 	if (getcwd(path, 200) == NULL)//No se cuando puede fallar la verdad, por lo que sobraria este bucle
 	{
-		dt->status = 1;
+		STATUS = 1;
 		return (-1);
 	}
 	printf ("%s\n", path);
-	dt->status = 0;
-	return (0);
+	STATUS = 0;
+	return (STATUS);
 }
-

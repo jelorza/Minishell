@@ -25,7 +25,7 @@ int	ft_exec(t_in *dt)
 		}
 		else//devuelve error porque no es ni builtin ni ejecutable
 		{
-			dt->status = 127;//el valor retornado en este caso es 127
+			STATUS = 127;//el valor retornado en este caso es 127
 			if (ft_ch_cmde(dt, dt->rootcmd) == -2)
 				printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
 			else
@@ -69,7 +69,7 @@ int	ft_exe_cmd(t_in *dt, int n)
 	{
 		if (ft_exe_cmd_exe(dt, n) == -1)
 			return (-1);
-		dt->status = 0;
+		STATUS = 0;
 	}
 	return (0);
 }

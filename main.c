@@ -4,6 +4,7 @@
 
 void	ft_struct_init(t_in *dt)
 {
+	STATUS = 0;
 	dt->l_parseInit = NULL;
 	dt->hdI = NULL;
 	dt->l_parseRedir = NULL;
@@ -17,7 +18,6 @@ void	ft_struct_init(t_in *dt)
 	dt->env_value = NULL;
 	dt->root = NULL;
 	dt->rootold = NULL;
-	dt->status = -1;//inicio el valor de retorno
 }
 
 void	ft_cleanAllLists(t_in *dt)
@@ -75,5 +75,5 @@ int main(int argc, char **argv, char **envp)
 	ft_cleanAllLists(&dt);
 	free (line);
 	system ("leaks minishell");
-	return (dt.status);
+	return (STATUS);
 }

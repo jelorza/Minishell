@@ -91,7 +91,7 @@ long	ft_atoi(char *str);
 int		ft_builtin(t_in *dt, int n);
 int		ft_exe_cd(t_in *dt);
 int		ft_exe_env(t_in *dt);
-int		ft_exe_pwd(t_in *dt);
+int		ft_exe_pwd();
 int		ft_exe_exit(t_in *dt);
 
 //funciones de recogida del env
