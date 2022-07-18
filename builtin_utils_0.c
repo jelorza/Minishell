@@ -11,7 +11,10 @@ int	ft_builtin(t_in *dt, int n)
 	if (i == 0)
 		ft_exe_cd(dt);
 	if (i == 1)
+	{
+		dt->cmdfEcho = ft_splitEcho(dt->l_parseCmd->data, ' ');
 		STATUS = ft_exe_echo(dt, n);
+	}
 	else if (i == 2)
 		STATUS =  ft_exe_env(dt);
 	else if (i == 3)
@@ -42,14 +45,20 @@ int	ft_exe_echo(t_in *dt, int n)
 	{
 		n = 1;
 		i++;
+		free(dt->cmdfEcho[1]);
 	}
+	free(dt->cmdfEcho[0]);
 	while (dt->cmdfEcho[i])
 	{
-		printf("%s ", dt->cmdfEcho[i]);
+		printf("%s", dt->cmdfEcho[i]);
+		free(dt->cmdfEcho[i]);
 		i++;
+		if (dt->cmdfEcho[i])
+			printf(" ");
 	}
 	if (n == 0)
 		printf("\n");
+	free(dt->cmdfEcho);
 	return (0);
 }
 
