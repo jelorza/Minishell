@@ -16,7 +16,7 @@ int	ft_exec(t_in *dt)
 	{
 		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
 		dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');//OJO AQUI CON LOS ESPACIOS AFECTADOS POR COMILLAS. HAREMOS LA PROBATURA DE METER AQUI UN COMANDO NO IMPRIMIBLE PARA DIVIDIR LA LINEA!!!!!
-		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) != -1)//comprueba si es un builtin o un ejecutable
+		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 		{
 			if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestio
 			{
@@ -26,7 +26,10 @@ int	ft_exec(t_in *dt)
 		else//devuelve error porque no es ni builtin ni ejecutable
 		{
 			dt->status = 127;//el valor retornado en este caso es 127
-			printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
+			if (ft_ch_cmde(dt, dt->rootcmd) == -2)
+				printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
+			else
+				printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 		}
 		ft_free(dt, 0);
 		dt->l_parseCmd = dt->l_parseCmd->next;
@@ -379,7 +382,7 @@ int	ft_ch_buil(char *name, t_list *list)
 	return (-1);//el cmd no es builtin
 }
 
-//con el access comprueba si el comando es ejecutable y devuelve el numero de la ruta guardada en el array de PATH. En caso de no encontrar coincidencia devuelve -1
+//con el access comprueba si el comando es ejecutable y devuelve 0 si es ejecutable. Devuelve-1 o -2 si no es ejecutable, pero por diferentes motivos, para sacar diferentes mensajes de error
 int	ft_ch_cmde(t_in *dt, char *name)
 {
 	char	**root;//rutas del PATH
@@ -387,9 +390,19 @@ int	ft_ch_cmde(t_in *dt, char *name)
 	int		i;
 	int		j;
 
+	if (name && name[0] == '/')//opcion de cuando meten un comando con ruta
+	{
+		dt->rootcmd = ft_strdup(name);
+		free (name);
+		dt->ncmd = ft_get_name_bis(dt->rootcmd);
+//		printf ("la ruta es: %s\nel comando es: %s\n", dt->rootcmd, dt->ncmd);
+		if (access(dt->rootcmd, F_OK) == 0)
+			return (0);
+		return (-2);//devuelve error de file or directory
+	}
 	root = ft_cut_root(dt);
 	i = -1;
-	while (root[++i])
+	while (root[++i])//cunado meten el comando a secas
 	{
 		rootb = ft_strjoin(root[i], "/");
 		free (root[i]);
@@ -402,11 +415,28 @@ int	ft_ch_cmde(t_in *dt, char *name)
 			while (root[++j])
 				free (root[j]);
 			free (root);
-			return (i);
+			return (0);
 		}
 		free (dt->rootcmd);
 		dt->rootcmd = NULL;
 	}
 	free (root);
-	return (-1);//el cmd no es ejecutable
+	return (-1);//devuelve error de command
+}
+
+//funcion que saca el nombre del comando cuando lo meten con una ruta
+char *ft_get_name_bis(char *str)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '/')
+			j = i;
+	}
+	if (str[j + 1] == 00)
+		printf ("Estoy\n");
+	return (ft_strlcpy(str, j + 1, ft_strlen(str)));
 }

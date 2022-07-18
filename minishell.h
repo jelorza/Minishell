@@ -69,6 +69,7 @@ int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
 char	*ft_get_name(char *str);
+char	*ft_get_name_bis(char *str);
 char	**ft_split(char *s, char c);//split con sus tres estáticas
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strjoinAux(char *s1, char *s2); //He tenido que crear ese join para poder liberar los dos datos de entrada (jon);

@@ -40,7 +40,7 @@ void	ft_add_back(t_list **list, t_list *new)
 	}
 }
 
-void	ft_print_list(t_list *list)
+void	ft_rint_list(t_list *list)
 {
 	t_list	*aux;
 	int		i;

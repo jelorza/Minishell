@@ -108,6 +108,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 					dt->hd = dt->hdH;
 					ft_destroy_list(&dt->hd);
 					printf ("bash: %s: No such file or directory\n", cmdnex);
+					free (cmdnex);
 					return (-2);
 				}
 			}
@@ -138,10 +139,8 @@ int	ft_exe_redir_int(t_in *dt, int n)
 			dt->hd = dt->hd->next;
 		}
 	}
+	dt->hd = dt->hdH;
 	ft_destroy_list(&dt->hd);
-//	dt->l_parseRedir = dt->hdR;
-//	printf ("Compruebo:\n");
-//	ft_printAllLists(dt);
 	return (0);
 }
 
