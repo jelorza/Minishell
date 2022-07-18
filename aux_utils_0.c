@@ -253,12 +253,13 @@ int	ft_wait(int pid)
 	int	res;
 	int	st;
 
-	res = waitpid(pid, &st, 0);
+	res = waitpid(pid, &st, WUNTRACED | WCONTINUED);
 	if (res == -1)
 	{
 		perror ("Waitpid error");
 		return (-1);
 	}
+	STATUS = WEXITSTATUS(st);
 	return (0);
 }
 
