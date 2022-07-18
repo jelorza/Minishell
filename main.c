@@ -69,11 +69,12 @@ int main(int argc, char **argv, char **envp)
 		}
 		free (line);
 		ft_cleanAllLists(&dt);
+		printf ("El status que sale es: %d\n", STATUS);
 	}
 	ft_free_1(&dt);//libero el enviroment
 	ft_free_0(&dt);
 	ft_cleanAllLists(&dt);
 	free (line);
-	system ("leaks minishell");
+//	system ("leaks minishell");
 	return (STATUS);
 }
