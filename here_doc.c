@@ -26,7 +26,6 @@ int	ft_ch_HD(t_in *dt, int n)
 			dt->l_parseRedir = dt->l_parseRedir->next;
 		}
 	}
-//	ft_print_list(dt->hd);
 	return (0);
 }
 

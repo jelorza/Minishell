@@ -13,6 +13,8 @@
 # define	ROJO_T 			"\x1b[31m"
 # define 	RESET_C			"\x1b[0m"
 
+int	STATUS;
+
 typedef struct s_list//lista para las redirecciones
 {
 	char			*data;//guardo el nombre del archivo

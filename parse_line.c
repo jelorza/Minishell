@@ -3,11 +3,14 @@
 int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 {
 	line = ft_expand_envs(line, dt); // Checar si entre pipes se encuentra un $. Si es asi sustituirla por la variable de entorno.
-	if (ft_pipes_list(line, dt) == -1) // crea la lista de pipes con la linea como dato.	
+	if (ft_pipes_list(line, dt) == -1) // crea la lista de pipes con la linea como dato.
+	{
+		free (line);
 		return (0);
+	}
 	ft_remove_quot(dt);
 	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
-//	ft_printAllLists(dt); // Imprimir listas
+	ft_printAllLists(dt); // Imprimir listas
 	free (line);
 	if (ft_exec(dt) == -1)
 		return (-1);
@@ -276,7 +279,7 @@ int	ft_pipes_list(char *line, t_in *dt)
 			if (line[i] == '|' && line[i + 1] == '|')
 				break ;
 		}
-		if (line[i] == '|' && line[i + 1] == ' ')
+		if (line[i] == '|' && (line[i + 1] == ' ' || line[i + 1] == '|'))
 		{
 			c = i;
 			i++;
@@ -348,7 +351,9 @@ void	ft_div_in_lists(t_in *dt)
 			aux = aux->next;
 			if (ret == 0)
 			{
-	//			ft_cleanAllLists(dt);
+				ft_cleanAllLists(dt);
+				dt->l_parseInit = NULL;
+				dt->hdI = NULL;
 				break;
 			}
 		}
@@ -387,7 +392,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 			z = i;
 			if (line[i] == '>')
 			{
-				printf("syntas error near unexpected token`%c'\n", line[i]);
+				printf("syntax error near unexpected token`%c'\n", line[i]);
 				return(0);
 			}
 			while (line[i] != ' ' && line[i]) // quito los espacios en caso de que los haya
