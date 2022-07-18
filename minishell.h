@@ -89,6 +89,7 @@ long	ft_atoi(char *str);
 //funciones que ejecutan los builtins
 //builtin_utils_o.c
 int		ft_builtin(t_in *dt, int n);
+int		ft_exe_echo(t_in *dt, int n);
 int		ft_exe_cd(t_in *dt);
 int		ft_exe_env(t_in *dt);
 int		ft_exe_pwd();
