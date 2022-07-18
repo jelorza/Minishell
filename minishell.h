@@ -41,6 +41,7 @@ typedef struct	s_in
 	char	*root;//guardo la ruta inicial, para el PWD del env
 	char	*rootold;//guardo la ultima ruta para el OLDPWD del env
 	char	**cmdf;//array bidimensional con el comando y sus argumentos y se va actualizando
+	char	**cmdfEcho;//array bidimensional con el comando y sus argumentos y se va actualizando
 	t_list	*l_parseInit;//lista inicial de pipes
 	t_list	*hdI;//cabeza de la lista pipes
 	t_list	*l_parseRedir;//lista de redirecciones
@@ -73,6 +74,7 @@ int		ft_compare_str(char *str, char *model);
 char	*ft_get_name(char *str);
 char	*ft_get_name_bis(char *str);
 char	**ft_split(char *s, char c);//split con sus tres estáticas
+char	**ft_splitEcho(char *s, char c);//split con sus tres estáticas
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strjoinAux(char *s1, char *s2); //He tenido que crear ese join para poder liberar los dos datos de entrada (jon);
 int		ft_fork(void);
@@ -85,6 +87,7 @@ char	*ft_substr(char *s, int start, int len);
 char	*ft_strdup(char *s);
 char	*ft_memcpy(char *des, char *src, int n);
 long	ft_atoi(char *str);
+size_t	ft_countEcho(char *s, char c);
 
 //funciones que ejecutan los builtins
 //builtin_utils_o.c

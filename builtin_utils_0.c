@@ -35,27 +35,21 @@ int	ft_builtin(t_in *dt, int n)
 
 int	ft_exe_echo(t_in *dt, int n)
 {
-	char **print;
 	int i = 1;
-	int y = 0;
-	
+
 	n = 0;
-	printf("%d->%s\n", n, dt->cmdf[0]);
-	printf("%d->%s\n", n, dt->cmdf[1]);
-	printf("%d->%s\n", n, dt->cmdf[2]);
-	while (dt->cmdf[y])
+	if (dt->cmdfEcho[1] && ft_compare_str(dt->cmdfEcho[1], "-n"))
 	{
-		i = 1;
-		print = ft_split(dt->cmdf[y], ' ');
-		while (print[i])
-		{
-			printf("%s ",print[i]);
-			i++;
-		}
-		//free(print);
-		y++;
+		n = 1;
+		i++;
 	}
-	printf("\n");
+	while (dt->cmdfEcho[i])
+	{
+		printf("%s ", dt->cmdfEcho[i]);
+		i++;
+	}
+	if (n == 0)
+		printf("\n");
 	return (0);
 }
 
