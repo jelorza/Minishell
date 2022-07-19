@@ -74,7 +74,7 @@ char	*ft_expand_envs(char *line, t_in *dt)
 		if (ft_checkInEnvList(env[0],dt)) //Si existe variable de entorno entra
 		{
 			isEnv = ft_checkInEnvList(env[0], dt); // Devuelve la posicion del array en la que esta la env
-			env[1] = ft_strdup(dt->env_value[isEnv]); //Duardo el valor de la env
+			env[1] = ft_strdup(dt->env_value[isEnv]); //Duardo el valor de la env	
 			env[2] = ft_replaceInLine(env[2], env[0], env[1]); //En la linea, sustituio el nombre del env por su valor
 			free(env[1]);
 		}
@@ -107,7 +107,6 @@ int	ft_charCounter(char *line, char c)
 		if(line[i] == c)
 			count++;
 	}
-//	printf("count-> %d\n",count);
 	return(count);
 }
 
@@ -129,7 +128,7 @@ char	*ft_checkIf$(char *line, int i)
 
 	i++;
 	z = i;
-	while( line[i] != ' ' && line[i] && line[i] != 39 && line[i] != '"')
+	while( line[i] != ' ' && line[i] != '$' && line[i] && line[i] != 39 && line[i] != '"')
 		i++;
 	if (line[i - 1] == '"' || line[i - 1] == 39)
 	{
@@ -191,7 +190,11 @@ char	*ft_replaceIfEnv(char *line, int *c, char *new, char *result)
 		z++;
 	}
 	while (line[c[0]] != ' ' && line[c[0]] && line[c[0]] != '"' && line[c[0]] != 39)
+	{
 		c[0]++;
+		if (line[c[0]] == '$')
+			break ;
+	}
 	while (line[c[0]])
 	{
 		result[c[1]] = line[c[0]];
@@ -206,7 +209,7 @@ char	*ft_replaceInLine(char *line, char *old, char *new)
 {
 	int c[2]; //counters
 	char *result;
-
+	
 	c[0] = -1; //i
 	c[1] = 0; //y
 	result = malloc(sizeof(char *) * (ft_strlen(line) - ft_strlen(old) + ft_strlen(new)) + 1);
