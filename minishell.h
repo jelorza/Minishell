@@ -13,7 +13,7 @@
 # define	ROJO_T 			"\x1b[31m"
 # define 	RESET_C			"\x1b[0m"
 
-int	STATUS;
+int	STATUS;//variable global para el status de salida
 
 typedef struct s_list//lista para las redirecciones
 {
@@ -181,9 +181,6 @@ int		ft_exe_redir(t_in *dt, int n);
 int		ft_exe_redir_int(t_in *dt, int n);
 int		ft_exe_redir_out(t_in *dt, int n);
 int		ft_exe_redir_out_aux0(t_in *dt);
-//int		ft_ch_arg_red(t_in *dt, int n);
-//int		ft_ch_arg_red_aux(char *str, t_in *dt, int n);
-//int		ft_ch_arg_red_aux(t_in *dt, int n, int nodo);
-//int		ft_ch_arg_red_exist(t_in *dt, int n);
+void	ft_redir_null(t_in *dt);
 
 #endif

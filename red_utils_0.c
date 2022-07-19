@@ -21,7 +21,6 @@ int	ft_ch_redir(t_in *dt, int n)
 	cr->ti = 0;
 	cr->ts = 0;
 	dt->l_parseRedir = dt->hdR;
-	dt->l_parseRedir = dt->hdR;
 	while (dt->l_parseRedir)
 	{
 		if (dt->l_parseRedir->id == n)
@@ -34,26 +33,26 @@ int	ft_ch_redir(t_in *dt, int n)
 //funcion aux de la check redirecciones y rellena la estructura de contabilizacion de redirecciones en el bucle de la lista
 void	ft_ch_redir_aux0(t_list *l_parseRedir, t_cr *cr)
 {
-		if (l_parseRedir->type == 1)
-		{
-			cr->i++;
-			cr->ti = 1;
-		}
-		if (l_parseRedir->type == 3)
-		{
-			cr->i++;
-			cr->ti = 3;
-		}
-		if (l_parseRedir->type == 2)
-		{
-			cr->s++;
-			cr->ts = 2;
-		}
-		if (l_parseRedir->type == 4)
-		{
-			cr->s++;
-			cr->ts = 4;
-		}
+	if(l_parseRedir->type == 1)
+	{
+		cr->i++;
+		cr->ti = 1;
+	}
+	if(l_parseRedir->type == 3)
+	{
+		cr->i++;
+		cr->ti = 3;
+	}
+	if(l_parseRedir->type == 2)
+	{
+		cr->s++;
+		cr->ts = 2;
+	}
+	if(l_parseRedir->type == 4)
+	{
+		cr->s++;
+		cr->ts = 4;
+	}
 }
 
 //funcion que va a ejecutar las redirecciones:
@@ -62,11 +61,11 @@ int	ft_exe_redir(t_in *dt, int n)
 	int	i;
 
 	i = ft_exe_redir_int(dt, n);
-	if (i == -1)
+	if(i == -1)
 		return (-1);
-	else if (i == -2)
+	else if(i == -2)
 		return (-2);//caso de que no exista el archivo
-	if (ft_exe_redir_out(dt, n) == -1)
+	if(ft_exe_redir_out(dt, n) == -1)
 		return (-1);
 	return (0);
 }
@@ -76,7 +75,7 @@ int	ft_exe_redir(t_in *dt, int n)
 //2 - Si es <<:
 int	ft_exe_redir_int(t_in *dt, int n)
 {
-	int 	i;
+	int		i;
 	char	*cmdnex;//guardo el nombre del cmd que no existe
 
 	i = 0;
@@ -84,17 +83,17 @@ int	ft_exe_redir_int(t_in *dt, int n)
 	cmdnex = NULL;
 	dt->hd = NULL;
 	dt->l_parseRedir = dt->hdR;
-	while (dt->l_parseRedir)
+	while(dt->l_parseRedir)
 	{
-		if (dt->l_parseRedir->id == n && (dt->l_parseRedir->type == 1 || dt->l_parseRedir->type == 3))
+		if(dt->l_parseRedir->id == n && (dt->l_parseRedir->type == 1 || dt->l_parseRedir->type == 3))
 		{
 			dt->tint = dt->l_parseRedir->type;//guardo el último tipo de redireccion de entrada
-			if (dt->l_parseRedir->type == 1)//caso de que sea <
+			if(dt->l_parseRedir->type == 1)//caso de que sea <
 			{
-				if (dt->fdint > 0)//cierro el descriptor anterior para volver a abrir el definitivo 
+				if(dt->fdint > 0)//cierro el descriptor anterior para volver a abrir el definitivo 
 					close (dt->fdint);
 				dt->fdint = open(dt->l_parseRedir->data, O_RDONLY);
-				if (dt->fdint == -1)//no existe alguna RIN
+				if(dt->fdint == -1)//no existe alguna RIN
 				{
 					cmdnex = ft_strjoin("", dt->l_parseRedir->data);//me guardo la RIN que no existe
 					n = -1;//condicion para activar en la función ch_HD que hay una redireccion que no existe

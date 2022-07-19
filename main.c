@@ -16,8 +16,12 @@ void	ft_struct_init(t_in *dt)
 	dt->env = NULL;
 	dt->env_name = NULL;
 	dt->env_value = NULL;
+	dt->ncmd = NULL;
+	dt->rootcmd = NULL;
 	dt->root = NULL;
 	dt->rootold = NULL;
+	dt->cmdf = NULL;
+	dt->cr = NULL;
 }
 
 void	ft_cleanAllLists(t_in *dt)
@@ -69,7 +73,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		free (line);
 		ft_cleanAllLists(&dt);
-		printf ("El status que sale es: %d\n", STATUS);
+//		printf ("El status que sale es: %d\n", STATUS);
 	}
 	ft_free_1(&dt);//libero el enviroment
 	ft_free_0(&dt);
