@@ -46,7 +46,7 @@ void	ft_cleanAllLists(t_in *dt)
 	ft_cleanListRedir(&dt->l_parseRedir);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*line;	
 	t_in	dt;
@@ -59,17 +59,17 @@ int main(int argc, char **argv, char **envp)
 	}
 	ft_struct_init(&dt);
 	ft_get_env(&dt, envp);//me guardo el env y la ruta inicial
-	while(1)
+	while (1)
 	{
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
-//		line = readline("bash del jonpol$ ");//texto de entrada de bash
+//		line = readline("***bash del jonpol$ ");//texto de entrada de bash
 		add_history (line);//añadido el history al minishell
 		if (!line || ft_compare_str(line, "E") == 1)
-			break; 
+			break ;
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
 //			ft_cleanAllLists(&dt);
-			break;
+			break ;
 		}
 		free (line);
 		ft_cleanAllLists(&dt);
@@ -79,6 +79,6 @@ int main(int argc, char **argv, char **envp)
 	ft_free_0(&dt);
 	ft_cleanAllLists(&dt);
 	free (line);
-	system ("leaks minishell");
+//	system ("leaks minishell");
 	return (STATUS);
 }

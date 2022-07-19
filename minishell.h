@@ -94,9 +94,11 @@ size_t	ft_countEcho(char *s, char c);
 int		ft_builtin(t_in *dt, int n);
 int		ft_exe_echo(t_in *dt, int n);
 int		ft_exe_cd(t_in *dt);
+void	ft_exe_cd_aux(t_in *dt);
 int		ft_exe_env(t_in *dt);
-int		ft_exe_pwd();
+int		ft_exe_pwd(void);
 int		ft_exe_exit(t_in *dt);
+int		ft_exe_exit_aux(t_in *dt, long aux);
 
 //funciones de recogida del env
 //env_utils_0.c

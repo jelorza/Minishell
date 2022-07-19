@@ -107,6 +107,7 @@ int	ft_exe_redir_int(t_in *dt, int n)
 					dt->hd = dt->hdH;
 					ft_destroy_list(&dt->hd);
 					printf ("bash: %s: No such file or directory\n", cmdnex);
+					STATUS = 1;
 					free (cmdnex);
 					return (-2);
 				}
@@ -186,4 +187,26 @@ int	ft_exe_redir_out_aux0(t_in *dt)
 		return (-1);
 	}
 	return (0);
+}
+
+//funcion que ejecuta las redirecciones en caso de que no haya comandos
+void	ft_redir_null(t_in *dt)
+{
+	t_list	*aux;
+
+	while (dt->l_parseRedir)
+	{
+		dt->l_parseRedir->id = 0;
+		dt->l_parseRedir = dt->l_parseRedir->next;
+	}
+	dt->l_parseRedir = dt->hdR;
+	aux = dt->l_parseRedir;
+	while (aux)//recorro la lista de redirecciones ejecutandolos
+	{
+		ft_ch_redir(dt, aux->id);
+		dt->l_parseRedir = dt->hdR;
+		ft_exe_redir(dt, aux->id);
+		while (aux)
+			aux = aux->next;
+	}
 }
