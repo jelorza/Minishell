@@ -118,6 +118,38 @@ char	**ft_cut_root(t_in *dt)
 			break;
 	}
 	root = ft_split(dt->env_value[i], ':');
+	root = ft_add_line(dt, root);
 	return (root);
 }
 
+//funcion que me añade a las rutas de comparacion de los comandos el directorio actual para los ejecutables
+char	**ft_add_line(t_in *dt, char **rootold)
+{
+	int		i;
+	int		j;
+	char	**rootnew;
+
+	i = -1;
+	j = 0;
+	rootnew = NULL;
+	while (dt->env_name[++i] != NULL)
+	{
+		if (ft_compare_str(dt->env_name[i], "PWD") == 1)
+			break;
+	}
+	while (rootold[j])
+		j++;
+	rootnew = (char **) malloc(sizeof(char *) * (j + 1));
+	j = 0;
+	while (rootold[j])
+	{
+		rootnew[j] = ft_strdup(rootold[j]);
+		free (rootold[j]);
+		j++;
+	}
+	free (rootold);
+	rootnew[j] = ft_strdup(dt->env_value[i]);
+	j++;
+	rootnew[j] = NULL;
+	return (rootnew);
+}	

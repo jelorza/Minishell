@@ -19,29 +19,23 @@ int	ft_exec(t_in *dt)
 		{
 			dt->ncmd = ft_get_name(dt->l_parseCmd->data);
 			dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
-	//		dt->cmdfEcho = ft_splitEcho(dt->l_parseCmd->data, ' ');
 			if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 			{
-				dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-				dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
-				if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
-				{
-					if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
+				if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
 					{
 						return (-1);
 					}
-				}
-				else//devuelve error porque no es ni builtin ni ejecutable
-				{
-					STATUS = 127;//el valor retornado en este caso es 127
-					if (ft_ch_cmde(dt, dt->rootcmd) == -2)
-						printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
-					else
-						printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
-				}
-				ft_free(dt, 0);
-				dt->l_parseCmd = dt->l_parseCmd->next;
 			}
+			else//devuelve error porque no es ni builtin ni ejecutable
+			{
+				STATUS = 127;//el valor retornado en este caso es 127
+				if (ft_ch_cmde(dt, dt->rootcmd) == -2)
+					printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
+				else
+					printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
+			}
+			ft_free(dt, 0);
+			dt->l_parseCmd = dt->l_parseCmd->next;
 		}
 	}
 	else if(dt->l_parseCmd == NULL && dt->l_parseRedir)
@@ -284,6 +278,7 @@ int	ft_exe_cmd_exe_st(t_in *dt)
 		ft_close (fd[0]);
 		//ENTRADAS
 		if (dt->fdint > 0)//cuando tengo int file
+		
 		{
 			ft_dup2 (dt->fdint, STDIN_FILENO);
 			ft_close (dt->fdint);
@@ -304,13 +299,9 @@ int	ft_exe_cmd_exe_st(t_in *dt)
 	else//el padre
 	{
 		ft_close (fd[1]);
-		ft_wait(pid);
-/*		int i;
-		waitpid(pid, &i, WNOHANG);
-		printf ("La i da: %d\n", i);
-		printf ("WIFEXITED da: %d\n", WIFEXITED(i));
-		printf ("El pid da: %d\n", pid);
-*/		dt->fdaux = dup (fd[0]);
+//		ft_wait(pid);
+		waitpid(pid, NULL, WNOHANG);
+		dt->fdaux = dup (fd[0]);
 		ft_close (fd[0]);
 	}
 	return (0);
