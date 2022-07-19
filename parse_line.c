@@ -10,7 +10,7 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 	}
 	ft_remove_quot(dt);
 	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
-//	ft_printAllLists(dt); // Imprimir listas
+	//ft_printAllLists(dt); // Imprimir listas
 	free (line);
 	if (ft_exec(dt) == -1)
 		return (-1);
@@ -20,37 +20,43 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 void	ft_remove_quot(t_in *dt)
 {
 	int i;
-	char *aux;
+	t_list *aux;
+	t_list *aux2;
 
-	aux = ft_strdup(dt->l_parseInit->data);
-	i = 0;
-	while (aux[i])
+	aux = dt->l_parseInit;
+	aux2 = dt->l_parseInit;
+	while (aux)
 	{
-		if (aux[i] == '"' )
+		i = 0;
+		while (aux->data[i])
 		{
-			dt->l_parseInit->data[i] = 1;
-			while (aux[++i] != '"' && aux[i])
+			if (aux->data[i] == '"' )
 			{
-				dt->l_parseInit->data[i] = aux[i] ;
+				dt->l_parseInit->data[i] = 1;
+				while (aux->data[++i] != '"' && aux->data[i])
+				{
+					dt->l_parseInit->data[i] = aux->data[i];
+				}
+				dt->l_parseInit->data[i] = 1;
 			}
-			dt->l_parseInit->data[i] = 1;
-		}
-		else if (aux[i] == 39)
-		{
-			dt->l_parseInit->data[i] = 1;
-			while (aux[++i] != 39 && aux[i])
+			else if (aux->data[i] == 39)
 			{
-				dt->l_parseInit->data[i] = aux[i] ;
+				dt->l_parseInit->data[i] = 1;
+				while (aux->data[++i] != 39 && aux->data[i])
+				{
+					dt->l_parseInit->data[i] = aux->data[i] ;
+				}
+				dt->l_parseInit->data[i] = 1;
 			}
-			dt->l_parseInit->data[i] = 1;
+			else
+				dt->l_parseInit->data[i] = aux->data[i];
+			i++;
 		}
-		else
-		{
-			dt->l_parseInit->data[i] = aux[i];
-		}
-		i++;
+		aux = aux->next;
+		dt->l_parseInit = dt->l_parseInit->next;
+		i = 0;
 	}
-	free(aux);
+	dt->l_parseInit = aux2;
 }
 
 char	*ft_expand_envs(char *line, t_in *dt)
@@ -101,6 +107,7 @@ int	ft_charCounter(char *line, char c)
 		if(line[i] == c)
 			count++;
 	}
+//	printf("count-> %d\n",count);
 	return(count);
 }
 

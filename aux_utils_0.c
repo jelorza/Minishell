@@ -117,14 +117,14 @@ char	**ft_splitEcho(char *s, char c)
 	char	**r;
 	int		i;
 	int		j;
-	int		l;
+	size_t		l;
 
 	i = 0;
 	l = 0;
 	if (s == NULL)
 		return (NULL);
 	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
-	while (s[i] != '\0' && r != NULL)
+	while (s[i] != '\0' && l < ft_countEcho(s, c))
 	{
 		if (s[i] != c)
 		{
@@ -134,12 +134,15 @@ char	**ft_splitEcho(char *s, char c)
 				if (s[i] == 1)
 				{
 					i++;
+				//	j++;
 					while(s[i] != 1)
 						i++;
+				//	break ;
 				}
 				i++;
 			}
 			r[l++] = ft_copy(s, i, j);
+			i++;
 		}
 		else
 			i++;
@@ -180,11 +183,13 @@ size_t	ft_countEcho(char *s, char c)
 			i++;
 			while (s[i] != 1 && s[i])
 				i++;
+			count++;
 		}
 		if (s[i] == c && s[i + 1] != c && s[i + 1])
 			count++;
 		i++;
 	}
+//	printf("count->%d\n", count);
 	return (count);
 }
 

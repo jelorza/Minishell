@@ -18,13 +18,13 @@ int	ft_exec(t_in *dt)
 		while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
 		{
 			dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-			dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
+			dt->cmdf = ft_splitEcho(dt->l_parseCmd->data, ' ');
 			if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 			{
 				if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
-					{
-						return (-1);
-					}
+				{
+					return (-1);
+				}
 			}
 			else//devuelve error porque no es ni builtin ni ejecutable
 			{
