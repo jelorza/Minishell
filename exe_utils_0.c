@@ -4,6 +4,10 @@
 int	ft_exec(t_in *dt)
 {
 	dt->fdaux = -2;//inicio el descriptor auxiliar 
+	dt->rootcmd = NULL;//inicio la ruta del comando
+	dt->cmdf = NULL;//inicio la bidimensional del comando
+	dt->cmdfEcho = NULL;//inicio la bidimensional del comando
+	dt->cr = NULL;//inicio el puntero a la estructura de redirecciones
 	dt->hdI = dt->l_parseInit;//guardo las cabezas de las listas
 	dt->hdR = dt->l_parseRedir;
 	dt->hdC = dt->l_parseCmd;
@@ -12,6 +16,10 @@ int	ft_exec(t_in *dt)
 	if (dt->l_parseCmd)
 	{
 		while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
+		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
+		dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
+//		dt->cmdfEcho = ft_splitEcho(dt->l_parseCmd->data, ' ');
+		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 		{
 			dt->ncmd = ft_get_name(dt->l_parseCmd->data);
 			dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');

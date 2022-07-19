@@ -10,8 +10,11 @@ int	ft_builtin(t_in *dt, int n)
 	i = ft_ch_buil(dt->ncmd, dt->l_parseCmd);
 	if (i == 0)
 		ft_exe_cd(dt);
-//	if (i == 1)
-//		STATUS = ft_exe_echo(dt, n);
+	if (i == 1)
+	{
+		dt->cmdfEcho = ft_splitEcho(dt->l_parseCmd->data, ' ');
+		STATUS = ft_exe_echo(dt, n);
+	}
 	else if (i == 2)
 		STATUS =  ft_exe_env(dt);
 	else if (i == 3)
@@ -32,6 +35,33 @@ int	ft_builtin(t_in *dt, int n)
 //1 - Si esta con varios comandos no hace nada en caso de que exista la ruta que hemos puesto. Si no existe si que saca mensaje de error
 //2 - Solo ejecuta la opracion de cambio de ruta si es un comando unico
 //Entonces, lo que hago es guardarme la ruta inicial que tengo y lanzo la ejecucion de cambio de directorio, y en caso de que haya mas comandos a parte del cd, como no ha de cambiar de directorio, pues cambio a la ruta original
+
+int	ft_exe_echo(t_in *dt, int n)
+{
+	int i = 1;
+
+	n = 0;
+	if (dt->cmdfEcho[1] && ft_compare_str(dt->cmdfEcho[1], "-n"))
+	{
+		n = 1;
+		i++;
+		free(dt->cmdfEcho[1]);
+	}
+	free(dt->cmdfEcho[0]);
+	while (dt->cmdfEcho[i])
+	{
+		printf("%s", dt->cmdfEcho[i]);
+		free(dt->cmdfEcho[i]);
+		i++;
+		if (dt->cmdfEcho[i])
+			printf(" ");
+	}
+	if (n == 0)
+		printf("\n");
+	free(dt->cmdfEcho);
+	return (0);
+}
+
 int	ft_exe_cd(t_in *dt)
 {
 	char	path[200];

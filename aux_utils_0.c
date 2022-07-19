@@ -112,6 +112,43 @@ char	**ft_split(char *s, char c)
 	return (r);
 }
 
+char	**ft_splitEcho(char *s, char c)
+{
+	char	**r;
+	int		i;
+	int		j;
+	int		l;
+
+	i = 0;
+	l = 0;
+	if (s == NULL)
+		return (NULL);
+	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
+	while (s[i] != '\0' && r != NULL)
+	{
+		if (s[i] != c)
+		{
+			j = i;
+			while (s[i] != c && i < ft_strlen(s))
+			{
+				if (s[i] == 1)
+				{
+					i++;
+					while(s[i] != 1)
+						i++;
+				}
+				i++;
+			}
+			r[l++] = ft_copy(s, i, j);
+		}
+		else
+			i++;
+	}
+	if (r != NULL)
+		r[l] = NULL;
+	return (r);
+}
+
 static char	*ft_copy(char *s, int i, int j)
 {
 	char	*r;
@@ -125,6 +162,30 @@ static char	*ft_copy(char *s, int i, int j)
 		r[m++] = (char)s[j++];
 	r[m] = '\0';
 	return (r);
+}
+
+size_t	ft_countEcho(char *s, char c)
+{
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	if (s[0] != c && s[0] != '\0')
+		count++;
+	while (s[i])
+	{
+		if (s[i] == 1)
+		{
+			i++;
+			while (s[i] != 1 && s[i])
+				i++;
+		}
+		if (s[i] == c && s[i + 1] != c && s[i + 1])
+			count++;
+		i++;
+	}
+	return (count);
 }
 
 static size_t	ft_count(char *s, char c)
