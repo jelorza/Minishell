@@ -13,7 +13,7 @@ int	ft_builtin(t_in *dt, int n)
 	if (i == 1)
 		STATUS = ft_exe_echo(dt, n);
 	else if (i == 2)
-		STATUS =  ft_exe_env(dt);
+		STATUS = ft_exe_env(dt);
 	else if (i == 3)
 	{
 		if (ft_exe_exit(dt) == -1)
@@ -35,7 +35,8 @@ int	ft_builtin(t_in *dt, int n)
 
 int	ft_exe_echo(t_in *dt, int n)
 {
-	int i = 1;
+	int	i = 1;
+
 	n = 0;
 	if (dt->cmdf[1] && ft_compare_str(dt->cmdf[1], "-n"))
 	{
@@ -73,20 +74,25 @@ int	ft_exe_cd(t_in *dt)
 			STATUS = 1;
 			return (-1);
 		}
-		if (dt->nc != 1)//si el comando cd no esta solo, vuelvo a la ruta donde estaba
+		if (dt->nc != 1) //si el comando cd no esta solo, vuelvo a la ruta donde estaba
 			chdir(path);
 		else//si cambio de ruta, he de cambiar el PWD y el OLDPWD del env
-		{
-			free (dt->rootold);
-			dt->rootold = ft_strlcpy(dt->root, 0, ft_strlen(dt->root));
-			free (dt->root);
-			getcwd(path, 200);
-			dt->root = ft_strlcpy(path, 0, ft_strlen(path));
-			ft_env_act(dt);
-		}
+			ft_exe_cd_aux(dt);
 	}
 	STATUS = 0;
 	return (0);
+}
+
+void	ft_exe_cd_aux(t_in *dt)
+{
+	char	path[200];
+
+	free (dt->rootold);
+	dt->rootold = ft_strlcpy(dt->root, 0, ft_strlen(dt->root));
+	free (dt->root);
+	getcwd(path, 200);
+	dt->root = ft_strlcpy(path, 0, ft_strlen(path));
+	ft_env_act(dt);
 }
 
 //funcion que imprime el env
@@ -109,7 +115,7 @@ int	ft_exe_exit(t_in *dt)
 	long	aux;
 
 	aux = 0;
-	if (ft_strlen_bi(dt->cmdf) > 2)//caso de demasiados argumentos en exit, y en ese caso retorna 1 y no hace nada
+	if (ft_strlen_bi(dt->cmdf) > 2) //caso de demasiados argumentos en exit, y en ese caso retorna 1 y no hace nada
 	{
 		STATUS = 1;
 		if (dt->nc == 1)
@@ -117,10 +123,12 @@ int	ft_exe_exit(t_in *dt)
 		printf ("bash: exit: too many arguments\n");
 		return (0);
 	}
-	if (dt->cmdf[1])//calcuo el valor retornado en caso de que me metan con exit un numero
+	if (dt->cmdf[1]) //calcuo el valor retornado en caso de que me metan con exit un numero
 	{
 		aux = ft_atoi(dt->cmdf[1]);
-		if (aux == -1)
+		if (ft_exe_exit_aux(dt, aux) == -1)
+			return (-1);
+/*		if (aux == -1)
 		{
 			STATUS = 1;
 			if (dt->nc == 1)
@@ -132,10 +140,10 @@ int	ft_exe_exit(t_in *dt)
 		if (aux > 256)
 			aux = aux % 256;
 		STATUS = aux;
-	}
-	if (dt->nc == 1)//caso de que exit este solo
+*/	}
+	if (dt->nc == 1) //caso de que exit este solo
 	{
-		if (STATUS == -1)//si no esta iniciado el status lo pongo a 0
+		if (STATUS == -1) //si no esta iniciado el status lo pongo a 0
 			STATUS = 0;
 		printf ("exit\n");
 		return (-1);
@@ -143,12 +151,29 @@ int	ft_exe_exit(t_in *dt)
 	return (0);
 }
 
-//funcionpara el pwd
-int	ft_exe_pwd()
+int	ft_exe_exit_aux(t_in *dt, long aux)
 {
-	char path[200];
+	if (aux == -1)
+	{
+		STATUS = 1;
+		if (dt->nc == 1)
+			printf ("exit\n");
+		printf ("bash: exit: %s: numeric argument required\n", dt->cmdf[1]);
+		if (dt->nc == 1)
+			return (-1);
+	}
+	if (aux > 256)
+		aux = aux % 256;
+	STATUS = aux;
+	return (0);
+}
 
-	if (getcwd(path, 200) == NULL)//No se cuando puede fallar la verdad, por lo que sobraria este bucle
+//funcionpara el pwd
+int	ft_exe_pwd(void)
+{
+	char	path[200];
+
+	if (getcwd(path, 200) == NULL) //No se cuando puede fallar la verdad, por lo que sobraria este bucle
 	{
 		STATUS = 1;
 		return (-1);

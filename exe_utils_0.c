@@ -26,6 +26,11 @@ int	ft_exec(t_in *dt)
 					return (-1);
 				}
 			}
+			else if (ft_compare_str(dt->ncmd, "$?") == 1)
+			{
+				printf ("bash: %d: command not found\n", STATUS);
+				STATUS = 127;
+			}
 			else//devuelve error porque no es ni builtin ni ejecutable
 			{
 				STATUS = 127;//el valor retornado en este caso es 127
@@ -41,28 +46,6 @@ int	ft_exec(t_in *dt)
 	else if(dt->l_parseCmd == NULL && dt->l_parseRedir)
 		ft_redir_null(dt);
 	return (0);
-}
-
-//funcion que ejecuta las redirecciones en caso de que no haya comandos
-void	ft_redir_null(t_in *dt)
-{
-	t_list	*aux;
-
-	while (dt->l_parseRedir)
-	{
-		dt->l_parseRedir->id = 0;
-		dt->l_parseRedir = dt->l_parseRedir->next;
-	}
-	dt->l_parseRedir = dt->hdR;
-	aux = dt->l_parseRedir;
-	while (aux)//recorro la lista de redirecciones ejecutandolos
-	{
-		ft_ch_redir(dt, aux->id);
-		dt->l_parseRedir = dt->hdR;
-		ft_exe_redir(dt, aux->id);
-		while (aux)
-			aux = aux->next;
-	}
 }
 
 //funcion que ejecuta con el execve el comando ejecutable que corresponda (recibo en n el numero de comando que es) y mira si hay o no redirección de salida. Si hay redirección de salida la ejecuta a donde corresponda, y si no hay redireccion de salida, su resultado lo deja guardado en el fd_aux de la estructura

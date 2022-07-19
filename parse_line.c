@@ -10,7 +10,7 @@ int	ft_parse_line(char *line, t_in *dt) // Funcion principal de parseo.
 	}
 	ft_remove_quot(dt);
 	ft_div_in_lists(dt); //crear las listas con sus respectivos datos del comando (cmds, redirect)
-	//ft_printAllLists(dt); // Imprimir listas
+//	ft_printAllLists(dt); // Imprimir listas
 	free (line);
 	if (ft_exec(dt) == -1)
 		return (-1);

@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-static char	*ft_copy(char *s, int i, int j);
+static char		*ft_copy(char *s, int i, int j);
 static size_t	ft_count(char *s, char c);
-static char	**ft_malloc(char *s, char c);
+static char		**ft_malloc(char *s, char c);
 
 char	*ft_strlcpy(char *line, int st, int len)
 {
@@ -59,11 +59,11 @@ int	ft_compare_str(char *str, char *model)
 		if (str[i] == model[i])
 			i++;
 		else
-			break;
+			break ;
 	}
 	if (model[i] == 00 && str[i] == 00)
-		return (1);//Caso de que coincidan
-	return (0);//Caso de que NO coincidan
+		return (1); //Caso de que coincidan
+	return (0); //Caso de que NO coincidan
 }
 
 //funcion que extrae mallocado solamente el nombre de la cadena comando
@@ -75,8 +75,8 @@ char	*ft_get_name(char *str)
 	i = -1;
 	while (str[++i] != 00)
 	{
-		if (str[i] == ' ')//cambiarlo por caracter no imprimible
-			break;
+		if (str[i] == ' ') //cambiarlo por caracter no imprimible
+			break ;
 	}
 	name = ft_strlcpy(str, 0, i);
 	return (name);
@@ -114,9 +114,9 @@ char	**ft_split(char *s, char c)
 
 char	**ft_splitEcho(char *s, char c)
 {
-	char	**r;
-	int		i;
-	int		j;
+	char		**r;
+	int			i;
+	int			j;
 	size_t		l;
 
 	i = 0;
@@ -318,12 +318,13 @@ int	ft_wait(int pid)
 	int	res;
 	int	st;
 
-	res = waitpid(pid, &st, WUNTRACED | WCONTINUED);
+	res = waitpid(pid, &st, 0); //WUNTRACED | WCONTINUED);
 	if (res == -1)
 	{
 		perror ("Waitpid error");
 		return (-1);
 	}
+	printf ("El status vale: %d\n", WEXITSTATUS(st));
 	STATUS = WEXITSTATUS(st);
 	return (0);
 }
@@ -373,8 +374,8 @@ char	*ft_strdup(char *s)
 
 char	*ft_substr(char *s, int start, int len)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*ptr;
 
 	i = 0;
@@ -412,4 +413,3 @@ long	ft_atoi(char *str)
 		return (r);
 	return (-1);
 }
-
