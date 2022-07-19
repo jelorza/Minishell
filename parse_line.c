@@ -329,11 +329,11 @@ int	ft_check_quotations(char *line, int i)
 			exit (1);	
 		}
 	}
-	else if (line[i] == '"' && line[i] == 1)
+	else if (line[i] == '"' || line[i] == 1)
 	{
 		if (line[++i])
 		{
-			while((line[i] != '"' || line[i] != 1)  && line[i])
+			while((line[i] != '"' && line[i] != 1)  && line[i])
 				i++;
 		}
 		if (!line[i])

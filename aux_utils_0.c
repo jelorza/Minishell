@@ -134,10 +134,10 @@ char	**ft_splitEcho(char *s, char c)
 				if (s[i] == 1)
 				{
 					i++;
-				//	j++;
-					while (s[i] != 1)
+					j++;
+					while(s[i] != 1)
 						i++;
-				//	break ;
+					break ;
 				}
 				i++;
 			}
@@ -189,7 +189,6 @@ size_t	ft_countEcho(char *s, char c)
 			count++;
 		i++;
 	}
-//	printf("count->%d\n", count);
 	return (count);
 }
 
