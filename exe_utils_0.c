@@ -16,30 +16,32 @@ int	ft_exec(t_in *dt)
 	if (dt->l_parseCmd)
 	{
 		while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
-		dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-		dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
-//		dt->cmdfEcho = ft_splitEcho(dt->l_parseCmd->data, ' ');
-		if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 		{
 			dt->ncmd = ft_get_name(dt->l_parseCmd->data);
 			dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
+	//		dt->cmdfEcho = ft_splitEcho(dt->l_parseCmd->data, ' ');
 			if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 			{
-				if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
+				dt->ncmd = ft_get_name(dt->l_parseCmd->data);
+				dt->cmdf = ft_split(dt->l_parseCmd->data, ' ');
+				if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
 				{
-					return (-1);
+					if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
+					{
+						return (-1);
+					}
 				}
+				else//devuelve error porque no es ni builtin ni ejecutable
+				{
+					STATUS = 127;//el valor retornado en este caso es 127
+					if (ft_ch_cmde(dt, dt->rootcmd) == -2)
+						printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
+					else
+						printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
+				}
+				ft_free(dt, 0);
+				dt->l_parseCmd = dt->l_parseCmd->next;
 			}
-			else//devuelve error porque no es ni builtin ni ejecutable
-			{
-				STATUS = 127;//el valor retornado en este caso es 127
-				if (ft_ch_cmde(dt, dt->rootcmd) == -2)
-					printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
-				else
-					printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
-			}
-			ft_free(dt, 0);
-			dt->l_parseCmd = dt->l_parseCmd->next;
 		}
 	}
 	else if(dt->l_parseCmd == NULL && dt->l_parseRedir)
@@ -51,23 +53,21 @@ int	ft_exec(t_in *dt)
 void	ft_redir_null(t_in *dt)
 {
 	t_list	*aux;
-	int		i;
 
-	i = 0;
-	aux = dt->l_parseRedir;
-	while (aux)
+	while (dt->l_parseRedir)
 	{
-		if (aux->type == 3)
-			i++;
-		aux = aux->next;
+		dt->l_parseRedir->id = 0;
+		dt->l_parseRedir = dt->l_parseRedir->next;
 	}
-	printf ("La i: %d\n", i);
+	dt->l_parseRedir = dt->hdR;
 	aux = dt->l_parseRedir;
-	while (aux && --i > 0)//recorro la lista de comandos ejecutandolos
+	while (aux)//recorro la lista de redirecciones ejecutandolos
 	{
 		ft_ch_redir(dt, aux->id);
+		dt->l_parseRedir = dt->hdR;
 		ft_exe_redir(dt, aux->id);
-		aux = aux->next;
+		while (aux)
+			aux = aux->next;
 	}
 }
 

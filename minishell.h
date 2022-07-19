@@ -167,7 +167,7 @@ int 	ft_charCounter(char *line, char c);
 char 	*ft_checkEnv(char *line);
 int		ft_checkInEnvList(char *env, t_in *dt);
 char	*ft_replaceInLine(char *line, char *old, char *new);
-int	ft_pipes_list(char *line, t_in *dt);
+int		ft_pipes_list(char *line, t_in *dt);
 int		ft_check_quotations(char *line, int i);
 void	ft_div_in_lists(t_in *dt);
 int		ft_check_and_create(char *line, t_in *dt, int id);
@@ -175,7 +175,7 @@ char	ft_redir_type(char *line, int i);
 void	ft_printAllLists(t_in *dt);
 int		ft_checkAndCreate(t_in *dt, int bool, char *data);
 int		ft_checkIf39(char *line, int i); //Check if has '
-char		*ft_checkIf$(char *line, int i);
+char	*ft_checkIf$(char *line, int i);
 
 //funciones para gestionar las redirecciones
 //red_utils_0.c

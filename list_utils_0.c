@@ -40,7 +40,7 @@ void	ft_add_back(t_list **list, t_list *new)
 	}
 }
 
-void	ft_rint_list(t_list *list)
+void	ft_print_list(t_list *list)
 {
 	t_list	*aux;
 	int		i;
@@ -49,7 +49,7 @@ void	ft_rint_list(t_list *list)
 	aux = list;
 	while (aux)
 	{
-		printf ("El nodo %d:\nPertenece al comando: %d\nTipo: %d\nDato: %s\n", i, aux->id, aux->type, aux->data);
+		printf ("El nodo %d:\nPertenece al comando: %d\nTipo: %d\nDato: <%s>\n", i, aux->id, aux->type, aux->data);
 		aux = aux->next;
 		i++;
 	}
