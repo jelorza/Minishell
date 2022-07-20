@@ -88,6 +88,8 @@ char	*ft_expand_envs(char *line, t_in *dt)
 				free(st);
 			}
 		}
+		else
+			env[2] = ft_replaceInLine(env[2], env[0], " "); //En la linea, sustituio el nombre del env por su valor
 		free(env[0]);
 		n--;
 	}
