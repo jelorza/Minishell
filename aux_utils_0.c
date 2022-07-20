@@ -168,31 +168,28 @@ char	**ft_splitEcho(char *s, char c)
 	if (s == NULL)
 		return (NULL);
 	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
-	while (s[i] != '\0' && l < ft_countEcho(s, c))
+//	printf ("Los espacios son: %zu\n", ft_countEcho(s, c));
+	while (s[i] != '\0')// && l < ft_countEcho(s, c))
 	{
-		if (s[i] != c)
+		if (s[i] != c && s[i] != 1)
 		{
 			j = i;
-			while (s[i] != c && i < ft_strlen(s))
-			{
-				if (s[i] == 1)
-				{
-					i++;
-					j++;
-					while(s[i] != 1)
-						i++;
-					break ;
-				}
+			while (s[i] != c && s[i])
 				i++;
-			}
 			r[l++] = ft_copy(s, i, j);
+		}
+		else if (s[i] == 1)
+		{
 			i++;
+			j = i;
+			while (s[i] != 1 && s[i])
+				i++;
+			r[l++] = ft_copy(s, i, j);
 		}
 		else
 			i++;
 	}
-	if (r != NULL)
-		r[l] = NULL;
+	r[l] = NULL;
 	return (r);
 }
 

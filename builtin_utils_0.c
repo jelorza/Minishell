@@ -23,8 +23,8 @@ int	ft_builtin(t_in *dt, int n)
 //		STATUS = ft_exe_export(dt, n);
 	else if (i == 5)
 		STATUS = ft_exe_pwd();
-//	else if (i == 6)
-//		STATUS = ft_exe_unset(dt, n);
+	else if (i == 6)
+		STATUS = ft_exe_unset(dt);
 	return (0);
 }
 
@@ -181,4 +181,11 @@ int	ft_exe_pwd(void)
 	printf ("%s\n", path);
 	STATUS = 0;
 	return (STATUS);
+}
+
+//funcion del unset
+int	ft_exe_unset(t_in *dt)
+{
+	printf ("nombre <%s>\n", dt->ncmd);
+	return (0);
 }
