@@ -260,6 +260,8 @@ int	ft_exe_cmd_exe_st(t_in *dt)
 	{
 		ft_close (fd[0]);
 		//ENTRADAS
+		dt->fdaux = 0;
+		ft_dup2 (dt->fdaux, STDIN_FILENO);
 		if (dt->fdint > 0)//cuando tengo int file
 		
 		{
@@ -330,7 +332,8 @@ int	ft_exe_cmd_exe_int(t_in *dt)
 		ft_close (fd[1]);
 		if (dt->fdaux > 0)
 			ft_close (dt->fdaux);
-		ft_wait(pid);
+//		ft_wait(pid);
+		waitpid(pid, NULL, WNOHANG);
 		if (fd[0] > 0)//A lo mejor sobra
 			dt->fdaux = dup (fd[0]);
 		ft_close (fd[0]);

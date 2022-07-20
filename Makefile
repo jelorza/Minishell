@@ -15,7 +15,7 @@ SRC = main.c\
 OBJ = $(SRC: .c=.o)  
 
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -g #-pthread
+FLAGS = -Wall -Werror -Wextra -g
 FLAGS_TWO = -lreadline
 SAN = -g3 -fsanitize=address
 

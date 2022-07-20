@@ -137,17 +137,25 @@ char	**ft_add_line(t_in *dt, char **rootold)
 		if (ft_compare_str(dt->env_name[i], "PWD") == 1)
 			break;
 	}
-	while (rootold[j])
-		j++;
-	rootnew = (char **) malloc(sizeof(char *) * (j + 1));
-	j = 0;
-	while (rootold[j])
+	if (rootold)
 	{
-		rootnew[j] = ft_strdup(rootold[j]);
-		free (rootold[j]);
-		j++;
+		while (rootold[j])
+			j++;
+		rootnew = (char **) malloc(sizeof(char *) * (j + 1));
+		j = 0;
+		while (rootold[j])
+		{
+			rootnew[j] = ft_strdup(rootold[j]);
+			free (rootold[j]);
+			j++;
+		}
+		free (rootold);
 	}
-	free (rootold);
+	else
+	{
+		j = 0;
+		rootnew = (char **) malloc(sizeof(char *) * (2));
+	}
 	rootnew[j] = ft_strdup(dt->env_value[i]);
 	j++;
 	rootnew[j] = NULL;
