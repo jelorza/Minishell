@@ -175,8 +175,6 @@ int	ft_exe_pwd(void)
 int	ft_exe_export(t_in *dt)
 {
 	int		i;
-	char	*name;
-	char	*value;
 
 	i = 0;
 	while (dt->cmdf[++i])
@@ -188,9 +186,12 @@ int	ft_exe_export(t_in *dt)
 		}
 		else
 		{
-			name = ft_split_env_1(dt->cmdf[i]);
-			value = ft_split_env_2(dt->cmdf[i]);
-			printf ("name: %s\nvalue: %s\n", name, value);
+			if (ft_ch_name_exist(dt, dt->cmdf[i]) == 1)
+			{
+				printf ("He de modificar solo el valor de la variable\n");
+			}
+			else
+				dt->env = ft_update_env_plus(dt, dt->cmdf[i]);
 		}
 	}
 	if (STATUS == 1)

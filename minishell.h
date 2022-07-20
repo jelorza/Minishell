@@ -117,6 +117,9 @@ char	*ft_split_env_1(char *env);
 char	*ft_split_env_2(char *env);
 char	**ft_cut_root(t_in *dt);
 char	**ft_add_line(t_in *dt, char **rootold);
+int		ft_ch_name_exist(t_in *dt, char *str);
+void	ft_change_value(t_in *dt, char *name, char *str);
+char	**ft_update_env_plus(t_in *dt, char *str);
 
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c

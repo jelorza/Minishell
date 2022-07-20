@@ -65,7 +65,7 @@ char	*ft_split_env_1(char *env)
 
 	i = 0;
 	j = -1;
-	while (env[i] != '=')
+	while (env[i] != '=' && env[i])
 		i++;
 	res = (char *) malloc (sizeof(char) * (i + 1));
 	if (res == NULL)
@@ -139,6 +139,8 @@ char	**ft_add_line(t_in *dt, char **rootold)
 		while (rootold[j])
 			j++;
 		rootnew = (char **) malloc(sizeof(char *) * (j + 2));
+		if (!rootnew)
+			return (NULL);
 		j = 0;
 		while (rootold[j])
 		{
@@ -152,9 +154,88 @@ char	**ft_add_line(t_in *dt, char **rootold)
 	{
 		j = 0;
 		rootnew = (char **) malloc(sizeof(char *) * (2));
+		if (!rootnew)
+			return (NULL);
 	}
 	rootnew[j] = ft_strdup(dt->env_value[i]);
 	j++;
 	rootnew[j] = NULL;
 	return (rootnew);
-}	
+}
+
+//funcion que chequea si ya existe la variable en el env y en ese caso solo modifica su valor
+int	ft_ch_name_exist(t_in *dt, char *str)
+{
+	char	*name;
+//	char	*value;
+	int		i;
+
+	name = ft_split_env_1(str);
+	i = 0;
+	while (dt->env_name[i])
+	{
+		if (ft_compare_str(name, dt->env_name[i]) == 1)
+			break ;
+		i++;
+	}
+	if (i != ft_strlen_bi(dt->env_name))
+	{
+		ft_change_value (dt, name, str);
+		free (name);
+		return (1);
+	}
+	else
+	{
+		free (name);
+		return (0);
+	}
+}
+
+//funcion que como la variable ya existe en el env y no se ha de crear, solo modifica su valor
+void	ft_change_value (t_in *dt, char *name, char *str)
+{
+	int		i;
+	char	*valuenew;
+	char 	*aux;
+	
+	i = 0;
+	while (dt->env_name[i])
+	{
+		if (ft_compare_str(name, dt->env_name[i]) == 1)
+			break ;
+		i++;
+	}
+	valuenew = ft_split_env_2(str);
+	free (dt->env_value[i]);
+	dt->env_value[i] = ft_strdup(valuenew);
+	free (valuenew);
+	free (dt->env[i]);
+	aux = ft_strjoin(name, "=");
+	dt->env[i] = ft_strjoin(aux, dt->env_value[i]);
+	free (aux);
+}
+
+//funcion que añade variables de entorno al env
+char	**ft_update_env_plus(t_in *dt, char *str)
+{
+	char	**envnew;
+	int		i;
+
+	i = 0;
+	while (dt->env[i])
+		i++;
+	envnew = (char **) malloc (sizeof(char *) * (i + 3));
+	if (!envnew)
+		return (NULL);
+	i = -1;
+	while (dt->env[++i])
+	{
+		envnew[i] = ft_strdup(dt->env[i]);
+		free (dt->env[i]);
+	}
+	free (dt->env);
+	envnew[i] = ft_strdup(str);
+	envnew[++i] = NULL;
+//	ft_update_env_rest
+	return (envnew);
+}
