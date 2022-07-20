@@ -66,6 +66,18 @@ int	ft_compare_str(char *str, char *model)
 	return (0); //Caso de que NO coincidan
 }
 
+//compara dos cadenas entre si para ver si son o no iguales 
+int	ft_compare_str_cat(char *str)
+{
+	if (ft_compare_str(str, "cat"))
+		return (1);
+	if (ft_compare_str(str, "grep"))
+		return (1);
+	if (ft_compare_str(str, "wc"))
+		return (1);
+	return (0); //Caso de que NO coincidan
+}
+
 //compara dos cadenas entre si para ver si el model esta contenido en la str al inicio 
 int	ft_compare_str_$(char *str, char *model)
 {
@@ -90,11 +102,17 @@ char	*ft_get_name(char *str)
 	char	*name;
 	int		i;
 
-	i = -1;
-	while (str[++i] != 00)
+	i = 0;
+	if (str[0] == 1)
 	{
-		if (str[i] == ' ') //cambiarlo por caracter no imprimible
-			break ;
+		i++;
+		while (str[i] != 00 && str[i] != 1)
+			i++;
+	}
+	else
+	{
+		while (str[i] != 00 && str[i] != 1)
+			i++;
 	}
 	name = ft_strlcpy(str, 0, i);
 	return (name);

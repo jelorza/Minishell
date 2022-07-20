@@ -129,19 +129,16 @@ char	**ft_add_line(t_in *dt, char **rootold)
 	int		j;
 	char	**rootnew;
 
-	i = -1;
-	j = 0;
+	i = 0;
 	rootnew = NULL;
-	while (dt->env_name[++i] != NULL)
-	{
-		if (ft_compare_str(dt->env_name[i], "PWD") == 1)
-			break;
-	}
+	while (dt->env_name[i] != NULL && ft_compare_str(dt->env_name[i], "PWD") != 1)
+		i++;
 	if (rootold)
 	{
+		j = 0;
 		while (rootold[j])
 			j++;
-		rootnew = (char **) malloc(sizeof(char *) * (j + 1));
+		rootnew = (char **) malloc(sizeof(char *) * (j + 2));
 		j = 0;
 		while (rootold[j])
 		{

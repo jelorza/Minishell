@@ -57,6 +57,7 @@ typedef struct	s_in
 	int		fdout;//guardo el fdout de salida que se ejecutara
 	int		tout;//guardo el tipo de redireccion de salida del ultimo file en cada pipe
 	int		fdaux;//guardo el resultado para pasar de proceso en proceso
+	int		an;//booleano para el cat =0 si no =1 si si
 	t_cr	*cr;//puntero a la estructura de redirecciones
 
 }	t_in;
@@ -71,6 +72,7 @@ char	*ft_strlcpy(char *line, int st, int len);
 int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
+int		ft_compare_str_cat(char *str);
 int		ft_compare_str_$(char *str, char *model);
 char	*ft_get_name(char *str);
 char	*ft_get_name_bis(char *str);

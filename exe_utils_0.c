@@ -3,7 +3,8 @@
 //funcion que va a comprobar si el comando es un builtin o un ejecutable, en caso de que ninguno sea, devuelve error y pasa al siguiente comando
 int	ft_exec(t_in *dt)
 {
-	dt->fdaux = -2;//inicio el descriptor auxiliar 
+	dt->fdaux = -2;//inicio el descriptor auxiliar
+	dt->an = 0;//inicio el booleano del cat
 	dt->rootcmd = NULL;//inicio la ruta del comando
 	dt->cmdf = NULL;//inicio la bidimensional del comando
 	dt->cmdfEcho = NULL;//inicio la bidimensional del comando
@@ -107,12 +108,19 @@ int	ft_exe_cmd_exe(t_in *dt, int n)
 	dt->l_parseInit = dt->hdI;
 	if (n == 0 && n != ft_listlen(dt->l_parseInit) - 1)//proceso del primer comando y no es el unico
 	{
-		if (ft_exe_cmd_exe_st(dt) == -1)
+		if (ft_compare_str_cat(dt->ncmd) == 1 && !dt->cmdf[1])
+		{
+			dt->an = 1;
+			return (0);
+		}
+		else if (ft_exe_cmd_exe_st(dt) == -1)
 			return (-1);
 	}
 	else if (n != 0 && n != (ft_listlen(dt->l_parseInit) - 1))//proceso de comandos intermedios
 	{
-		if (ft_exe_cmd_exe_int(dt) == -1)
+		if (ft_compare_str_cat(dt->ncmd) == 1 && dt->an == 1)
+			return (0);
+		else if (ft_exe_cmd_exe_int(dt) == -1)
 			return (-1);
 	}
 	else if (n == ft_listlen(dt->l_parseInit) - 1)//proceso del ultimo comando o es 1 solo
@@ -284,8 +292,7 @@ int	ft_exe_cmd_exe_st(t_in *dt)
 	else//el padre
 	{
 		ft_close (fd[1]);
-//		ft_wait(pid);
-		waitpid(pid, NULL, WNOHANG);
+		ft_wait(pid);
 		dt->fdaux = dup (fd[0]);
 		ft_close (fd[0]);
 	}
@@ -332,8 +339,7 @@ int	ft_exe_cmd_exe_int(t_in *dt)
 		ft_close (fd[1]);
 		if (dt->fdaux > 0)
 			ft_close (dt->fdaux);
-//		ft_wait(pid);
-		waitpid(pid, NULL, WNOHANG);
+		ft_wait(pid);
 		if (fd[0] > 0)//A lo mejor sobra
 			dt->fdaux = dup (fd[0]);
 		ft_close (fd[0]);
@@ -375,6 +381,18 @@ int	ft_exe_cmd_exe_end(t_in *dt)
 		ft_wait (pid);
 		if (dt->fdaux > 0)
 			ft_close (dt->fdaux);
+	}
+	if (dt->an == 1)
+	{
+		char *linenull;
+
+		linenull = NULL;
+		while (1)
+		{
+			linenull = readline("");
+			free (linenull);
+		}
+		free (linenull);
 	}
 	return (0);
 }
