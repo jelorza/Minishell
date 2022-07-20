@@ -106,13 +106,21 @@ char	*ft_get_name(char *str)
 	if (str[0] == 1)
 	{
 		i++;
-		while (str[i] != 00 && str[i] != 1)
+		while (str[i] != 00)
+		{
+			if (str[i] == 1)
+				break ;
 			i++;
+		}
 	}
 	else
 	{
-		while (str[i] != 00 && str[i] != 1)
+		while (str[i] != 00)
+		{
+			if (str[i] == ' ')
+				break ;
 			i++;
+		}
 	}
 	name = ft_strlcpy(str, 0, i);
 	return (name);
