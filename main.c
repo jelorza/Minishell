@@ -35,13 +35,13 @@ void	ft_cleanAllLists(t_in *dt)
 	if (dt->hdC)
 	{
 		dt->l_parseCmd = dt->hdC;
-		dt->hdI = NULL;
+		dt->hdC = NULL;
 	}
 	ft_cleanListCmd(&dt->l_parseCmd);
 	if (dt->hdR)
 	{
 		dt->l_parseRedir = dt->hdR;
-		dt->hdI = NULL;
+		dt->hdR = NULL;
 	}
 	ft_cleanListRedir(&dt->l_parseRedir);
 }
