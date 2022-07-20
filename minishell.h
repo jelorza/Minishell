@@ -69,6 +69,7 @@ void	ft_cleanAllLists(t_in *dt);
 //funciones auxiliares de ayuda
 //aux_utils_0.c
 char	*ft_strlcpy(char *line, int st, int len);
+int		ft_strlcpy_itoa(char *line, char  *st, int size);
 int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
@@ -91,6 +92,7 @@ char	*ft_strdup(char *s);
 char	*ft_memcpy(char *des, char *src, int n);
 long	ft_atoi(char *str);
 size_t	ft_countEcho(char *s, char c);
+char	*ft_itoa(int n);
 
 //funciones que ejecutan los builtins
 //builtin_utils_o.c

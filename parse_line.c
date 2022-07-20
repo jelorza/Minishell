@@ -64,6 +64,7 @@ char	*ft_expand_envs(char *line, t_in *dt)
 	char *env[3];
 	int isEnv;
 	int n;
+	char *st;
 
 	env[2] = ft_strdup(line);
 	isEnv = 0;
@@ -71,12 +72,21 @@ char	*ft_expand_envs(char *line, t_in *dt)
 	while (n > 0)
 	{
 		env[0] = ft_checkEnv(env[2]); // Guardo el nombre de la env en caso de que exista
-		if (ft_checkInEnvList(env[0],dt)) //Si existe variable de entorno entra
+		if (ft_checkInEnvList(env[0], dt) || ft_compare_str(env[0], "?")) //Si existe variable de entorno entra
 		{
-			isEnv = ft_checkInEnvList(env[0], dt); // Devuelve la posicion del array en la que esta la env
-			env[1] = ft_strdup(dt->env_value[isEnv]); //Duardo el valor de la env	
-			env[2] = ft_replaceInLine(env[2], env[0], env[1]); //En la linea, sustituio el nombre del env por su valor
-			free(env[1]);
+			if (!ft_compare_str(env[0], "?"))
+			{
+				isEnv = ft_checkInEnvList(env[0], dt); // Devuelve la posicion del array en la que esta la env
+				env[1] = ft_strdup(dt->env_value[isEnv]); //Duardo el valor de la env	
+				env[2] = ft_replaceInLine(env[2], env[0], env[1]); //En la linea, sustituio el nombre del env por su valor
+				free(env[1]);
+			}
+			else
+			{
+				st = ft_itoa(STATUS);
+				env[2] = ft_replaceInLine(env[2], env[0], st); //En la linea, sustituio el nombre del env por su valor
+				free(st);
+			}
 		}
 		free(env[0]);
 		n--;
