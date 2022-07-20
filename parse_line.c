@@ -290,7 +290,7 @@ int	ft_pipes_list(char *line, t_in *dt)
 	if (line[i] == '|')
 	{
 		printf("bash: syntax error near unexpected token `|'\n");
-		return (-1);
+		return (0);
 	}
 	while (i < ft_strlen(line))
 	{
@@ -310,7 +310,7 @@ int	ft_pipes_list(char *line, t_in *dt)
 			if (line[i] == '|')
 			{
 				printf("bash: syntax error near unexpected token `|'\n");
-				return(-1);
+				return(0);
 			}
 			else
 				i = c;
@@ -374,8 +374,6 @@ void	ft_div_in_lists(t_in *dt)
 			if (ret == 0)
 			{
 				ft_cleanAllLists(dt);
-				dt->l_parseInit = NULL;
-				dt->hdI = NULL;
 				break;
 			}
 		}
@@ -467,6 +465,16 @@ char	ft_redir_type(char *line, int i)
 	int z;
 
 	z = i;
+	if (line[i] == '<' && line[i + 1] == '>')
+	{
+			printf("syntas error near unexpected token `%c' \n", line[i]);
+			return('5');
+	}
+	else if (line[i] == '>' && line[i + 1] == '<')
+	{
+			printf("syntas error near unexpected token `%c' \n", line[i]);
+			return('5');
+	}
 	i++;
 	if (line[i] == ' ')
 	{
@@ -477,7 +485,7 @@ char	ft_redir_type(char *line, int i)
 			printf("syntas error near unexpected token `%c' \n", line[i]);
 			return('5');
 		}
-	}	
+	}
 	i = z;
 	if (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>' && line[i + 3] == '>')
 	{
