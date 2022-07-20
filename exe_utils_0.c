@@ -26,7 +26,7 @@ int	ft_exec(t_in *dt)
 					return (-1);
 				}
 			}
-			else if (ft_compare_str(dt->ncmd, "$?") == 1)
+			else if (ft_compare_str_$(dt->ncmd, "$?") == 1)
 			{
 				printf ("bash: %d: command not found\n", STATUS);
 				STATUS = 127;

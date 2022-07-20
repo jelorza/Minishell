@@ -71,6 +71,7 @@ char	*ft_strlcpy(char *line, int st, int len);
 int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
+int		ft_compare_str_$(char *str, char *model);
 char	*ft_get_name(char *str);
 char	*ft_get_name_bis(char *str);
 char	**ft_split(char *s, char c);//split con sus tres estáticas

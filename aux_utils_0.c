@@ -66,6 +66,24 @@ int	ft_compare_str(char *str, char *model)
 	return (0); //Caso de que NO coincidan
 }
 
+//compara dos cadenas entre si para ver si el model esta contenido en la str al inicio 
+int	ft_compare_str_$(char *str, char *model)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != 00)
+	{
+		if (str[i] == model[i])
+			i++;
+		else
+			break ;
+	}
+	if (model[i] == 00)
+		return (1); //Caso de que coincidan
+	return (0); //Caso de que NO coincidan
+}
+
 //funcion que extrae mallocado solamente el nombre de la cadena comando
 char	*ft_get_name(char *str)
 {
@@ -324,7 +342,6 @@ int	ft_wait(int pid)
 		perror ("Waitpid error");
 		return (-1);
 	}
-	printf ("El status vale: %d\n", WEXITSTATUS(st));
 	STATUS = WEXITSTATUS(st);
 	return (0);
 }
