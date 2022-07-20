@@ -19,8 +19,8 @@ int	ft_builtin(t_in *dt, int n)
 		if (ft_exe_exit(dt) == -1)
 			return (-1);
 	}
-//	else if (i == 4)
-//		STATUS = ft_exe_export(dt, n);
+	else if (i == 4)
+		STATUS = ft_exe_export(dt);
 	else if (i == 5)
 		STATUS = ft_exe_pwd();
 	else if (i == 6)
@@ -128,19 +128,7 @@ int	ft_exe_exit(t_in *dt)
 		aux = ft_atoi(dt->cmdf[1]);
 		if (ft_exe_exit_aux(dt, aux) == -1)
 			return (-1);
-/*		if (aux == -1)
-		{
-			STATUS = 1;
-			if (dt->nc == 1)
-				printf ("exit\n");
-			printf ("bash: exit: %s: numeric argument required\n", dt->cmdf[1]);
-			if (dt->nc == 1)
-				return (-1);
-		}
-		if (aux > 256)
-			aux = aux % 256;
-		STATUS = aux;
-*/	}
+	}
 	if (dt->nc == 1) //caso de que exit este solo
 	{
 		if (STATUS == -1) //si no esta iniciado el status lo pongo a 0
@@ -181,6 +169,59 @@ int	ft_exe_pwd(void)
 	printf ("%s\n", path);
 	STATUS = 0;
 	return (STATUS);
+}
+
+//funcion del export
+int	ft_exe_export(t_in *dt)
+{
+	int		i;
+	char	*name;
+	char	*value;
+
+	i = 0;
+	while (dt->cmdf[++i])
+	{
+		if (ft_ch_name(dt->cmdf[i]) == 1)
+		{
+			printf ("bash: export: `%s': not a valid identifier\n", dt->cmdf[i]);
+			STATUS = 1;
+		}
+		else
+		{
+			name = ft_split_env_1(dt->cmdf[i]);
+			value = ft_split_env_2(dt->cmdf[i]);
+			printf ("name: %s\nvalue: %s\n", name, value);
+		}
+	}
+	if (STATUS == 1)
+		return (1);
+	return (0);
+}
+
+//funcion que chequea el nombre de la variable
+//Retorna 0 si el nombre es válido
+//Retorna 1 si el nombre no es valido
+//*Ha de empezar por letra o _
+//*El nombre no puede contener simbolos, excepto el _
+int	ft_ch_name(char *str)
+{
+	int	i;
+
+	if (!(str[0] >= 65 && str[0] <= 90) && !(str[0] >= 97 && str[0] <= 122))
+	{
+		if (str[0] != 95)
+			return (1);
+	}
+	i = 0;
+	while (str[++i] && str[i] != '=')
+	{
+		if ((str[i] >= 0 && str[i] <= 47) || (str[i] >= 58 && str[i] <= 64) || (str[i] >= 91 && str[i] <= 96) || (str[i] >= 123 && str[i] <= 127))
+		{
+			if (str[i] != 95)
+				return (1);
+		}
+	}
+	return (0);
 }
 
 //funcion del unset

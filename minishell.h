@@ -102,6 +102,9 @@ int		ft_exe_env(t_in *dt);
 int		ft_exe_pwd(void);
 int		ft_exe_exit(t_in *dt);
 int		ft_exe_exit_aux(t_in *dt, long aux);
+int		ft_exe_export(t_in *dt);
+int		*ft_get_var_name(char *str);
+int		ft_ch_name(char *str);
 int		ft_exe_unset(t_in *dt);
 
 //funciones de recogida del env
