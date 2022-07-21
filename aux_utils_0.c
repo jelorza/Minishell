@@ -242,11 +242,70 @@ char	**ft_split(char *s, char c)
 	return (r);
 }
 
+char	*ft_join_all(char	**s)
+{
+	char	*r;
+	int i;
+
+	i = 0;
+	r = ft_strdup("");
+	while (s[i])
+	{
+		r = ft_strjoinAux(r, s[i]);
+		i++;
+	}
+	free(s);
+	return (r);
+}
+
+char	*ft_split_join(char *s)
+{
+	char	**aux;
+	char	*r;
+	int		i;
+	int		j;
+	int		l;
+
+	i = 0;
+	l = 0;
+	j = 0;
+	aux = (char **)malloc (sizeof(char *) * (ft_countEcho(s, '!') + 1));
+	while (s[i])
+	{
+		if (s[i] == '!')
+		{
+			while (s[i] == '!' && s[i])
+				i++;
+			j = i;
+			while (s[i] != '!' && s[i])
+				i++;
+			if (s[i])
+			{
+				aux[l] = ft_copy(s, i, j);
+				l++;
+			}
+		}
+		else
+			i++;
+	}
+	if (l != 0)
+	{
+		aux[l] = NULL;
+		r = ft_join_all(aux);
+		free(s);
+		return(r);
+	}
+	else
+	{
+		free(aux);
+		return(s);
+	}
+}
+
 char	**ft_splitEcho(char *s, char c)
 {
-//	char		**r;
 	char		**aux;
-	//char		*aux;
+	char		**r;
 	int			i;
 	int			j;
 	int			l;
@@ -256,42 +315,28 @@ char	**ft_splitEcho(char *s, char c)
 	j = 0;
 	if (s == NULL)
 		return (NULL);
-	//r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
 	aux = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
+	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
 	while (s[i] != '\0')
 	{
 		if (s[i] != c)
 		{
-//			printf("entra1\n");
 			j = i;
 			while (s[i] != c && s[i])
 				i++;
 			aux[l] = ft_copy(s, i, j);
 			l++;
 		}
-		//ahora me toca hacer una funcion que me corte y me junte lo bueno
-//		r[l] = ft_split_join(aux)
-		/*
-		if (s[i] == '!' && s[i] != c)
-		{
-//			printf("entra2\n");
-			while (s[i] == '!')
-				i++;
-			j = i;
-			while (s[i] != '!' && s[i])
-				i++;
-			r[l] = ft_copy(s, i, j);
-			printf("r2 %s\n", r[l]);
-
-			l++;
-			while (s[i] == '!')
-				i++;
-		}*/
 		else
 			i++;
 	}
 	aux[l] = NULL;
-	return (aux);
+	l = -1;
+	while (aux[++l])
+		r[l] = ft_split_join(aux[l]);
+	r[l] = NULL;
+	free(aux);
+	return (r);
 }
 
 static char	*ft_copy(char *s, int i, int j)
