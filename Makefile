@@ -7,7 +7,10 @@ SRC = main.c\
 	  exe_utils_0.c\
 	  free_utils_0.c\
 	  here_doc.c\
-	  linked_list.c\
+	  linked_list_newnod.c\
+	  linked_list_print.c\
+	  linked_list_clean.c\
+	  linked_list_addnod.c\
 	  list_utils_0.c\
 	  parse_line.c\
 	  red_utils_0.c\
@@ -25,7 +28,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
-	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) $(SAN)
+	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) #$(SAN)
 
 clean:
 	$(RM) *.o

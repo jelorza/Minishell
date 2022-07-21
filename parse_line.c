@@ -32,21 +32,21 @@ void	ft_remove_quot(t_in *dt)
 		{
 			if (aux->data[i] == '"' )
 			{
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 				while (aux->data[++i] != '"' && aux->data[i])
 				{
 					dt->l_parseInit->data[i] = aux->data[i];
 				}
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 			}
 			else if (aux->data[i] == 39)
 			{
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 				while (aux->data[++i] != 39 && aux->data[i])
 				{
 					dt->l_parseInit->data[i] = aux->data[i] ;
 				}
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 			}
 			else
 				dt->l_parseInit->data[i] = aux->data[i];

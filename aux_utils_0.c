@@ -236,33 +236,42 @@ char	**ft_split(char *s, char c)
 char	**ft_splitEcho(char *s, char c)
 {
 	char		**r;
+	char		*aux;
 	int			i;
 	int			j;
 	int			l;
 
 	i = 0;
 	l = 0;
+	j = 0;
 	if (s == NULL)
 		return (NULL);
 	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
 	while (s[i] != '\0')
 	{
-		if (s[i] != c && s[i] != 1)
+		if (s[i] != c && s[i] != '!')
 		{
-			j = i;
+			printf("entra1\n");
 			while (s[i] != c && s[i])
-				i++;
+			{
+				if (s[i] == '!')
+				{
+					aux = ft_copy(s, i, j);
+					printf("aux %s\n", aux);
+				}
+					i++;
+			}
 			r[l] = ft_copy(s, i, j);
 			l++;
 		}
-		else if (s[i] == 1)
+		else if (s[i] == '!')
 		{
+			printf("entra2\n");
 			i++;
 			j = i;
-			while (s[i] != 1 && s[i])
+			while (s[i] != '!' && s[i])
 				i++;
-			i++;
-			r[l] = ft_copy(s, i, j);
+			r[l] = ft_copy(s, i++, j);
 			l++;
 		}
 		else
