@@ -108,15 +108,15 @@ int	ft_charCounter(char *line, char c)
 		if (line[i] == '"')
 		{
 			i++;
-			while(line[i] != '"' && line[i] )
+			while(line[i] != '"' && line[i])
 			{	
-				if (line[i] == c)
+				if(line[i] == c && line[i + 1] && line[i + 1] != '"' && line[i + 1] != 39)
 					count++;
 				i++;
 			}
 		}
 		i = ft_checkIf39(line, i);
-		if(line[i] == c)
+		if(line[i] == c && line[i + 1] && line[i + 1] != '"' && line[i + 1] != 39)
 			count++;
 	}
 	return(count);

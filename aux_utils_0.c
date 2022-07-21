@@ -236,7 +236,8 @@ char	**ft_split(char *s, char c)
 char	**ft_splitEcho(char *s, char c)
 {
 	char		**r;
-	char		*aux;
+//	char		*aux;
+//	char		*aux;
 	int			i;
 	int			j;
 	int			l;
@@ -252,14 +253,11 @@ char	**ft_splitEcho(char *s, char c)
 		if (s[i] != c && s[i] != '!')
 		{
 			printf("entra1\n");
+			j = i;
 			while (s[i] != c && s[i])
 			{
-				if (s[i] == '!')
-				{
-					aux = ft_copy(s, i, j);
-					printf("aux %s\n", aux);
-				}
-					i++;
+				//aqui tengo que hacer split y join de los comandos que entre medias tienen !!!! / por ejemplo el l"s" o echo "'"hola"'"
+				i++;
 			}
 			r[l] = ft_copy(s, i, j);
 			l++;
@@ -267,7 +265,8 @@ char	**ft_splitEcho(char *s, char c)
 		else if (s[i] == '!')
 		{
 			printf("entra2\n");
-			i++;
+			while (s[i] == '!')
+				i++;
 			j = i;
 			while (s[i] != '!' && s[i])
 				i++;
