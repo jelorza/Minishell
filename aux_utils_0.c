@@ -86,21 +86,18 @@ char	*ft_strlcpy(char *line, int st, int len)
 	int		i;
 	char	*res;
 
+	if (!line || st < 0 || len <= 0)
+		return (NULL);
 	i = 0;
 	res = (char *) malloc (sizeof (char) * (len + 1));
 	if (!res)
-		exit (0);
-	if (len != 0)
+		return (NULL);
+	while (line[st + i] != 00 && i < len)
 	{
-		while (line[st + i] != 00 && i < len)
-		{
-			res[i] = line[st + i];
-			i++;
-		}
-		res[i] = 00;
+		res[i] = line[st + i];
+		i++;
 	}
-	else
-		res[i] = 00;
+	res[i] = 00;
 	return (res);
 }
 
@@ -108,6 +105,8 @@ int	ft_strlen(char *line)
 {
 	int	i;
 
+	if (!line)
+		return (0);
 	i = 0;
 	while (line[i] != 00)
 		i++;
@@ -119,6 +118,8 @@ int	ft_strlen_bi(char **str)
 {
 	int	i;
 
+	if (!str)
+		return (0);
 	i = 0;
 	while (str[i])
 		i++;
@@ -130,6 +131,8 @@ int	ft_compare_str(char *str, char *model)
 {
 	int	i;
 
+	if (!str || !model)
+		return (0);
 	i = 0;
 	while (str[i] != 00)
 	{
@@ -146,6 +149,8 @@ int	ft_compare_str(char *str, char *model)
 //compara dos cadenas entre si para ver si son o no iguales 
 int	ft_compare_str_cat(char *str)
 {
+	if (!str)
+		return (0);
 	if (ft_compare_str(str, "cat"))
 		return (1);
 	if (ft_compare_str(str, "grep"))
@@ -160,6 +165,8 @@ int	ft_compare_str_$(char *str, char *model)
 {
 	int	i;
 
+	if (!str || !model)
+		return (0);
 	i = 0;
 	while (str[i] != 00)
 	{
@@ -179,6 +186,8 @@ char	*ft_get_name(char *str)
 	char	*name;
 	int		i;
 
+	if (!str)
+		return (NULL);
 	i = 0;
 	if (str[0] == 1)
 	{
@@ -213,7 +222,7 @@ char	**ft_split(char *s, char c)
 
 	i = 0;
 	l = 0;
-	if (s == NULL)
+	if (!s || !c)
 		return (NULL);
 	r = ft_malloc (s, c);
 	while (s[i] != '\0' && r != NULL)
@@ -497,6 +506,8 @@ char	*ft_substr(char *s, int start, int len)
 	int		j;
 	char	*ptr;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	j = 0;
 	ptr = (char *)malloc (sizeof(char) * (len - start + 1));
@@ -519,6 +530,8 @@ long	ft_atoi(char *str)
 	int		i;
 	long	r;
 
+	if (!str)
+		return (-1);
 	i = 0;
 	r = 0;
 	while (str[i] == '-' || str[i] == '+')

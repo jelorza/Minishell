@@ -3,6 +3,7 @@
 //funcion que va a comprobar si el comando es un builtin o un ejecutable, en caso de que ninguno sea, devuelve error y pasa al siguiente comando
 int	ft_exec(t_in *dt)
 {
+	int	i;
 	dt->fdaux = -2;//inicio el descriptor auxiliar
 	dt->an = 0;//inicio el booleano del cat
 	dt->rootcmd = NULL;//inicio la ruta del comando
@@ -19,28 +20,22 @@ int	ft_exec(t_in *dt)
 		while (dt->l_parseCmd)//recorro la lista de comandos ejecutandolos
 		{
 			dt->ncmd = ft_get_name(dt->l_parseCmd->data);
-//			printf ("El comando se llama: <%s>\n", dt->ncmd);
 			dt->cmdf = ft_splitEcho(dt->l_parseCmd->data, ' ');
-//			int i = -1;
-//			while (dt->cmdf[++i])
-//				printf("La %d: <%s>\n", i, dt->cmdf[i]);
-			if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || ft_ch_cmde(dt, dt->ncmd) == 0)//comprueba si es un builtin o un ejecutable
+			i = ft_ch_cmde(dt);
+			if ((ft_ch_buil(dt->ncmd, dt->l_parseCmd) >= 0 && ft_ch_buil(dt->ncmd, dt->l_parseCmd) <= 6) || i == 0)//comprueba si es un builtin o un ejecutable
 			{
 				if (ft_execve (dt, dt->l_parseCmd->id) == -1)//Ejecuto el comando en cuestion
 				{
 					return (-1);
 				}
 			}
-			else if (ft_compare_str_$(dt->ncmd, "$?") == 1)
-			{
-				printf ("bash: %d: command not found\n", STATUS);
-				STATUS = 127;
-			}
 			else//devuelve error porque no es ni builtin ni ejecutable
 			{
 				STATUS = 127;//el valor retornado en este caso es 127
-				if (ft_ch_cmde(dt, dt->rootcmd) == -2)
+				if (i == -2)
+				{
 					printf ("bash: %s: No such file or directory\n", dt->rootcmd);//mensaje de error y al siguiente comando
+				}
 				else
 					printf ("bash: %s: command not found\n", dt->ncmd);//mensaje de error y al siguiente comando
 			}
@@ -63,7 +58,7 @@ int	ft_execve (t_in *dt, int n)
 	i = ft_exe_redir(dt, n);
 	if (i == -1)//solo contemplo return -1 pq de fallo algun malloc (errores de syntaxis tipo < > se analizan en el parseo). El resto de errores, que no exista el archivo int, falle la apertura de alguno de salida... ha de pasar al siguiente cmd habiendo enviado un error en texto
 		return (-1);
-	else if (i == -2)//en caso de que no existan todas las redirecciones de entrada retorno hasta el siguiente comando
+	else if (i == -2)//en caso de que no existan todas las redirecciones de entrada retorno hasta el siguiente comando o falle algun archivo de salida
 	{
 		return (-2);
 	}
@@ -420,22 +415,25 @@ int	ft_ch_buil(char *name, t_list *list)
 }
 
 //con el access comprueba si el comando es ejecutable y devuelve 0 si es ejecutable. Devuelve-1 o -2 si no es ejecutable, pero por diferentes motivos, para sacar diferentes mensajes de error
-int	ft_ch_cmde(t_in *dt, char *name)
+int	ft_ch_cmde(t_in *dt)
 {
 	char	**root;//rutas del PATH
 	char	*rootb;//nombre de la ruta con /
 	int		i;
 	int		j;
 
-	if (name && name[0] == '/')//opcion de cuando meten un comando con ruta
+	if (dt->ncmd && dt->ncmd[0] == '/')//opcion de cuando meten un comando con ruta
 	{
-		dt->rootcmd = ft_strdup(name);
-		free (name);
+		dt->rootcmd = ft_strdup(dt->ncmd);
+		free (dt->ncmd);
+		dt->ncmd = NULL;
 		dt->ncmd = ft_get_name_bis(dt->rootcmd);
+		if (!dt->ncmd)
+			return (-2);
 //		printf ("la ruta es: %s\nel comando es: %s\n", dt->rootcmd, dt->ncmd);
 		if (access(dt->rootcmd, F_OK) == 0)
 			return (0);
-		return (-2);//devuelve error de file or directory
+		return (-2);//devuelve cuando no existe la ruta que te meten
 	}
 	root = ft_cut_root(dt);
 	i = -1;
@@ -443,7 +441,7 @@ int	ft_ch_cmde(t_in *dt, char *name)
 	{
 		rootb = ft_strjoin(root[i], "/");
 		free (root[i]);
-		dt->rootcmd = ft_strjoin(rootb, name);
+		dt->rootcmd = ft_strjoin(rootb, dt->ncmd);
 		free (rootb);
 		if (access(dt->rootcmd, F_OK) == 0)
 		{
@@ -464,16 +462,22 @@ int	ft_ch_cmde(t_in *dt, char *name)
 //funcion que saca el nombre del comando cuando lo meten con una ruta
 char *ft_get_name_bis(char *str)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*strnew;
 
-	i = -1;
+	i = 0;
+	j = 0;
 	while (str[++i])
 	{
 		if (str[i] == '/')
 			j = i;
 	}
-	if (str[j + 1] == 00)
-		printf ("Estoy\n");
-	return (ft_strlcpy(str, j + 1, ft_strlen(str)));
+	j++;
+	if (str[j] == 00)
+	{
+		return (NULL);
+	}
+	strnew = ft_strlcpy(str, j, (ft_strlen(str) - j));
+	return (strnew);
 }
