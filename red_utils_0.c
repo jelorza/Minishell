@@ -65,8 +65,11 @@ int	ft_exe_redir(t_in *dt, int n)
 		return (-1);
 	else if(i == -2)
 		return (-2);//caso de que no exista el archivo
-	if(ft_exe_redir_out(dt, n) == -1)
+	i = ft_exe_redir_out(dt, n);
+	if(i == -1)
 		return (-1);
+	if(i == -2)
+		return (-2);
 	return (0);
 }
 
@@ -148,6 +151,9 @@ int	ft_exe_redir_int(t_in *dt, int n)
 //En todas las de salida (La unica diferencia entre ellas es que > machaca contenido y >> añade contenido a lo existente), lo que va a hacer es con todas las que no sean la ultima, creara los archivos, y la ultima redireccionara a la salida.
 int	ft_exe_redir_out(t_in *dt, int n)
 {
+	int	i;
+
+	i = 0;
 	dt->tout = 0;//reseteo el tipo de salida
 	dt->fdout = -2;//reseteo la salida (pongo -2 pq -1 es error de open)
 	dt->l_parseRedir = dt->hdR;
@@ -155,8 +161,12 @@ int	ft_exe_redir_out(t_in *dt, int n)
 	{
 		if (dt->l_parseRedir->id == n && (dt->l_parseRedir->type == 2 || dt->l_parseRedir->type == 4))
 		{
-			if (ft_exe_redir_out_aux0(dt) == -1)//de momento no esta contemplado ningun retorno -1 para esta funcion pero errores de syntaxis cortan la linea entera (p. ej ls > <)
+			i = ft_exe_redir_out_aux0(dt);
+			if (i == -1)//de momento no esta contemplado ningun retorno -1 para esta funcion pero errores de syntaxis cortan la linea entera (p. ej ls > <)
 				return (-1);
+			else if (i == -2)//falla alguna apertura, pq no hay nada
+				return (-2);
+
 		}
 		dt->l_parseRedir = dt->l_parseRedir->next;
 	}
@@ -183,8 +193,8 @@ int	ft_exe_redir_out_aux0(t_in *dt)
 	}
 	if (dt->fdout == -1)//fallo a la hora de abrir o crear el archivo de salida. Mandamos mensaje de error pero no retornamos -1, pq ha de seguir con el siguiente cmd
 	{
-		perror ("Open error\n");
-		return (-1);
+		printf ("bash: syntax error near unexpected token `>>'\n");
+		return (-2);
 	}
 	return (0);
 }

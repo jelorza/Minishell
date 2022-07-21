@@ -174,23 +174,25 @@ int	ft_exe_pwd(void)
 //funcion del export
 int	ft_exe_export(t_in *dt)
 {
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (dt->cmdf[++i])
 	{
-		if (ft_ch_name(dt->cmdf[i]) == 1)
+		j = ft_ch_name(dt->cmdf[i], 'e');
+		if (j == 1)
 		{
 			printf ("bash: export: `%s': not a valid identifier\n", dt->cmdf[i]);
 			STATUS = 1;
 		}
-		else
+		else if (j == 0)
 		{
 			if (ft_ch_name_exist(dt, dt->cmdf[i]) == 0)
 			{
 				dt->env = ft_update_env_plus(dt, dt->cmdf[i]);
-				dt->env_name = ft_update_env_plus_aux(dt, 'n');//actualizo el env_name;
-				dt->env_value = ft_update_env_plus_aux(dt, 'v');//actualizo el env_value;
+				dt->env_name = ft_update_env_aux(dt, 'n');//actualizo el env_name;
+				dt->env_value = ft_update_env_aux(dt, 'v');//actualizo el env_value;
 			}
 		}
 	}
@@ -202,19 +204,20 @@ int	ft_exe_export(t_in *dt)
 //funcion que chequea el nombre de la variable
 //Retorna 0 si el nombre es válido
 //Retorna 1 si el nombre no es valido
+//Retorna 2 si para el export no hay un = (bash, salvo que la variable este en memoria, no hace nada) 
 //*Ha de empezar por letra o _
 //*El nombre no puede contener simbolos, excepto el _
-int	ft_ch_name(char *str)
+int	ft_ch_name(char *str, char c)
 {
 	int	i;
 
-	if (!(str[0] >= 65 && str[0] <= 90) && !(str[0] >= 97 && str[0] <= 122))
+	if (!(str[0] >= 65 && str[0] <= 90) && !(str[0] >= 97 && str[0] <= 122))//compruebo el primer char de la variable
 	{
 		if (str[0] != 95)
 			return (1);
 	}
 	i = 0;
-	while (str[++i] && str[i] != '=')
+	while (str[++i] && str[i] != '=')//compruebo el nombre hasta el =, y ojo ha de tenr el igual, si no bash no hace nada
 	{
 		if ((str[i] >= 0 && str[i] <= 47) || (str[i] >= 58 && str[i] <= 64) || (str[i] >= 91 && str[i] <= 96) || (str[i] >= 123 && str[i] <= 127))
 		{
@@ -222,12 +225,37 @@ int	ft_ch_name(char *str)
 				return (1);
 		}
 	}
+	if (c == 'e' && !str[i])//caso del export sin =
+		return (2);
+	if (c == 'u' && str[i] == '=')//caso del unset con simbolo =
+		return (1);
 	return (0);
 }
 
 //funcion del unset
 int	ft_exe_unset(t_in *dt)
 {
-	printf ("nombre <%s>\n", dt->ncmd);
+	int		i;
+
+	i = 0;
+	while (dt->cmdf[++i])
+	{
+		if (ft_ch_name(dt->cmdf[i], 'u') == 1)
+		{
+			printf ("bash: unset: `%s': not a valid identifier\n", dt->cmdf[i]);
+			STATUS = 1;
+		}
+		else
+		{
+			if (ft_ch_name_exist_bis(dt, dt->cmdf[i]) == 1)
+			{
+				dt->env = ft_update_env_minus(dt, dt->cmdf[i]);
+				dt->env_name = ft_update_env_aux(dt, 'n');//actualizo el env_name;
+				dt->env_value = ft_update_env_aux(dt, 'v');//actualizo el env_value;
+			}
+		}
+	}
+	if (STATUS == 1)
+		return (1);
 	return (0);
 }

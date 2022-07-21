@@ -297,6 +297,8 @@ int	ft_pipes_list(char *line, t_in *dt)
 		while(line[i] != '|' && line[i] )
 		{
 			i = ft_check_quotations(line, i);
+			if (i == -1)
+				return (-1);
 			i++;
 			if (line[i] == '|' && line[i + 1] == '|')
 				break ;
@@ -340,8 +342,8 @@ int	ft_check_quotations(char *line, int i)
 		}
 		if (!line[i])
 		{
-			printf("ERROR:solo abro commillas pero no las cierro por lo que me tengo que quedar colgado\n");
-			exit (1);	
+			printf("bash: syntax error near unexpected token `newline'\n");
+			return (-1);	
 		}
 	}
 	else if (line[i] == '"' || line[i] == 1)
@@ -353,8 +355,8 @@ int	ft_check_quotations(char *line, int i)
 		}
 		if (!line[i])
 		{
-			printf("ERROR:solo abro commillas pero no las cierro por lo que me tengo que quedar colgado\n");
-			exit (1);	
+			printf("bash: syntax error near unexpected token `newline'\n");
+			return (-1);	
 		}
 	}
 	return (i);
@@ -374,7 +376,7 @@ void	ft_div_in_lists(t_in *dt)
 			if (ret == 0)
 			{
 				ft_cleanAllLists(dt);
-				break;
+				break ;
 			}
 		}
 	}
@@ -418,6 +420,8 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 			while (line[i] != ' ' && line[i]) // quito los espacios en caso de que los haya
 			{
 				i = ft_check_quotations(line, i);
+				if (i == -1)
+					return (0);
 				i++;
 			}
 			data = ft_substr(line, z, i);
@@ -428,6 +432,8 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 			while (line[i] != '>' && line[i] != '<' && line[i] && line[i] != ' ')
 			{
 				i = ft_check_quotations(line, i);
+				if (i == -1)
+					return (0);
 				i++;
 			}
 			if (line[i])
@@ -467,12 +473,12 @@ char	ft_redir_type(char *line, int i)
 	z = i;
 	if (line[i] == '<' && line[i + 1] == '>')
 	{
-			printf("syntas error near unexpected token `%c' \n", line[i]);
+			printf("syntax error near unexpected token `%c' \n", line[i]);
 			return('5');
 	}
 	else if (line[i] == '>' && line[i + 1] == '<')
 	{
-			printf("syntas error near unexpected token `%c' \n", line[i]);
+			printf("syntax error near unexpected token `%c' \n", line[i]);
 			return('5');
 	}
 	i++;
@@ -482,34 +488,34 @@ char	ft_redir_type(char *line, int i)
 			i++;
 		if (line[i] == '<' || line[i] == '>')
 		{
-			printf("syntas error near unexpected token `%c' \n", line[i]);
+			printf("syntax error near unexpected token `%c' \n", line[i]);
 			return('5');
 		}
 	}
 	i = z;
 	if (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>' && line[i + 3] == '>')
 	{
-		printf("syntas error near unexpected token `%c%c' \n", line[i + 2], line[i + 3]);
+		printf("syntax error near unexpected token `%c%c' \n", line[i + 2], line[i + 3]);
 		return('5');
 	}
 	else if (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>')
 	{
-		printf("syntas error near unexpected token `%c' \n", line[i + 2]);
+		printf("syntax error near unexpected token `%c' \n", line[i + 2]);
 		return('5');
 	}
 	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<' && line[i + 3] == '<' && line[i + 4] == '<' && line[i + 5] == '<')
 	{
-		printf("syntas error near unexpected token `%c%c%c' \n", line[i + 2], line[i + 3], line[i + 4]);
+		printf("syntax error near unexpected token `%c%c%c' \n", line[i + 2], line[i + 3], line[i + 4]);
 		return('5');
 	}
 	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<' && line[i + 3] == '<' && line[i + 4] == '<')
 	{
-		printf("syntas error near unexpected token `%c%c' \n", line[i + 2], line[i + 3]);
+		printf("syntax error near unexpected token `%c%c' \n", line[i + 2], line[i + 3]);
 		return('5');
 	}
 	else if (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<' && line[i + 3] == '<')
 	{
-		printf("syntas error near unexpected token `%c' \n", line[i + 2]);
+		printf("syntax error near unexpected token `%c' \n", line[i + 2]);
 		return('5');
 	}
 	else if (line[i] == '<' && line[i + 1] != '<')

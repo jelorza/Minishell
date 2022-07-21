@@ -106,7 +106,7 @@ int		ft_exe_exit(t_in *dt);
 int		ft_exe_exit_aux(t_in *dt, long aux);
 int		ft_exe_export(t_in *dt);
 int		*ft_get_var_name(char *str);
-int		ft_ch_name(char *str);
+int		ft_ch_name(char *str, char c);
 int		ft_exe_unset(t_in *dt);
 
 //funciones de recogida del env
@@ -118,15 +118,17 @@ char	*ft_split_env_2(char *env);
 char	**ft_cut_root(t_in *dt);
 char	**ft_add_line(t_in *dt, char **rootold);
 int		ft_ch_name_exist(t_in *dt, char *str);
+int		ft_ch_name_exist_bis(t_in *dt, char *str);
 void	ft_change_value(t_in *dt, char *name, char *str);
 char	**ft_update_env_plus(t_in *dt, char *str);
-char	**ft_update_env_plus_aux(t_in *dt, char c);
+char	**ft_update_env_minus(t_in *dt, char *str);
+char	**ft_update_env_aux(t_in *dt, char c);
 
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c
 int		ft_exec(t_in *dt);
 int		ft_ch_buil(char *name, t_list *list);
-int		ft_ch_cmde(t_in *dt, char *name);
+int		ft_ch_cmde(t_in *dt);
 int		ft_execve(t_in *dt, int n);
 int		ft_exe_cmd(t_in *dt, int n);
 int		ft_exe_cmd_builtin(t_in *dt, int n);

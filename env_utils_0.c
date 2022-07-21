@@ -63,13 +63,15 @@ char	*ft_split_env_1(char *env)
 	int		j;
 	char	*res;
 
+	if (!env)
+		return (NULL);
 	i = 0;
 	j = -1;
 	while (env[i] != '=' && env[i])
 		i++;
 	res = (char *) malloc (sizeof(char) * (i + 1));
 	if (res == NULL)
-		exit(0);//ver si liberamos o no en estos casos
+		return(NULL);
 	while (++j < i)
 		res[j] = env[j];
 	res[j] = 00;
@@ -84,15 +86,19 @@ char	*ft_split_env_2(char *str)
 	int		l;
 	char	*res;
 
+	if (!str)
+		return (NULL);
 	i = 0;
-	while (str[i] != '=')
+	while (str[i] != '=' && str[i])
 		i++;
+	if (!str[i])
+		return (NULL);
 	l = i;
 	while (str[l] != 00)
 		l++;
 	res = (char *) malloc (sizeof(char) * (l - i));
 	if (res == NULL)
-		exit(0);//ver si liberamos o no en estos casos
+		return (NULL);
 	j = 0;
 	i++;
 	while (j < (l - i))
@@ -167,7 +173,6 @@ char	**ft_add_line(t_in *dt, char **rootold)
 int	ft_ch_name_exist(t_in *dt, char *str)
 {
 	char	*name;
-//	char	*value;
 	int		i;
 
 	name = ft_split_env_1(str);
@@ -239,34 +244,89 @@ char	**ft_update_env_plus(t_in *dt, char *str)
 	return (envnew);
 }
 
+//funcion que analiza para el unset si la variable existe o no. Retorna 1 si existe y 0 si no
+int	ft_ch_name_exist_bis(t_in *dt, char *str)
+{
+	char	*name;
+	int		i;
+
+	name = ft_split_env_1(str);
+	i = -1;
+	while (dt->env_name[++i])
+	{
+		if (ft_compare_str(name, dt->env_name[i]) == 1)
+			break ;
+	}
+	if (i != ft_strlen_bi(dt->env_name))//existe la variable
+	{
+		free (name);
+		return (1);
+	}
+	free (name);
+	return (0);
+}
+
+//funcion que quita, si existe la variable, la variable del env
+char	**ft_update_env_minus(t_in *dt, char *str)
+{
+	char	**envnew;
+	char	*name;
+	int		i;
+	int		j;
+
+	name = ft_split_env_1(str);
+	i = 0;
+	while (dt->env[i])
+		i++;
+	envnew = (char **) malloc (sizeof(char *) * (i));
+	i = -1;
+	while (ft_compare_str(name, dt->env_name[++i]) != 1)//copio hasta la variable a eliminar
+	{
+		envnew[i] = ft_strdup(dt->env[i]);
+		free (dt->env[i]);
+	}
+	free (dt->env[i]);//elimino la coincidencia
+	dt->env[i] = NULL;
+	j = i;
+	while (dt->env[++j])//copio lo que queda de env
+	{
+		envnew[i++] = ft_strdup(dt->env[j]);
+		free (dt->env[j]);
+	}
+	envnew[i] = NULL;
+	free (dt->env);
+	free (name);
+	return (envnew);
+}
+
 //funcion que actualiza el env_name y el env_value cuando al env se le añade una nueva linea y ha cambiado
-char	**ft_update_env_plus_aux(t_in *dt, char c)
+char	**ft_update_env_aux(t_in *dt, char c)
 {
 	int		i;
 	char	**env_new;
 
-	i = 0;
-	while (dt->env[i] != NULL)
-		i++;
-	env_new = (char **) malloc (sizeof(char *) * (i + 1));
+	i = -1;
+	if (c == 'n')//destruyo las anteriores
+	{
+		while (dt->env_name[++i] != NULL)
+			free(dt->env_name[i]);
+		free (dt->env_name);
+	}
+	if (c == 'v')//destruyo las anteriores
+	{
+		while (dt->env_value[++i] != NULL)
+			free(dt->env_value[i]);
+		free (dt->env_value);
+	}
+	env_new = (char **) malloc (sizeof(char *) * (i));
 	i = -1;
 	while (dt->env[++i] != NULL)
 	{
 		if (c == 'n')
-		{
 			env_new[i] = ft_split_env_1(dt->env[i]);
-			free (dt->env_name[i]);
-		}
 		else if (c == 'v')
-		{
 			env_new[i] = ft_split_env_2(dt->env[i]);
-			free (dt->env_value[i]);
-		}
 	}
-	if (c == 'n')
-		free (dt->env_name);
-	if (c == 'v')
-		free (dt->env_value);
 	env_new[i] = NULL;
 	return (env_new);
 }
