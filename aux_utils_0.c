@@ -269,7 +269,9 @@ char	*ft_split_join(char *s)
 	i = 0;
 	l = 0;
 	j = 0;
-	aux = (char **)malloc (sizeof(char *) * (ft_countEcho(s, '!') + 1));
+	aux = (char **)malloc (sizeof(char *) * (ft_count(s, '!') + 1));
+	printf("count %zu\n", ft_count(s, '!'));
+	printf("data %s\n", s);
 	while (s[i])
 	{
 		if (s[i] == '!')
@@ -317,19 +319,36 @@ char	**ft_splitEcho(char *s, char c)
 		return (NULL);
 	aux = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
 	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
+	printf("entra\n");
 	while (s[i] != '\0')
 	{
 		if (s[i] != c)
 		{
 			j = i;
 			while (s[i] != c && s[i])
+			{
 				i++;
+				if (s[i] == c)
+				{
+					while (s[i] == c)
+						i++;
+					if (s[i] != '!')
+					{
+						while (s[i] != '!')
+							i++;
+						//i++;
+					}
+				}
+				i++;
+			}
 			aux[l] = ft_copy(s, i, j);
+			printf("data %s\n", aux[l]);
 			l++;
 		}
 		else
 			i++;
 	}
+	printf("sale\n");
 	aux[l] = NULL;
 	l = -1;
 	while (aux[++l])
@@ -365,12 +384,12 @@ size_t	ft_countEcho(char *s, char c)
 		count++;
 	while (s[i])
 	{
-		if (s[i] == 1)
+		if (s[i] == '!')
 		{
 			i++;
-			while (s[i] != 1 && s[i])
+			while (s[i] != '!' && s[i])
 				i++;
-//			count++;
+		//	count++;
 		}
 		if (s[i] == c && s[i + 1] != c && s[i + 1])
 			count++;
