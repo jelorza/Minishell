@@ -186,12 +186,12 @@ int	ft_exe_export(t_in *dt)
 		}
 		else
 		{
-			if (ft_ch_name_exist(dt, dt->cmdf[i]) == 1)
+			if (ft_ch_name_exist(dt, dt->cmdf[i]) == 0)
 			{
-				printf ("He de modificar solo el valor de la variable\n");
-			}
-			else
 				dt->env = ft_update_env_plus(dt, dt->cmdf[i]);
+				dt->env_name = ft_update_env_plus_aux(dt, 'n');//actualizo el env_name;
+				dt->env_value = ft_update_env_plus_aux(dt, 'v');//actualizo el env_value;
+			}
 		}
 	}
 	if (STATUS == 1)

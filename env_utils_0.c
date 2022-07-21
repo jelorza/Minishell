@@ -224,7 +224,7 @@ char	**ft_update_env_plus(t_in *dt, char *str)
 	i = 0;
 	while (dt->env[i])
 		i++;
-	envnew = (char **) malloc (sizeof(char *) * (i + 3));
+	envnew = (char **) malloc (sizeof(char *) * (i + 2));
 	if (!envnew)
 		return (NULL);
 	i = -1;
@@ -236,6 +236,37 @@ char	**ft_update_env_plus(t_in *dt, char *str)
 	free (dt->env);
 	envnew[i] = ft_strdup(str);
 	envnew[++i] = NULL;
-//	ft_update_env_rest
 	return (envnew);
+}
+
+//funcion que actualiza el env_name y el env_value cuando al env se le añade una nueva linea y ha cambiado
+char	**ft_update_env_plus_aux(t_in *dt, char c)
+{
+	int		i;
+	char	**env_new;
+
+	i = 0;
+	while (dt->env[i] != NULL)
+		i++;
+	env_new = (char **) malloc (sizeof(char *) * (i + 1));
+	i = -1;
+	while (dt->env[++i] != NULL)
+	{
+		if (c == 'n')
+		{
+			env_new[i] = ft_split_env_1(dt->env[i]);
+			free (dt->env_name[i]);
+		}
+		else if (c == 'v')
+		{
+			env_new[i] = ft_split_env_2(dt->env[i]);
+			free (dt->env_value[i]);
+		}
+	}
+	if (c == 'n')
+		free (dt->env_name);
+	if (c == 'v')
+		free (dt->env_value);
+	env_new[i] = NULL;
+	return (env_new);
 }

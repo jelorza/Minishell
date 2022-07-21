@@ -120,6 +120,7 @@ char	**ft_add_line(t_in *dt, char **rootold);
 int		ft_ch_name_exist(t_in *dt, char *str);
 void	ft_change_value(t_in *dt, char *name, char *str);
 char	**ft_update_env_plus(t_in *dt, char *str);
+char	**ft_update_env_plus_aux(t_in *dt, char c);
 
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c
