@@ -32,21 +32,21 @@ void	ft_remove_quot(t_in *dt)
 		{
 			if (aux->data[i] == '"' )
 			{
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 				while (aux->data[++i] != '"' && aux->data[i])
 				{
 					dt->l_parseInit->data[i] = aux->data[i];
 				}
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 			}
 			else if (aux->data[i] == 39)
 			{
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 				while (aux->data[++i] != 39 && aux->data[i])
 				{
 					dt->l_parseInit->data[i] = aux->data[i] ;
 				}
-				dt->l_parseInit->data[i] = 1;
+				dt->l_parseInit->data[i] = '!';
 			}
 			else
 				dt->l_parseInit->data[i] = aux->data[i];
@@ -108,15 +108,15 @@ int	ft_charCounter(char *line, char c)
 		if (line[i] == '"')
 		{
 			i++;
-			while(line[i] != '"' && line[i] )
+			while(line[i] != '"' && line[i])
 			{	
-				if (line[i] == c)
+				if(line[i] == c && line[i + 1] && line[i + 1] != '"' && line[i + 1] != 39)
 					count++;
 				i++;
 			}
 		}
 		i = ft_checkIf39(line, i);
-		if(line[i] == c)
+		if(line[i] == c && line[i + 1] && line[i + 1] != '"' && line[i + 1] != 39)
 			count++;
 	}
 	return(count);

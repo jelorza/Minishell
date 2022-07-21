@@ -158,7 +158,11 @@ int		ft_exe_HD(char *str, int fdint, char **env);
 //linked_list.c
 t_list *ft_newNodPi(char *data, t_list **list);
 t_list *ft_newNodRe(char *data, t_list **list, int id, char type);
+t_list *ft_newNodCmd(char *data, t_list **list, int id);
 void	ft_addNodBack(t_in *dt, char *data, char type, int id);
+void	ft_add_nod_back_pipe(t_in *dt, char *data);
+void	ft_add_nod_back_re(t_in *dt, char *data, int id, char type);
+void	ft_add_nod_back_cmd(t_in *dt, char *data, int id);
 void	ft_printListPipe(t_list **list);
 void	ft_printListCmd(t_list **list);
 void	ft_printListRedir(t_list **list);
