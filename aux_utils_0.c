@@ -261,7 +261,7 @@ char	**ft_splitEcho(char *s, char c)
 	{
 		if (s[i] != c && s[i] != '!')
 		{
-			printf("entra1\n");
+//			printf("entra1\n");
 			j = i;
 			while (s[i] != c && s[i])
 			{
@@ -273,7 +273,7 @@ char	**ft_splitEcho(char *s, char c)
 		}
 		else if (s[i] == '!')
 		{
-			printf("entra2\n");
+//			printf("entra2\n");
 			while (s[i] == '!')
 				i++;
 			j = i;
