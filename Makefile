@@ -14,21 +14,28 @@ SRC = main.c\
 	  list_utils_0.c\
 	  parse_line.c\
 	  red_utils_0.c\
+	  signal_utils_0.c\
 
 OBJ = $(SRC: .c=.o)  
 
-CC = gcc
-FLAGS = -Wall -Werror -Wextra -g
-FLAGS_TWO = -lreadline
-SAN = -g3 -fsanitize=address
+READLINE_DIR = ${HOME}/.brew/opt/readline
+
+CC = gcc -g3
+FLAGS = -Wall -Werror -Wextra
+F_RD1 = -I$(READLINE_DIR)/include
+F_RD2 = -lreadline -L$(READLINE_DIR)/lib
+SAN = -fsanitize=address
 
 RM = rm -r -f
 
 all: $(NAME)
 
+.c.o: $(SRC)
+	$(CC) $(FLAGS) $(F_RD1) -c -o $@ $<
+
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
-	$(CC) $(FLAGS) $(FLAGS_TWO) $(OBJ) -o $(NAME) $(SAN)
+#	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
+	$(CC) $(FLAGS) -o $(NAME) $(F_RD2) $(OBJ) #$(SAN)
 
 clean:
 	$(RM) *.o
@@ -39,5 +46,4 @@ fclean: clean
 
 re:	fclean all
 
-.PHONY: name, all, clean, fclean, re 
-
+.PHONY: name, all, clean, fclean, re

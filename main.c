@@ -61,10 +61,11 @@ int	main(int argc, char **argv, char **envp)
 	ft_get_env(&dt, envp);//me guardo el env y la ruta inicial
 	while (1)
 	{
+		ft_signal ();
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
 //		line = readline("***bash del jonpol$ ");//texto de entrada de bash
 		add_history (line);//añadido el history al minishell
-		if (!line || ft_compare_str(line, "E") == 1)
+		if (!line)
 			break ;
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
