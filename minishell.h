@@ -214,6 +214,6 @@ void	ft_redir_null(t_in *dt);
 //signal_utils_0.c
 void	ft_signal(void);
 void	signal_c(int signum);
-void	signal_d(int signum);
+void	signal_b(int signum);
 
 #endif

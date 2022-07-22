@@ -33,9 +33,10 @@ int	ft_ch_HD(t_in *dt, int n)
 void	ft_exe_null_HD(char *str)
 {
 	char *line;
-
+	
+	STATUS = -23;
 	line = readline("> ");
-	while (ft_compare_str(line, str) != 1)
+	while (ft_compare_str(line, str) != 1 && line)
 	{
 		free (line);
 		line = readline("> ");
@@ -48,13 +49,14 @@ int	ft_exe_HD(char *str, int fdint, char **env)
 {
 	char	*line;
 
+	STATUS = -23;
 	fdint = open (".aux_HD.txt.tmp", O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
 	if (fdint == -1)
 	{
 		fdint = open (".aux_HD.txt.tmp", O_RDWR | O_TRUNC, 0644);
 	}
 	line = readline("> ");
-	while (ft_compare_str(line, str) != 1)
+	while (ft_compare_str(line, str) != 1 && line)
 	{
 		if (write (fdint, line, ft_strlen(line)) == -1)
 		{

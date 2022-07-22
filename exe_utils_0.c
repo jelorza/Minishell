@@ -81,8 +81,10 @@ int	ft_exe_cmd(t_in *dt, int n)
 	}
 	else//ejecuto los ejecutables
 	{
+		rl_catch_signals = 1;
 		if (ft_exe_cmd_exe(dt, n) == -1)
 			return (-1);
+		rl_catch_signals = 0;
 	}
 	return (0);
 }

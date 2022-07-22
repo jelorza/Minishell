@@ -327,7 +327,7 @@ char	**ft_splitEcho(char *s, char c)
 			j = i;
 			while (s[i] != c && s[i])
 			{
-				i++;
+/*				i++;
 				if (s[i] == c)
 				{
 					while (s[i] == c)
@@ -339,7 +339,7 @@ char	**ft_splitEcho(char *s, char c)
 						//i++;
 					}
 				}
-				i++;
+*/				i++;
 			}
 			aux[l] = ft_copy(s, i, j);
 //			printf("data %s\n", aux[l]);

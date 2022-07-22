@@ -16,34 +16,32 @@ SRC = main.c\
 	  red_utils_0.c\
 	  signal_utils_0.c\
 
-OBJ = $(SRC: .c=.o)  
+OBJ = $(SRC:.c=.o)
+
+CC = gcc -g3
 
 READLINE_DIR = ${HOME}/.brew/opt/readline
 
-CC = gcc -g3
-FLAGS = -Wall -Werror -Wextra
-F_RD1 = -I$(READLINE_DIR)/include
-F_RD2 = -lreadline -L$(READLINE_DIR)/lib
-SAN = -fsanitize=address
 
-RM = rm -r -f
+FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+F_READLINE = -I$(READLINE_DIR)/include
+COMPILE = -lreadline -L$(READLINE_DIR)/lib
+
+.c.o: $(SRC)
+	$(CC) $(FLAGS) $(F_READLINE) -c -o $@ $<
+
+
+$(NAME):$(OBJ)
+		$(CC) $(FLAGS) -o $(NAME) $(COMPILE) $(OBJ) $(LIBFT)
 
 all: $(NAME)
 
-.c.o: $(SRC)
-	$(CC) $(FLAGS) $(F_RD1) -c -o $@ $<
-
-$(NAME): $(OBJ)
-#	$(CC) $(FLAGS) -c $(OBJ) $(SRC)
-	$(CC) $(FLAGS) -o $(NAME) $(F_RD2) $(OBJ) #$(SAN)
-
 clean:
-	$(RM) *.o
+		/bin/rm -f $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME)
-	$(RM) *.dSYM
+		/bin/rm -f $(NAME)
 
-re:	fclean all
+re: fclean all
 
-.PHONY: name, all, clean, fclean, re
+.PHONY: all clean fclean re bonus
