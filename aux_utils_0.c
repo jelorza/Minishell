@@ -210,69 +210,6 @@ char	**ft_split(char *s, char c)
 	return (r);
 }
 
-char	*ft_join_all(char	**s)
-{
-	char	*r;
-	int i;
-
-	i = 0;
-	r = ft_strdup("");
-	while (s[i])
-	{
-		r = ft_strjoinAux(r, s[i]);
-		i++;
-	}
-	free(s);
-	return (r);
-}
-/*
-char	*ft_split_join(char *s)
-{
-	char	**aux;
-	char	*r;
-	int		i;
-	int		j;
-	int		l;
-
-	i = 0;
-	l = 0;
-	j = 0;
-	aux = (char **)malloc (sizeof(char *) * (ft_count(s, '!') + 1));
-//	printf("count %zu\n", ft_count(s, '!'));
-//	printf("data %s\n", s);
-	while (s[i])
-	{
-		if (s[i] == '!')
-		{
-			while (s[i] == '!' && s[i])
-				i++;
-			j = i;
-			while (s[i] != '!' && s[i])
-				i++;
-			if (s[i])
-			{
-				aux[l] = ft_copy(s, i, j);
-				l++;
-			}
-		}
-		else
-			i++;
-	}
-	if (l != 0)
-	{
-		aux[l] = NULL;
-		r = ft_join_all(aux);
-		free(s);
-		return(r);
-	}
-	else
-	{
-		free(aux);
-		return(s);
-	}
-}
-*/
-
 //funcion que hace un split del sata del nodo considerando solo los espacios no afectados por comillas
 char	**ft_splitEcho(char *s, char c)
 {
@@ -400,9 +337,8 @@ int	ft_countEcho(char *s, char c)
 			i++;
 			while (s[i] != '!' && s[i])
 				i++;
-		//	count++;
 		}
-		if (s[i] == c && s[i + 1] != c && s[i + 1])
+		if (s[i] == c && s[i + 1] != c)
 			count++;
 		i++;
 	}

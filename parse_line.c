@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 22:00:49 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/22 18:10:39 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/07/22 19:46:21 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_parse_line(char *line, t_in *dt)
 	}
 	ft_remove_quot(dt);
 	ft_div_in_lists(dt);
-//	ft_printAllLists(dt);
+	//ft_printAllLists(dt);
 	free (line);
 	if (ft_exec(dt) == -1)
 		return (-1);
@@ -361,11 +361,11 @@ int	ft_pipes_list(char *line, t_in *dt)
 
 int	ft_check_quotations(char *line, int i)
 {
-	if (line[i] == 39 || line[i] == 1)
+	if (line[i] == 39 || line[i] == '!')
 	{
 		if (line[++i])
 		{
-			while ((line[i] != 39 && line[i] != 1) && line[i])
+			while ((line[i] != 39 && line[i] != '!') && line[i])
 				i++;
 		}
 		if (!line[i])
@@ -374,11 +374,11 @@ int	ft_check_quotations(char *line, int i)
 			return (-1);
 		}
 	}
-	else if (line[i] == '"' || line[i] == 1)
+	else if (line[i] == '"' || line[i] == '!')
 	{
 		if (line[++i])
 		{
-			while ((line[i] != '"' && line[i] != 1) && line[i])
+			while ((line[i] != '"' && line[i] != '!') && line[i])
 				i++;
 		}
 		if (!line[i])
