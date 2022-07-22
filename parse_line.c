@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 22:00:49 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/22 00:05:08 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/07/22 18:10:39 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,7 +422,7 @@ int	ft_check_and_create(char *line, t_in *dt, int id)
 	z = 0;
 	while (line[i])
 	{
-		while (line[i] && line[i] == ' ')
+		while (line[i] && line[i] == ' ' && ft_count_rarus(line, i) == 0)
 			i++;
 		z = i;
 		if (line[i] && (line[i] == '<' || line[i] == '>'))

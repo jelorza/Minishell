@@ -180,38 +180,6 @@ int	ft_compare_str_$(char *str, char *model)
 	return (0); //Caso de que NO coincidan
 }
 
-//funcion que extrae mallocado solamente el nombre de la cadena comando
-char	*ft_get_name(char *str)
-{
-	char	*name;
-	int		i;
-
-	if (!str)
-		return (NULL);
-	i = 0;
-	if (str[0] == 1)
-	{
-		i++;
-		while (str[i] != 00)
-		{
-			if (str[i] == 1)
-				break ;
-			i++;
-		}
-	}
-	else
-	{
-		while (str[i] != 00)
-		{
-			if (str[i] == ' ')
-				break ;
-			i++;
-		}
-	}
-	name = ft_strlcpy(str, 0, i);
-	return (name);
-}
-
 //split con sus tres estáticas
 char	**ft_split(char *s, char c)
 {
@@ -257,7 +225,7 @@ char	*ft_join_all(char	**s)
 	free(s);
 	return (r);
 }
-
+/*
 char	*ft_split_join(char *s)
 {
 	char	**aux;
@@ -303,59 +271,102 @@ char	*ft_split_join(char *s)
 		return(s);
 	}
 }
+*/
 
+//funcion que hace un split del sata del nodo considerando solo los espacios no afectados por comillas
 char	**ft_splitEcho(char *s, char c)
 {
-	char		**aux;
-	char		**r;
-	int			i;
-	int			j;
-	int			l;
+	char	**r;
+	int		i;
+	int		j;
+	int		l;
 
 	i = 0;
-	l = 0;
 	j = 0;
+	l = 0;
 	if (s == NULL)
 		return (NULL);
-	aux = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
-	r = (char **)malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
-//	printf("entra\n");
-	while (s[i] != '\0')
+//	printf ("La bidimensional tendra %d + 1 arrays\n", ft_countEcho(s, c));
+	r = (char **) malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
+	while (s[i] != 00)
 	{
-		if (s[i] != c)
+		if (s[i] != ' ')
 		{
-			j = i;
-			while (s[i] != c && s[i])
-			{
-			//	i++;
-			//	if (s[i] == c)
-			//	{
-			//		while (s[i] == c)
-			//			i++;
-			//		if (s[i] != '!')
-			//		{
-			//			while (s[i] != '!')
-			//				i++;
-			//			//i++;
-			//		}
-			//	}
+			if (ft_count_rarus(s, i) == 0)
+				j = i;
+			while (s[i] != ' ' && s[i])
 				i++;
+			if ((s[i] == ' ' && ft_count_rarus(s, i) == 0) || s[i] == 00)
+			{
+				r[l] = ft_strlcpy (s, j, i - j);
+				l++;
 			}
-			aux[l] = ft_copy(s, i, j);
-//			printf("data %s\n", aux[l]);
-			l++;
 		}
-		else
+		if (s[i] != 00)
 			i++;
 	}
-//	printf("sale\n");
-	aux[l] = NULL;
-	l = -1;
-	while (aux[++l])
-		r[l] = ft_split_join(aux[l]);
 	r[l] = NULL;
-	free(aux);
+	i = -1;
+	while (r[++i])
+	{
+		j = -1;
+		while (r[i][++j])
+		{
+			if (r[i][j] == '!')
+			{
+				r[i] = ft_split_echo_aux(r[i]);
+				break ;
+			}
+		}
+//		printf ("Despues %d: <%s>\n", i, r[i]);
+	}
 	return (r);
+}
+
+//funcion que cuenta las comillas anteriores al espacio. Devuelve
+//0 si son pares, por lo que son comillas cerradas y no le afecta
+//1 si son impares y esta afectado por comillas
+int		ft_count_rarus(char *str, int n)
+{
+	int	i;
+	int	j;
+
+//	printf ("La cadena: %s\nLa posicion: %d\n", str, n);
+	i = -1;
+	j = 0;
+	while (str[++i] && i < n)
+	{
+		if (str[i] == '!')
+			j++;
+	}
+//	printf ("Cantidad de comillas antes: %d\n", j);
+	if (j % 2 == 0)
+		return (0);
+	return (1);
+}
+
+//funcion que quita las comillas en los arrays de la bidimensional en los que haya
+char	*ft_split_echo_aux(char *str)
+{
+	char	*aux;
+	int		i;
+	int		j;
+
+	aux = (char *) malloc (sizeof (char) * (ft_strlen (str) -1));
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '!')
+		{
+			aux[j] = str[i];
+			j++;
+		}
+		i++;
+	}
+	aux[j] = 00;
+	free (str);
+	return (aux);
 }
 
 static char	*ft_copy(char *s, int i, int j)
@@ -373,7 +384,7 @@ static char	*ft_copy(char *s, int i, int j)
 	return (r);
 }
 
-size_t	ft_countEcho(char *s, char c)
+int	ft_countEcho(char *s, char c)
 {
 	int		i;
 	int		count;

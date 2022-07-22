@@ -76,10 +76,11 @@ int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
 int		ft_compare_str_cat(char *str);
 int		ft_compare_str_$(char *str, char *model);
-char	*ft_get_name(char *str);
 char	*ft_get_name_bis(char *str);
 char	**ft_split(char *s, char c);//split con sus tres estáticas
-char	**ft_splitEcho(char *s, char c);//split con sus tres estáticas
+char	**ft_splitEcho(char *s, char c);
+char	*ft_split_echo_aux(char *s);
+int		ft_count_rarus(char *s, int n);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strjoinAux(char *s1, char *s2); //He tenido que crear ese join para poder liberar los dos datos de entrada (jon);
 int		ft_fork(void);
@@ -92,7 +93,7 @@ char	*ft_substr(char *s, int start, int len);
 char	*ft_strdup(char *s);
 char	*ft_memcpy(char *des, char *src, int n);
 long	ft_atoi(char *str);
-size_t	ft_countEcho(char *s, char c);
+int		ft_countEcho(char *s, char c);
 char	*ft_itoa(int n);
 
 //funciones que ejecutan los builtins
