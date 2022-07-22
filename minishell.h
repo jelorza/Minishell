@@ -9,6 +9,7 @@
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <signal.h>
 
 # define	ROJO_T 			"\x1b[31m"
 # define 	RESET_C			"\x1b[0m"
@@ -208,5 +209,11 @@ int		ft_exe_redir_int(t_in *dt, int n);
 int		ft_exe_redir_out(t_in *dt, int n);
 int		ft_exe_redir_out_aux0(t_in *dt);
 void	ft_redir_null(t_in *dt);
+
+//funciones para las señales
+//signal_utils_0.c
+void	ft_signal(void);
+void	signal_c(int signum);
+void	signal_b(int signum);
 
 #endif

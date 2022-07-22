@@ -59,13 +59,18 @@ int	main(int argc, char **argv, char **envp)
 	}
 	ft_struct_init(&dt);
 	ft_get_env(&dt, envp);//me guardo el env y la ruta inicial
+	rl_catch_signals = 0;
+	ft_signal ();
 	while (1)
 	{
 		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
 //		line = readline("***bash del jonpol$ ");//texto de entrada de bash
 		add_history (line);//añadido el history al minishell
-		if (!line || ft_compare_str(line, "E") == 1)
+		if (!line)
+		{
+			printf ("exit\n");
 			break ;
+		}
 		if (ft_parse_line(line, &dt) == -1)//inicio el programa
 		{
 //			ft_cleanAllLists(&dt);
@@ -79,6 +84,6 @@ int	main(int argc, char **argv, char **envp)
 	ft_free_0(&dt);
 	ft_cleanAllLists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (STATUS);
 }
