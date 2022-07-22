@@ -327,18 +327,18 @@ char	**ft_splitEcho(char *s, char c)
 			j = i;
 			while (s[i] != c && s[i])
 			{
-				i++;
-				if (s[i] == c)
-				{
-					while (s[i] == c)
-						i++;
-					if (s[i] != '!')
-					{
-						while (s[i] != '!')
-							i++;
-						//i++;
-					}
-				}
+			//	i++;
+			//	if (s[i] == c)
+			//	{
+			//		while (s[i] == c)
+			//			i++;
+			//		if (s[i] != '!')
+			//		{
+			//			while (s[i] != '!')
+			//				i++;
+			//			//i++;
+			//		}
+			//	}
 				i++;
 			}
 			aux[l] = ft_copy(s, i, j);
