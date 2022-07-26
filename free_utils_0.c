@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_utils_0.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 10:58:55 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//funcion que libera los argumentos de la linea. Se usa a la salida y por si falla el malloc
 void	ft_free_0(t_in *dt)
 {
 	int	j;
@@ -30,7 +41,6 @@ void	ft_free_0(t_in *dt)
 	}
 }
 
-//funcion que libera el enviroment solamente
 void	ft_free_1(t_in *dt)
 {
 	int	j;
@@ -52,12 +62,9 @@ void	ft_free_1(t_in *dt)
 		free (dt->rootold);
 }
 
-//funcion general para liberar. En función del int activa unas cosas u otras
-//i = 0 - libera todo lo de la linea, NO el env (cuando salimos normal de la linea)
-//i = 1 - libera todo el env (cuando salimos normal o por error del programa)
 void	ft_free(t_in *dt, int i)
 {
-	if (i == 0)//Revisar esta historia por si acaso!!!
+	if (i == 0)
 		ft_free_0(dt);
 	if (i == 1 && dt->env_name != NULL && dt->env_value != NULL)
 		ft_free_1(dt);

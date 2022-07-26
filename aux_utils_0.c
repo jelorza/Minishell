@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   aux_utils_0.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 14:43:01 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char		*ft_copy(char *s, int i, int j);
 static size_t	ft_count(char *s, char c);
 static char		**ft_malloc(char *s, char c);
 
-int		ft_strlcpy_itoa(char *line, char *st, int size)
+int	ft_strlcpy_itoa(char *line, char *st, int size)
 {
 	int	i;
-	int		len;
+	int	len;
 
 	i = 0;
 	len = ft_strlen(st);
@@ -80,7 +92,6 @@ char	*ft_itoa(int n)
 	return (dest);
 }
 
-
 char	*ft_strlcpy(char *line, int st, int len)
 {
 	int		i;
@@ -142,11 +153,10 @@ int	ft_compare_str(char *str, char *model)
 			break ;
 	}
 	if (model[i] == 00 && str[i] == 00)
-		return (1); //Caso de que coincidan
-	return (0); //Caso de que NO coincidan
+		return (1);
+	return (0);
 }
 
-//compara dos cadenas entre si para ver si son o no iguales 
 int	ft_compare_str_cat(char *str)
 {
 	if (!str)
@@ -157,11 +167,10 @@ int	ft_compare_str_cat(char *str)
 		return (1);
 	if (ft_compare_str(str, "wc"))
 		return (1);
-	return (0); //Caso de que NO coincidan
+	return (0);
 }
 
-//compara dos cadenas entre si para ver si el model esta contenido en la str al inicio 
-int	ft_compare_str_$(char *str, char *model)
+int	ft_compare_str_env(char *str, char *model)
 {
 	int	i;
 
@@ -176,11 +185,10 @@ int	ft_compare_str_$(char *str, char *model)
 			break ;
 	}
 	if (model[i] == 00)
-		return (1); //Caso de que coincidan
-	return (0); //Caso de que NO coincidan
+		return (1);
+	return (0);
 }
 
-//split con sus tres estáticas
 char	**ft_split(char *s, char c)
 {
 	char	**r;
@@ -210,8 +218,7 @@ char	**ft_split(char *s, char c)
 	return (r);
 }
 
-//funcion que hace un split del sata del nodo considerando solo los espacios no afectados por comillas
-char	**ft_splitEcho(char *s, char c)
+char	**ft_split_echo(char *s, char c)
 {
 	char	**r;
 	int		i;
@@ -223,8 +230,7 @@ char	**ft_splitEcho(char *s, char c)
 	l = 0;
 	if (s == NULL)
 		return (NULL);
-//	printf ("La bidimensional tendra %d + 1 arrays\n", ft_countEcho(s, c));
-	r = (char **) malloc (sizeof(char *) * (ft_countEcho(s, c) + 1));
+	r = (char **) malloc (sizeof(char *) * (ft_count_echo(s, c) + 1));
 	while (s[i] != 00)
 	{
 		if (s[i] != ' ')
@@ -255,20 +261,19 @@ char	**ft_splitEcho(char *s, char c)
 				break ;
 			}
 		}
-//		printf ("Despues %d: <%s>\n", i, r[i]);
 	}
 	return (r);
 }
 
-//funcion que cuenta las comillas anteriores al espacio. Devuelve
-//0 si son pares, por lo que son comillas cerradas y no le afecta
-//1 si son impares y esta afectado por comillas
-int		ft_count_rarus(char *str, int n)
+/*funcion que cuenta las comillas anteriores al espacio. Devuelve
+0 si son pares, por lo que son comillas cerradas y no le afecta
+1 si son impares y esta afectado por comillas
+*/
+int	ft_count_rarus(char *str, int n)
 {
 	int	i;
 	int	j;
 
-//	printf ("La cadena: %s\nLa posicion: %d\n", str, n);
 	i = -1;
 	j = 0;
 	while (str[++i] && i < n)
@@ -276,13 +281,11 @@ int		ft_count_rarus(char *str, int n)
 		if (str[i] == '!')
 			j++;
 	}
-//	printf ("Cantidad de comillas antes: %d\n", j);
 	if (j % 2 == 0)
 		return (0);
 	return (1);
 }
 
-//funcion que quita las comillas en los arrays de la bidimensional en los que haya
 char	*ft_split_echo_aux(char *str)
 {
 	char	*aux;
@@ -321,7 +324,7 @@ static char	*ft_copy(char *s, int i, int j)
 	return (r);
 }
 
-int	ft_countEcho(char *s, char c)
+int	ft_count_echo(char *s, char c)
 {
 	int		i;
 	int		count;
@@ -397,7 +400,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (des);
 }
 
-char	*ft_strjoinAux(char *s1, char *s2)
+char	*ft_strjoin_aux(char *s1, char *s2)
 {
 	char	*des;
 	int		i;
@@ -423,7 +426,6 @@ char	*ft_strjoinAux(char *s1, char *s2)
 	return (des);
 }
 
-//pipe function with errors control
 int	ft_pipe(int *fd)
 {
 	int	i;
@@ -437,7 +439,6 @@ int	ft_pipe(int *fd)
 	return (0);
 }
 
-//fork function with errors control
 int	ft_fork(void)
 {
 	int	pid;
@@ -451,7 +452,6 @@ int	ft_fork(void)
 	return (pid);
 }
 
-//close function with errors control
 int	ft_close(int descr)
 {
 	int	i;
@@ -465,23 +465,21 @@ int	ft_close(int descr)
 	return (0);
 }
 
-//waitpid function with errors control
 int	ft_wait(int pid)
 {
 	int	res;
 	int	st;
 
-	res = waitpid(pid, &st, 0); //WUNTRACED | WCONTINUED);
+	res = waitpid(pid, &st, 0);
 	if (res == -1)
 	{
 		perror ("Waitpid error");
 		return (-1);
 	}
-	STATUS = WEXITSTATUS(st);
+	g_status = WEXITSTATUS(st);
 	return (0);
 }
 
-//dup2 function with errors control
 int	ft_dup2(int desold, int desnew)
 {
 	int	i;
@@ -520,7 +518,7 @@ char	*ft_strdup(char *s)
 	cpi = malloc(sizeof(char *) * ft_strlen(s) + 1);
 	if (!cpi)
 		return (00);
-	ft_memcpy(cpi, s, ft_strlen(s));
+	cpi = ft_memcpy(cpi, s, ft_strlen(s));
 	return (cpi);
 }
 

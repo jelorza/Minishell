@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils_0.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 10:34:15 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//copia en dos array bidimensionales el enviroment al inicio
 void	ft_get_env(t_in *dt, char **envp)
 {
 	int	i;
@@ -14,29 +25,30 @@ void	ft_get_env(t_in *dt, char **envp)
 	i = -1;
 	while (envp[++i] != NULL)
 	{
-		dt->env[i] = ft_strlcpy(envp[i], 0, ft_strlen(envp[i])); 
+		dt->env[i] = ft_strlcpy(envp[i], 0, ft_strlen(envp[i]));
 		dt->env_name[i] = ft_split_env_1(envp[i]);
 		dt->env_value[i] = ft_split_env_2(envp[i]);
-		if (ft_compare_str(dt->env_name[i], "PWD"))//me guardo la ruta inicial para cambiar el env con un cd
-			dt->root = ft_strlcpy(dt->env_value[i], 0, ft_strlen(dt->env_value[i]));
-		if (ft_compare_str(dt->env_name[i], "OLDPWD"))//me guardo la ruta old inicial para cambiar el env con un cd
-			dt->rootold = ft_strlcpy(dt->env_value[i], 0, ft_strlen(dt->env_value[i]));
+		if (ft_compare_str(dt->env_name[i], "PWD"))
+			dt->root = ft_strlcpy(dt->env_value[i], 0,
+					ft_strlen(dt->env_value[i]));
+		if (ft_compare_str(dt->env_name[i], "OLDPWD"))
+			dt->rootold = ft_strlcpy(dt->env_value[i], 0,
+					ft_strlen(dt->env_value[i]));
 	}
 	dt->env[i] = NULL;
 	dt->env_name[i] = NULL;
 	dt->env_value[i] = NULL;
 }
 
-//funcion que me actualiza cada redline el enviroment
 void	ft_env_act(t_in *dt)
 {
 	int	i;
 
 	i = 0;
-	while (dt->env_name[i])//busco la posicion del PWD
+	while (dt->env_name[i])
 	{
 		if (ft_compare_str(dt->env_name[i], "PWD") == 1)
-			break;
+			break ;
 		i++;
 	}
 	free (dt->env_value[i]);
@@ -44,10 +56,10 @@ void	ft_env_act(t_in *dt)
 	free (dt->env[i]);
 	dt->env[i] = ft_strjoin("PWD=", dt->env_value[i]);
 	i = 0;
-	while (dt->env_name[i])//busco la posicion del OLDPWD
+	while (dt->env_name[i])
 	{
 		if (ft_compare_str(dt->env_name[i], "OLDPWD") == 1)
-			break;
+			break ;
 		i++;
 	}
 	free (dt->env_value[i]);
@@ -56,7 +68,6 @@ void	ft_env_act(t_in *dt)
 	dt->env[i] = ft_strjoin("OLDPWD=", dt->env_value[i]);
 }
 
-//funcion que extrae el nombre de las variablles de entorno y las guarda en un array bidimensional env_name
 char	*ft_split_env_1(char *env)
 {
 	int		i;
@@ -71,14 +82,13 @@ char	*ft_split_env_1(char *env)
 		i++;
 	res = (char *) malloc (sizeof(char) * (i + 1));
 	if (res == NULL)
-		return(NULL);
+		return (NULL);
 	while (++j < i)
 		res[j] = env[j];
 	res[j] = 00;
 	return (res);
 }
 
-//funcion que extrae el valor de las variablles de entorno y los guarda en un array bidimensional env_value (esta identado con el env_name)
 char	*ft_split_env_2(char *str)
 {
 	int		i;
@@ -110,7 +120,6 @@ char	*ft_split_env_2(char *str)
 	return (res);
 }
 
-//funcion que coge del env el path y saca todas las rutas para el access
 char	**ft_cut_root(t_in *dt)
 {
 	int		i;
@@ -121,14 +130,13 @@ char	**ft_cut_root(t_in *dt)
 	while (dt->env_name[++i] != NULL)
 	{
 		if (ft_compare_str (dt->env_name[i], "PATH") == 1)
-			break;
+			break ;
 	}
 	root = ft_split(dt->env_value[i], ':');
 	root = ft_add_line(dt, root);
 	return (root);
 }
 
-//funcion que me añade a las rutas de comparacion de los comandos el directorio actual para los ejecutables
 char	**ft_add_line(t_in *dt, char **rootold)
 {
 	int		i;
@@ -137,7 +145,8 @@ char	**ft_add_line(t_in *dt, char **rootold)
 
 	i = 0;
 	rootnew = NULL;
-	while (dt->env_name[i] != NULL && ft_compare_str(dt->env_name[i], "PWD") != 1)
+	while (dt->env_name[i] != NULL
+		&& ft_compare_str(dt->env_name[i], "PWD") != 1)
 		i++;
 	if (rootold)
 	{
@@ -169,7 +178,6 @@ char	**ft_add_line(t_in *dt, char **rootold)
 	return (rootnew);
 }
 
-//funcion que chequea si ya existe la variable en el env y en ese caso solo modifica su valor
 int	ft_ch_name_exist(t_in *dt, char *str)
 {
 	char	*name;
@@ -196,13 +204,12 @@ int	ft_ch_name_exist(t_in *dt, char *str)
 	}
 }
 
-//funcion que como la variable ya existe en el env y no se ha de crear, solo modifica su valor
-void	ft_change_value (t_in *dt, char *name, char *str)
+void	ft_change_value(t_in *dt, char *name, char *str)
 {
 	int		i;
 	char	*valuenew;
-	char 	*aux;
-	
+	char	*aux;
+
 	i = 0;
 	while (dt->env_name[i])
 	{
@@ -220,7 +227,6 @@ void	ft_change_value (t_in *dt, char *name, char *str)
 	free (aux);
 }
 
-//funcion que añade variables de entorno al env
 char	**ft_update_env_plus(t_in *dt, char *str)
 {
 	char	**envnew;
@@ -244,7 +250,6 @@ char	**ft_update_env_plus(t_in *dt, char *str)
 	return (envnew);
 }
 
-//funcion que analiza para el unset si la variable existe o no. Retorna 1 si existe y 0 si no
 int	ft_ch_name_exist_bis(t_in *dt, char *str)
 {
 	char	*name;
@@ -257,7 +262,7 @@ int	ft_ch_name_exist_bis(t_in *dt, char *str)
 		if (ft_compare_str(name, dt->env_name[i]) == 1)
 			break ;
 	}
-	if (i != ft_strlen_bi(dt->env_name))//existe la variable
+	if (i != ft_strlen_bi(dt->env_name))
 	{
 		free (name);
 		return (1);
@@ -280,15 +285,15 @@ char	**ft_update_env_minus(t_in *dt, char *str)
 		i++;
 	envnew = (char **) malloc (sizeof(char *) * (i));
 	i = -1;
-	while (ft_compare_str(name, dt->env_name[++i]) != 1)//copio hasta la variable a eliminar
+	while (ft_compare_str(name, dt->env_name[++i]) != 1)
 	{
 		envnew[i] = ft_strdup(dt->env[i]);
 		free (dt->env[i]);
 	}
-	free (dt->env[i]);//elimino la coincidencia
+	free (dt->env[i]);
 	dt->env[i] = NULL;
 	j = i;
-	while (dt->env[++j])//copio lo que queda de env
+	while (dt->env[++j])
 	{
 		envnew[i++] = ft_strdup(dt->env[j]);
 		free (dt->env[j]);
@@ -299,20 +304,19 @@ char	**ft_update_env_minus(t_in *dt, char *str)
 	return (envnew);
 }
 
-//funcion que actualiza el env_name y el env_value cuando al env se le añade una nueva linea y ha cambiado
 char	**ft_update_env_aux(t_in *dt, char c)
 {
 	int		i;
 	char	**env_new;
 
 	i = -1;
-	if (c == 'n')//destruyo las anteriores
+	if (c == 'n')
 	{
 		while (dt->env_name[++i] != NULL)
 			free(dt->env_name[i]);
 		free (dt->env_name);
 	}
-	if (c == 'v')//destruyo las anteriores
+	if (c == 'v')
 	{
 		while (dt->env_value[++i] != NULL)
 			free(dt->env_value[i]);

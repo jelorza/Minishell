@@ -4,15 +4,15 @@
 /*   linked_list_newnod.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/21 11:09:14 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/21 11:09:41 by jelorza-         ###   ########.fr       */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 11:08:19 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*ft_newNodCmd(char *data, t_list **list, int id)
+t_list	*ft_new_nod_cmd(char *data, t_list **list, int id)
 {
 	t_list	*new;
 
@@ -27,7 +27,7 @@ t_list	*ft_newNodCmd(char *data, t_list **list, int id)
 	return (new);
 }
 
-t_list	*ft_newNodRe(char *data, t_list **list, int id, char type)
+t_list	*ft_new_nod_re(char *data, t_list **list, int id, char type)
 {
 	t_list	*new;
 	int		n;
@@ -52,7 +52,7 @@ t_list	*ft_newNodRe(char *data, t_list **list, int id, char type)
 	return (new);
 }
 
-t_list	*ft_newNodPi(char *data, t_list **list)
+t_list	*ft_new_nod_pi(char *data, t_list **list)
 {
 	static int	id;
 	t_list		*new;

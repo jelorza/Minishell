@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 11:12:15 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//funcion que crea nodos de la lista de redirecciones con el nombre del fichero, el comando al que afecta y el tipo de redireccion
 t_list	*ft_new(char *file, int n, int t)
 {
 	t_list	*new;
@@ -9,7 +20,7 @@ t_list	*ft_new(char *file, int n, int t)
 	if (new == NULL)
 		return (NULL);
 	if (file)
-		new->data = ft_strlcpy(file, 0 , ft_strlen(file));
+		new->data = ft_strlcpy(file, 0, ft_strlen(file));
 	else
 		new->data = NULL;
 	new->id = n;
@@ -49,13 +60,13 @@ void	ft_print_list(t_list *list)
 	aux = list;
 	while (aux)
 	{
-		printf ("El nodo %d:\nPertenece al comando: %d\nTipo: %d\nDato: <%s>\n", i, aux->id, aux->type, aux->data);
+		printf ("El nodo %d:\nPertenece al comando: %d\nTipo: %d\nDato: <%s>\n",
+			i, aux->id, aux->type, aux->data);
 		aux = aux->next;
 		i++;
 	}
 }
 
-//tengo un leak por listireccion que haga en cada pipe, sigo para adelante y luego la buscare!!!
 void	ft_destroy_list(t_list **list)
 {
 	t_list	*aux;
@@ -72,7 +83,7 @@ void	ft_destroy_list(t_list **list)
 	*list = NULL;
 }
 
-int	ft_listlen (t_list *list)
+int	ft_listlen(t_list *list)
 {
 	int	i;
 

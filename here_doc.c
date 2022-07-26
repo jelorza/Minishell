@@ -1,40 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 12:15:37 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//función que chequea la lista de redirecciones y mira si hay o no algun <<.
-//1- Retorna 0 si no hay ninguno
-//2- Retorna -1 si algo da error
-//3- Retorna -2 si hay alguno
-int	ft_ch_HD(t_in *dt, int n)
+int	ft_ch_hd(t_in *dt, int n)
 {
 	t_list	*new;
 
-	if (n != -1)//caso de tener un HD antes de encontrar alguna redireccion que no exista
+	if (n != -1)
 	{
-		new = ft_new(ft_strdup(dt->l_parseRedir->data), n, 0);
+		new = ft_new(ft_strdup(dt->l_parse_redir->data), n, 0);
 		ft_add_back(&dt->hd, new);
 		return (0);
 	}
-	else//caso de haber encontrado alguna redireccion que no existe, he de buscar si quedan HD por añadir a la lista
+	else
 	{
-		while (dt->l_parseRedir)
+		while (dt->l_parse_redir)
 		{
-			if (dt->l_parseRedir->type == 3)
+			if (dt->l_parse_redir->type == 3)
 			{
-				new = ft_new(ft_strdup(dt->l_parseRedir->data), n, 0);
+				new = ft_new(ft_strdup(dt->l_parse_redir->data), n, 0);
 				ft_add_back(&dt->hd, new);
 			}
-			dt->l_parseRedir = dt->l_parseRedir->next;
+			dt->l_parse_redir = dt->l_parse_redir->next;
 		}
 	}
 	return (0);
 }
 
-//función que activa uno o varios HD y los va cerrando consecutivamente sin tener que guardar la información
-void	ft_exe_null_HD(char *str)
+void	ft_exe_null_hd(char *str)
 {
-	char *line;
-	
-	STATUS = -23;
+	char	*line;
+
+	g_status = -23;
 	line = readline("> ");
 	while (ft_compare_str(line, str) != 1 && line)
 	{
@@ -44,13 +51,13 @@ void	ft_exe_null_HD(char *str)
 	free(line);
 }
 
-//funcion que es activada cuando hay un HD predominante y va guardando linea a linea retornando el descriptor para fdint
-int	ft_exe_HD(char *str, int fdint, char **env)
+int	ft_exe_hd(char *str, int fdint, char **env)
 {
 	char	*line;
 
-	STATUS = -23;
-	fdint = open (".aux_HD.txt.tmp", O_CREAT | O_EXCL | O_RDWR | O_APPEND, 0644);
+	g_status = -23;
+	fdint = open (".aux_HD.txt.tmp", O_CREAT
+			| O_EXCL | O_RDWR | O_APPEND, 0644);
 	if (fdint == -1)
 	{
 		fdint = open (".aux_HD.txt.tmp", O_RDWR | O_TRUNC, 0644);
@@ -64,7 +71,7 @@ int	ft_exe_HD(char *str, int fdint, char **env)
 			return (-1);
 		}
 		free (line);
-		write (fdint, "\n", 1);//hay que añadir salto de linea
+		write (fdint, "\n", 1);
 		line = readline("> ");
 	}
 	free(line);
@@ -74,7 +81,6 @@ int	ft_exe_HD(char *str, int fdint, char **env)
 	return (fdint);
 }
 
-//función que borra el archivo auxiliar generado con un HD predominante
 void	ft_erase_aux(char **env)
 {
 	char	**rm;

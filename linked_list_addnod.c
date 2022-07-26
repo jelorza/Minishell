@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   linked_list.c                                      :+:      :+:    :+:   */
+/*   linked_list_addnod.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/21 09:46:34 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/21 11:07:35 by jelorza-         ###   ########.fr       */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 12:17:36 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ void	ft_add_nod_back_re(t_in *dt, char *data, int id, char list)
 	t_list	*new;
 	t_list	*aux;
 
-	new = ft_newNodRe(data, &dt->l_parseRedir, id, list);
-	aux = dt->l_parseRedir;
+	new = ft_new_nod_re(data, &dt->l_parse_redir, id, list);
+	aux = dt->l_parse_redir;
 	if (!new)
 		return ;
 	if (aux == NULL)
-		dt->l_parseRedir = new;
+		dt->l_parse_redir = new;
 	else
 	{
 		while (aux->next != NULL)
@@ -36,12 +36,12 @@ void	ft_add_nod_back_pipe(t_in *dt, char *data)
 	t_list	*new;
 	t_list	*aux;
 
-	new = ft_newNodPi(data, &dt->l_parseInit);
-	aux = dt->l_parseInit;
+	new = ft_new_nod_pi(data, &dt->l_parse_init);
+	aux = dt->l_parse_init;
 	if (!new)
 		return ;
 	if (aux == NULL)
-		dt->l_parseInit = new;
+		dt->l_parse_init = new;
 	else
 	{
 		while (aux->next != NULL)
@@ -55,12 +55,12 @@ void	ft_add_nod_back_cmd(t_in *dt, char *data, int id)
 	t_list	*new;
 	t_list	*aux;
 
-	new = ft_newNodCmd(data, &dt->l_parseCmd, id);
-	aux = dt->l_parseCmd;
+	new = ft_new_nod_cmd(data, &dt->l_parse_cmd, id);
+	aux = dt->l_parse_cmd;
 	if (!new)
 		return ;
 	if (aux == NULL)
-		dt->l_parseCmd = new;
+		dt->l_parse_cmd = new;
 	else
 	{
 		while (aux->next != NULL)
@@ -69,7 +69,7 @@ void	ft_add_nod_back_cmd(t_in *dt, char *data, int id)
 	}
 }
 
-void	ft_addNodBack(t_in *dt, char *data, char list, int id)
+void	ft_add_nod_back(t_in *dt, char *data, char list, int id)
 {
 	if (list == 'p')
 		ft_add_nod_back_pipe(dt, data);

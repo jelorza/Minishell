@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 14:39:39 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -11,89 +23,85 @@
 # include <sys/wait.h>
 # include <signal.h>
 
-# define	ROJO_T 			"\x1b[31m"
-# define 	RESET_C			"\x1b[0m"
+# define ROJO_T 			"\x1b[31m"
+# define RESET_C			"\x1b[0m"
 
-int	STATUS;//variable global para el status de salida
+int	g_status;
 
-typedef struct s_list//lista para las redirecciones
+typedef struct s_list
 {
-	char			*data;//guardo el nombre del archivo
-	int				type;//Tipo de redireccion: 1 = < / 2 = > / 3 = << / 4 = >>
-	int				id;//id del comando al que afecta
+	char			*data;
+	int				type;
+	int				id;
 	struct s_list	*next;
 }	t_list;
 
-typedef struct	s_cr//estructura para contabilizacion de redirecciones
+typedef struct s_cr
 {
-	int		i;//cantidad de redirecciones de entrada, < o <<
-	int		s;//cantidad de redirecciones de slaida, > o >>
-	int		ti;//tipo de la ultima redireccion de entrada
-	int		ts;//tipo de la ultima redireccion de salida
+	int		i;
+	int		s;
+	int		ti;
+	int		ts;
 }	t_cr;
 
-typedef struct	s_in
+typedef struct s_in
 {
-	char	**env;//puntero doble que guarda el env
-	char	**env_name;//puntero doble con el nombre de variables de entorno
-	char	**env_value;//puntero doble con los valores de variables de entorno
-	char	*ncmd;//array con el nombre del comando y se va actualizando con cada cmd
-	char	*rootcmd;//puntero que guarda la ruta del ejecutable con el cmd y se va actualizando para cada cmd
-	char	*root;//guardo la ruta inicial, para el PWD del env
-	char	*rootold;//guardo la ultima ruta para el OLDPWD del env
-	char	**cmdf;//array bidimensional con el comando y sus argumentos y se va actualizando
-	char	**cmdfEcho;//array bidimensional con el comando y sus argumentos y se va actualizando
-	t_list	*l_parseInit;//lista inicial de pipes
-	t_list	*hdI;//cabeza de la lista pipes
-	t_list	*l_parseRedir;//lista de redirecciones
-	t_list	*hdR;//cabeza de la lista redirecciones
-	t_list	*l_parseCmd;//lista de comandos(type 1 = builtin)
-	t_list	*hdC;//cabeza de la lista comandos
-	t_list	*hd;//lista de here docs (HD)
-	t_list	*hdH;//cabeza de la lista HD
-	int		nc;//guardo el numero de cmd que hay en la lista para la funcion exit
-	int		status;//guardo el valor a retornar por el programa
-	int		fdint;//guardo el fdin de entrada que se ejecutara
-	int		tint;//guardo el tipo de redireccion de entrada del ultimo file en cada pipe
-	int		fdout;//guardo el fdout de salida que se ejecutara
-	int		tout;//guardo el tipo de redireccion de salida del ultimo file en cada pipe
-	int		fdaux;//guardo el resultado para pasar de proceso en proceso
-	int		an;//booleano para el cat =0 si no =1 si si
-	t_cr	*cr;//puntero a la estructura de redirecciones
+	char	**env;
+	char	**env_name;
+	char	**env_value;
+	char	*ncmd;
+	char	*rootcmd;
+	char	*root;
+	char	*rootold;
+	char	**cmdf;
+	char	**cmdf_echo;
+	t_list	*l_parse_init;
+	t_list	*hd_i;
+	t_list	*l_parse_redir;
+	t_list	*hd_r;
+	t_list	*l_parse_cmd;
+	t_list	*hd_c;
+	t_list	*hd;
+	t_list	*hd_h;
+	int		nc;
+	int		status;
+	int		fdint;
+	int		tint;
+	int		fdout;
+	int		tout;
+	int		fdaux;
+	int		an;
+	t_cr	*cr;
 
 }	t_in;
 
-//main.c
 void	ft_struct_init(t_in *dt);
-void	ft_cleanAllLists(t_in *dt);
-
-//funciones auxiliares de ayuda
-//aux_utils_0.c
+void	ft_clean_all_lists(t_in *dt);
 char	*ft_strlcpy(char *line, int st, int len);
-int		ft_strlcpy_itoa(char *line, char  *st, int size);
+int		ft_strlcpy_itoa(char *line, char *st, int size);
 int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
 int		ft_compare_str_cat(char *str);
-int		ft_compare_str_$(char *str, char *model);
+int		ft_compare_str_env(char *str, char *model);
 char	*ft_get_name_bis(char *str);
-char	**ft_split(char *s, char c);//split con sus tres estáticas
-char	**ft_splitEcho(char *s, char c);
+char	**ft_split(char *s, char c);
+char	**ft_split_echo(char *s, char c);
 char	*ft_split_echo_aux(char *s);
 int		ft_count_rarus(char *s, int n);
 char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strjoinAux(char *s1, char *s2); //He tenido que crear ese join para poder liberar los dos datos de entrada (jon);
+char	*ft_strjoin_aux(char *s1, char *s2);
 int		ft_fork(void);
 int		ft_pipe(int *fd);
 int		ft_close(int descr);
 int		ft_wait(int pid);
-int		ft_dup2(int desnew, int desold); 
+int		ft_dup2(int desnew, int desold);
 void	ft_erase_aux(char **env);
 char	*ft_substr(char *s, int start, int len);
 char	*ft_strdup(char *s);
 char	*ft_memcpy(char *des, char *src, int n);
 long	ft_atoi(char *str);
-int		ft_countEcho(char *s, char c);
+int		ft_count_echo(char *s, char c);
 char	*ft_itoa(int n);
 
 //funciones que ejecutan los builtins
@@ -152,26 +160,26 @@ void	ft_free(t_in *dt, int i);
 
 //funciones que realizan el here dock (HD)
 //here_doc_0.c
-int		ft_ch_HD(t_in *dt, int n);
-void	ft_exe_null_HD(char *str);
-int		ft_exe_HD(char *str, int fdint, char **env);
+int		ft_ch_hd(t_in *dt, int n);
+void	ft_exe_null_hd(char *str);
+int		ft_exe_hd(char *str, int fdint, char **env);
 
 //funciones de linked list
 //linked_list.c
-t_list *ft_newNodPi(char *data, t_list **list);
-t_list *ft_newNodRe(char *data, t_list **list, int id, char type);
-t_list *ft_newNodCmd(char *data, t_list **list, int id);
-void	ft_addNodBack(t_in *dt, char *data, char type, int id);
+t_list	*ft_new_nod_pi(char *data, t_list **list);
+t_list	*ft_new_nod_re(char *data, t_list **list, int id, char type);
+t_list	*ft_new_nod_cmd(char *data, t_list **list, int id);
+void	ft_add_nod_back(t_in *dt, char *data, char type, int id);
 void	ft_add_nod_back_pipe(t_in *dt, char *data);
 void	ft_add_nod_back_re(t_in *dt, char *data, int id, char type);
 void	ft_add_nod_back_cmd(t_in *dt, char *data, int id);
-void	ft_printListPipe(t_list **list);
-void	ft_printListCmd(t_list **list);
-void	ft_printListRedir(t_list **list);
-void	ft_addNodFront(t_list **list, char *data);
-void	ft_cleanListPipe(t_list **list);
-void	ft_cleanListCmd(t_list **list);
-void	ft_cleanListRedir(t_list **list);
+void	ft_print_list_pipe(t_list **list);
+void	ft_print_list_cmd(t_list **list);
+void	ft_print_list_redir(t_list **list);
+void	ft_add_nod_front(t_list **list, char *data);
+void	ft_clean_list_pipe(t_list **list);
+void	ft_clean_list_cmd(t_list **list);
+void	ft_clean_list_redir(t_list **list);
 
 //funciones auxiliares para crear o trabajar con listas
 //list_utils_0.c
@@ -187,19 +195,19 @@ int		ft_listlen(t_list *list);
 int		ft_parse_line(char *line, t_in *dt);
 void	ft_remove_quot(t_in *dt);
 char	*ft_expand_envs(char *line, t_in *dt);
-int 	ft_charCounter(char *line, char c);
-char 	*ft_checkEnv(char *line);
-int		ft_checkInEnvList(char *env, t_in *dt);
-char	*ft_replaceInLine(char *line, char *old, char *new);
+int		ft_char_counter(char *line, char c);
+char	*ft_check_env(char *line);
+int		ft_check_in_env_list(char *env, t_in *dt);
+char	*ft_replace_in_line(char *line, char *old, char *new);
 int		ft_pipes_list(char *line, t_in *dt);
 int		ft_check_quotations(char *line, int i);
 void	ft_div_in_lists(t_in *dt);
 int		ft_check_and_create(char *line, t_in *dt, int id);
 char	ft_redir_type(char *line, int i);
-void	ft_printAllLists(t_in *dt);
-int		ft_checkAndCreate(t_in *dt, int bool, char *data);
-int		ft_checkIf39(char *line, int i); //Check if has '
-char	*ft_checkIfEnv(char *line, int i);
+void	ft_print_all_lists(t_in *dt);
+int		ft_check_create(t_in *dt, int bool, char *data);
+int		ft_check_if39(char *line, int i); //Check if has '
+char	*ft_check_if_env(char *line, int i);
 
 //funciones para gestionar las redirecciones
 //red_utils_0.c

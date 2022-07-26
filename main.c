@@ -1,18 +1,28 @@
-//Tengo la primera lista terminada aunque me falta corregir que si la primera en el prompt es | me haga algo igual al bash. Lo libero todo y todo perfect. Todo esta con entructura de listas. Ahora vou a hacer otra lista con cada nodo de la lista de los comandos pero teniendo en cuenta las redirecciones.
-//Tambien tengo que controlar que cuando hay una ' o " despues de | me haga bien. (asdf|asdf|'asdf')
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 11:59:41 by jelorza-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_struct_init(t_in *dt)
 {
-	STATUS = 0;
-	dt->l_parseInit = NULL;
-	dt->hdI = NULL;
-	dt->l_parseRedir = NULL;
-	dt->hdR = NULL;
-	dt->l_parseCmd = NULL;
-	dt->hdC = NULL;
+	g_status = 0;
+	dt->l_parse_init = NULL;
+	dt->hd_i = NULL;
+	dt->l_parse_redir = NULL;
+	dt->hd_r = NULL;
+	dt->l_parse_cmd = NULL;
+	dt->hd_c = NULL;
 	dt->hd = NULL;
-	dt->hdH = NULL;
+	dt->hd_h = NULL;
 	dt->env = NULL;
 	dt->env_name = NULL;
 	dt->env_value = NULL;
@@ -24,26 +34,26 @@ void	ft_struct_init(t_in *dt)
 	dt->cr = NULL;
 }
 
-void	ft_cleanAllLists(t_in *dt)
+void	ft_clean_all_lists(t_in *dt)
 {
-	if (dt->hdI)
+	if (dt->hd_i)
 	{
-		dt->l_parseInit = dt->hdI;
-		dt->hdI = NULL;
+		dt->l_parse_init = dt->hd_i;
+		dt->hd_i = NULL;
 	}
-	ft_cleanListPipe(&dt->l_parseInit);
-	if (dt->hdC)
+	ft_clean_list_pipe(&dt->l_parse_init);
+	if (dt->hd_c)
 	{
-		dt->l_parseCmd = dt->hdC;
-		dt->hdC = NULL;
+		dt->l_parse_cmd = dt->hd_c;
+		dt->hd_c = NULL;
 	}
-	ft_cleanListCmd(&dt->l_parseCmd);
-	if (dt->hdR)
+	ft_clean_list_cmd(&dt->l_parse_cmd);
+	if (dt->hd_r)
 	{
-		dt->l_parseRedir = dt->hdR;
-		dt->hdR = NULL;
+		dt->l_parse_redir = dt->hd_r;
+		dt->hd_r = NULL;
 	}
-	ft_cleanListRedir(&dt->l_parseRedir);
+	ft_clean_list_redir(&dt->l_parse_redir);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -58,32 +68,27 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	ft_struct_init(&dt);
-	ft_get_env(&dt, envp);//me guardo el env y la ruta inicial
+	ft_get_env(&dt, envp);
 	rl_catch_signals = 0;
 	ft_signal ();
 	while (1)
 	{
-		line = readline(ROJO_T "bash-3.2$ " RESET_C);//texto de entrada de bash
-//		line = readline("***bash del jonpol$ ");//texto de entrada de bash
-		add_history (line);//añadido el history al minishell
+		line = readline(ROJO_T "bash-3.2$ " RESET_C);
+		add_history (line);
 		if (!line)
 		{
 			printf ("exit\n");
 			break ;
 		}
-		if (ft_parse_line(line, &dt) == -1)//inicio el programa
-		{
-//			ft_cleanAllLists(&dt);
+		if (ft_parse_line(line, &dt) == -1)
 			break ;
-		}
 		free (line);
-		ft_cleanAllLists(&dt);
-//		printf ("El status que sale es: %d\n", STATUS);
+		ft_clean_all_lists(&dt);
 	}
-	ft_free_1(&dt);//libero el enviroment
+	ft_free_1(&dt);
 	ft_free_0(&dt);
-	ft_cleanAllLists(&dt);
+	ft_clean_all_lists(&dt);
 	free (line);
 //	system ("leaks minishell");
-	return (STATUS);
+	return (g_status);
 }

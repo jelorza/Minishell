@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   linked_list_print.c                                :+:      :+:    :+:   */
+/*   linked_list_print.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/21 11:08:34 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/21 11:09:02 by jelorza-         ###   ########.fr       */
+/*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
+/*   Updated: 2022/07/26 11:09:36 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_printListCmd(t_list **list)
+void	ft_print_list_cmd(t_list **list)
 {	
 	t_list	*aux;
 
@@ -29,7 +29,7 @@ void	ft_printListCmd(t_list **list)
 		printf("La lista esta vacia\n");
 }
 
-void	ft_printListRedir(t_list **list)
+void	ft_print_list_redir(t_list **list)
 {	
 	t_list	*aux;
 
@@ -47,7 +47,7 @@ void	ft_printListRedir(t_list **list)
 		printf("La lista esta vacia\n");
 }
 
-void	ft_printListPipe(t_list **list)
+void	ft_print_list_pipe(t_list **list)
 {	
 	t_list	*aux;
 
