@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/27 18:49:47 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/07/27 18:56:48 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	ft_pipes_list(char *line, t_in *dt, int i, int z)
 	}
 	return (0);
 }
+
 int	ft_init(char *line, int i)
 {
 	while (line[i] == ' ')
