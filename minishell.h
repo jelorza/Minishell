@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 14:39:39 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/07/27 14:32:14 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int		ft_strlcpy_itoa(char *line, char *st, int size);
 int		ft_strlen(char *line);
 int		ft_strlen_bi(char **str);
 int		ft_compare_str(char *str, char *model);
+void	ft_cmp_replace(char *env[3], t_in *dt, int is_env);
 int		ft_compare_str_cat(char *str);
 int		ft_compare_str_env(char *str, char *model);
 char	*ft_get_name_bis(char *str);
@@ -197,15 +198,26 @@ void	ft_remove_quot(t_in *dt);
 char	*ft_expand_envs(char *line, t_in *dt);
 int		ft_char_counter(char *line, char c);
 char	*ft_check_env(char *line);
+int		ft_check_pipe(char *line, int i);
+int		ft_init(char *line, int i);
 int		ft_check_in_env_list(char *env, t_in *dt);
+int		ft_create_new(char *line, int z, int i, t_in *dt);
+int		ft_check_quot(char *line, int i, char type);
 char	*ft_replace_in_line(char *line, char *old, char *new);
-int		ft_pipes_list(char *line, t_in *dt);
+int		ft_pipes_list(char *line, t_in *dt, int i, int z);
 int		ft_check_quotations(char *line, int i);
 void	ft_div_in_lists(t_in *dt);
-int		ft_check_and_create(char *line, t_in *dt, int id);
+int		ft_check_and_create(char *line, t_in *dt, int id, char type);
 char	ft_redir_type(char *line, int i);
+int		ft_check_redir_1(char *line, int i);
+int		ft_check_redir_2(char *line, int i);
+int		ft_check_redir_3(char *line, int i);
 void	ft_print_all_lists(t_in *dt);
-int		ft_check_create(t_in *dt, int bool, char *data);
+int		ft_del_spaces(char *line, int c);
+int		ft_check_create0(char *line, int c, char type);
+int		ft_check_create1(char *line, int c);
+int		ft_check_create3(char *line, int c[2], int id, t_in *dt);
+int		ft_check_create4(t_in *dt, int bool, char *data);
 int		ft_check_if39(char *line, int i); //Check if has '
 char	*ft_check_if_env(char *line, int i);
 

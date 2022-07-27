@@ -15,6 +15,12 @@ SRC = main.c\
 	  parse_line.c\
 	  red_utils_0.c\
 	  signal_utils_0.c\
+	  expand_envs1.c\
+	  expand_envs2.c\
+	  div_in_list1.c\
+	  div_in_list2.c\
+	  div_in_list3.c\
+	  pipes_list.c\
 
 OBJ = $(SRC:.c=.o)
 
