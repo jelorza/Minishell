@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/27 14:33:39 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/07/27 18:49:47 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_init(char *line, int i)
 	if (line[i] == '|')
 	{
 		printf("bash: syntax error near unexpected token `|'\n");
-		return (0);
+		return (-1);
 	}
 	return (i);
 }
