@@ -17,6 +17,7 @@ SRC = main.c\
 	  signal_utils_0.c\
 	  expand_envs1.c\
 	  expand_envs2.c\
+	  expand_envs3.c\
 	  div_in_list1.c\
 	  div_in_list2.c\
 	  div_in_list3.c\
