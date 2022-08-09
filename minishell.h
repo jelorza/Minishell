@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 17:54:35 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/09 19:05:55 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int		ft_compare_str_env(char *str, char *model);
 char	*ft_get_name_bis(char *str);
 char	**ft_split(char *s, char c);
 char	**ft_split_echo(char *s, char c);
+char	**ft_split_echo_init(char *s, char **r);
 char	*ft_split_echo_aux(char *s);
 int		ft_count_rarus(char *s, int n);
 char	*ft_strjoin(char *s1, char *s2);
@@ -238,6 +239,8 @@ int		ft_ch_redir(t_in *dt, int n);
 void	ft_ch_redir_aux0(t_list *red, t_cr *cr);
 int		ft_exe_redir(t_in *dt, int n);
 int		ft_exe_redir_int(t_in *dt, int n);
+int		ft_exe_redir_int_aux_1(t_in *dt, int n);
+int		ft_exe_redir_int_aux_2(t_in *dt);
 int		ft_exe_redir_out(t_in *dt, int n);
 int		ft_exe_redir_out_aux0(t_in *dt);
 void	ft_redir_null(t_in *dt);

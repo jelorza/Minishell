@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 12:32:47 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 18:50:03 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,9 @@ int	ft_exe_redir(t_in *dt, int n)
 int	ft_exe_redir_int(t_in *dt, int n)
 {
 	int		i;
-	char	*cmdnex;
 
 	i = 0;
 	dt->tint = 0;
-	cmdnex = NULL;
 	dt->hd = NULL;
 	dt->l_parse_redir = dt->hd_r;
 	while (dt->l_parse_redir)
@@ -97,33 +95,50 @@ int	ft_exe_redir_int(t_in *dt, int n)
 			dt->tint = dt->l_parse_redir->type;
 			if (dt->l_parse_redir->type == 1)
 			{
-				if (dt->fdint > 0)
-					close (dt->fdint);
-				dt->fdint = open(dt->l_parse_redir->data, O_RDONLY);
-				if (dt->fdint == -1)
-				{
-					cmdnex = ft_strjoin("", dt->l_parse_redir->data);
-					n = -1;
-					ft_ch_hd (dt, n);
-					dt->hd_h = dt->hd;
-					while (dt->hd)
-					{
-						ft_exe_null_hd(dt->hd->data);
-						dt->hd = dt->hd->next;
-					}
-					dt->hd = dt->hd_h;
-					ft_destroy_list(&dt->hd);
-					printf ("bash: %s: No such file or directory\n", cmdnex);
-					g_status = 1;
-					free (cmdnex);
+				if (ft_exe_redir_int_aux_1(dt, n) == -2)
 					return (-2);
-				}
 			}
 			else if (dt->l_parse_redir->type == 3)
 				ft_ch_hd (dt, n);
 		}
 		dt->l_parse_redir = dt->l_parse_redir->next;
 	}
+	if (ft_exe_redir_int_aux_2(dt) == -1)
+		return (-1);
+	return (0);
+}
+
+int	ft_exe_redir_int_aux_1(t_in *dt, int n)
+{
+	char	*cmdnex;
+
+	cmdnex = NULL;
+	if (dt->fdint > 0)
+		close (dt->fdint);
+	dt->fdint = open(dt->l_parse_redir->data, O_RDONLY);
+	if (dt->fdint == -1)
+	{
+		cmdnex = ft_strjoin("", dt->l_parse_redir->data);
+		n = -1;
+		ft_ch_hd (dt, n);
+		dt->hd_h = dt->hd;
+		while (dt->hd)
+		{
+			ft_exe_null_hd(dt->hd->data);
+			dt->hd = dt->hd->next;
+		}
+		dt->hd = dt->hd_h;
+		ft_destroy_list(&dt->hd);
+		printf ("bash: %s: No such file or directory\n", cmdnex);
+		g_status = 1;
+		free (cmdnex);
+		return (-2);
+	}
+	return (0);
+}
+
+int	ft_exe_redir_int_aux_2(t_in *dt)
+{
 	dt->hd_h = dt->hd;
 	if (dt->tint == 3)
 	{
