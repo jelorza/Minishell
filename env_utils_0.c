@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 08:25:40 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/09 18:17:42 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,10 +275,7 @@ char	**ft_update_env_minus(t_in *dt, char *str)
 	int		j;
 
 	name = ft_split_env_1(str);
-	i = 0;
-	while (dt->env[i])
-		i++;
-	envnew = (char **) malloc (sizeof(char *) * (i));
+	envnew = (char **) malloc (sizeof(char *) * (ft_strlen_bi(dt->env)));
 	i = -1;
 	while (ft_compare_str(name, dt->env_name[++i]) != 1)
 	{
@@ -304,6 +301,24 @@ char	**ft_update_env_aux(t_in *dt, char c)
 	int		i;
 	char	**env_new;
 
+	i = ft_update_env_aux_aux(dt, c);
+	env_new = (char **) malloc (sizeof(char *) * (i + 2));
+	i = -1;
+	while (dt->env[++i] != NULL)
+	{
+		if (c == 'n')
+			env_new[i] = ft_split_env_1(dt->env[i]);
+		else if (c == 'v')
+			env_new[i] = ft_split_env_2(dt->env[i]);
+	}
+	env_new[i] = NULL;
+	return (env_new);
+}
+
+int	ft_update_env_aux_aux(t_in *dt, char c)
+{
+	int	i;
+
 	i = -1;
 	if (c == 'n')
 	{
@@ -317,15 +332,5 @@ char	**ft_update_env_aux(t_in *dt, char c)
 			free(dt->env_value[i]);
 		free (dt->env_value);
 	}
-	env_new = (char **) malloc (sizeof(char *) * (i));
-	i = -1;
-	while (dt->env[++i] != NULL)
-	{
-		if (c == 'n')
-			env_new[i] = ft_split_env_1(dt->env[i]);
-		else if (c == 'v')
-			env_new[i] = ft_split_env_2(dt->env[i]);
-	}
-	env_new[i] = NULL;
-	return (env_new);
+	return (i);
 }

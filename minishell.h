@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 08:23:47 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/09 17:54:35 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void	ft_change_value(t_in *dt, char *name, char *str);
 char	**ft_update_env_plus(t_in *dt, char *str);
 char	**ft_update_env_minus(t_in *dt, char *str);
 char	**ft_update_env_aux(t_in *dt, char c);
+int		ft_update_env_aux_aux(t_in *dt, char c);
 
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c
