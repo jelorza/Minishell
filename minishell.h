@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 07:59:20 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/09 08:23:47 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ char	*ft_split_env_1(char *env);
 char	*ft_split_env_2(char *env);
 char	**ft_cut_root(t_in *dt);
 char	**ft_add_line(t_in *dt, char **rootold);
+int		ft_add_line_aux(t_in *dt);
 int		ft_ch_name_exist(t_in *dt, char *str);
 int		ft_ch_name_exist_bis(t_in *dt, char *str);
 void	ft_change_value(t_in *dt, char *name, char *str);

@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 06:49:34 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/09 08:25:40 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,43 +136,41 @@ char	**ft_cut_root(t_in *dt)
 
 char	**ft_add_line(t_in *dt, char **rootold)
 {
-	int		i;
 	int		j;
 	char	**rootnew;
 
-	i = 0;
+	j = 0;
 	rootnew = NULL;
-	while (dt->env_name[i] != NULL
-		&& ft_compare_str(dt->env_name[i], "PWD") != 1)
-		i++;
 	if (rootold)
 	{
-		j = 0;
 		while (rootold[j])
 			j++;
 		rootnew = (char **) malloc(sizeof(char *) * (j + 2));
-		if (!rootnew)
-			return (NULL);
-		j = 0;
-		while (rootold[j])
+		j = -1;
+		while (rootold[++j])
 		{
 			rootnew[j] = ft_strdup(rootold[j]);
 			free (rootold[j]);
-			j++;
 		}
 		free (rootold);
 	}
 	else
-	{
-		j = 0;
 		rootnew = (char **) malloc(sizeof(char *) * (2));
-		if (!rootnew)
-			return (NULL);
-	}
-	rootnew[j] = ft_strdup(dt->env_value[i]);
+	rootnew[j] = ft_strdup(dt->env_value[ft_add_line_aux(dt)]);
 	j++;
 	rootnew[j] = NULL;
 	return (rootnew);
+}
+
+int	ft_add_line_aux(t_in *dt)
+{
+	int	i;
+
+	i = 0;
+	while (dt->env_name[i] != NULL
+		&& ft_compare_str(dt->env_name[i], "PWD") != 1)
+		i++;
+	return (i);
 }
 
 int	ft_ch_name_exist(t_in *dt, char *str)
