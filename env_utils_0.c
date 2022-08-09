@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 10:34:15 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 06:49:34 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,10 @@ char	*ft_split_env_2(char *str)
 	res = (char *) malloc (sizeof(char) * (l - i));
 	if (res == NULL)
 		return (NULL);
-	j = 0;
+	j = -1;
 	i++;
-	while (j < (l - i))
-	{
+	while (++j < (l - i))
 		res[j] = str[i + j];
-		j++;
-	}
 	res[j] = 00;
 	return (res);
 }

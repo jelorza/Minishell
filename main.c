@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/27 19:04:05 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 07:59:49 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,6 @@ int	main(int argc, char **argv, char **envp)
 	ft_free_0(&dt);
 	ft_clean_all_lists(&dt);
 	free (line);
-//	system ("leaks minishell");
+	system ("leaks minishell");
 	return (g_status);
 }

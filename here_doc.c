@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 12:15:37 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 06:59:07 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,7 @@ int	ft_exe_hd(char *str, int fdint, char **env)
 	fdint = open (".aux_HD.txt.tmp", O_CREAT
 			| O_EXCL | O_RDWR | O_APPEND, 0644);
 	if (fdint == -1)
-	{
 		fdint = open (".aux_HD.txt.tmp", O_RDWR | O_TRUNC, 0644);
-	}
 	line = readline("> ");
 	while (ft_compare_str(line, str) != 1 && line)
 	{

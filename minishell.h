@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/28 12:00:02 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 07:59:20 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,12 @@ char	**ft_update_env_aux(t_in *dt, char c);
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c
 int		ft_exec(t_in *dt);
+void	ft_exec_aux(int i, t_in *dt);
+void	ft_clean(t_in *dt);
 int		ft_ch_buil(char *name, t_list *list);
 int		ft_ch_cmde(t_in *dt);
+int		ft_ch_cmde_aux(t_in *dt);
+void	ft_ch_cmde_aux_aux(t_in *dt);
 int		ft_execve(t_in *dt, int n);
 int		ft_exe_cmd(t_in *dt, int n);
 int		ft_exe_cmd_builtin(t_in *dt, int n);
@@ -149,9 +153,13 @@ int		ft_exe_cmd_builtin_int(t_in *dt, int n);
 int		ft_exe_cmd_builtin_end(t_in *dt, int n);
 int		ft_builtin_fork(t_in *dt, int n);
 int		ft_exe_cmd_builtin_st_aux(t_in *dt, int n);
+void	ft_exe_cmd_builtin_st_aux_aux(t_in *dt, int fd0, int fd1, int pid);
 int		ft_exe_cmd_exe_st(t_in *dt);
+void	ft_exe_cmd_exe_st_aux(t_in *dt, int fd1);
 int		ft_exe_cmd_exe_int(t_in *dt);
+void	ft_exe_cmd_exe_int_aux(t_in *dt, int fd1);
 int		ft_exe_cmd_exe_end(t_in *dt);
+void	ft_exe_cmd_exe_end_aux(t_in *dt);
 
 //funciones de liberacion de memoria
 //free_utils_0.c

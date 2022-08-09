@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 12:14:24 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 08:01:23 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,7 @@ int	ft_exec(t_in *dt)
 {
 	int	i;
 
-	dt->fdaux = -2;
-	dt->an = 0;
-	dt->rootcmd = NULL;
-	dt->cmdf = NULL;
-	dt->cmdf_echo = NULL;
-	dt->cr = NULL;
-	dt->hd_i = dt->l_parse_init;
-	dt->hd_r = dt->l_parse_redir;
-	dt->hd_c = dt->l_parse_cmd;
-	dt->nc = ft_listlen(dt->l_parse_cmd);
-	dt->l_parse_cmd = dt->hd_c;
+	ft_clean(dt);
 	if (dt->l_parse_cmd)
 	{
 		while (dt->l_parse_cmd)
@@ -41,14 +31,7 @@ int	ft_exec(t_in *dt)
 					return (-1);
 			}
 			else
-			{
-				g_status = 127;
-				if (i == -2)
-					printf ("bash: %s: No such file or directory\n",
-						dt->rootcmd);
-				else
-					printf ("bash: %s: command not found\n", dt->ncmd);
-			}
+				ft_exec_aux (i, dt);
 			ft_free(dt, 0);
 			dt->l_parse_cmd = dt->l_parse_cmd->next;
 		}
@@ -56,6 +39,30 @@ int	ft_exec(t_in *dt)
 	else if (dt->l_parse_cmd == NULL && dt->l_parse_redir)
 		ft_redir_null(dt);
 	return (0);
+}
+
+void	ft_exec_aux(int i, t_in *dt)
+{
+	g_status = 127;
+	if (i == -2)
+		printf ("bash: %s: No such file or directory\n", dt->rootcmd);
+	else
+		printf ("bash: %s: command not found\n", dt->ncmd);
+}
+
+void	ft_clean(t_in *dt)
+{
+	dt->fdaux = -2;
+	dt->an = 0;
+	dt->rootcmd = NULL;
+	dt->cmdf = NULL;
+	dt->cmdf_echo = NULL;
+	dt->cr = NULL;
+	dt->hd_i = dt->l_parse_init;
+	dt->hd_r = dt->l_parse_redir;
+	dt->hd_c = dt->l_parse_cmd;
+	dt->nc = ft_listlen(dt->l_parse_cmd);
+	dt->l_parse_cmd = dt->hd_c;
 }
 
 int	ft_execve(t_in *dt, int n)
@@ -215,9 +222,7 @@ int	ft_exe_cmd_builtin_st_aux(t_in *dt, int n)
 
 	ft_pipe (fd);
 	pid = ft_fork ();
-	if (pid == -1)
-		return (-1);
-	else if (pid == 0)
+	if (pid == 0)
 	{
 		ft_close (fd[0]);
 		if (dt->fdint > 0)
@@ -235,13 +240,16 @@ int	ft_exe_cmd_builtin_st_aux(t_in *dt, int n)
 		exit(0);
 	}
 	else
-	{
-		ft_close (fd[1]);
-		ft_wait(pid);
-		dt->fdaux = dup (fd[0]);
-		ft_close (fd[0]);
-	}
+		ft_exe_cmd_builtin_st_aux_aux(dt, fd[0], fd[1], pid);
 	return (0);
+}
+
+void	ft_exe_cmd_builtin_st_aux_aux(t_in *dt, int fd0, int fd1, int pid)
+{
+	ft_close (fd1);
+	ft_wait(pid);
+	dt->fdaux = dup (fd0);
+	ft_close (fd0);
 }
 
 int	ft_exe_cmd_exe_st(t_in *dt)
@@ -258,18 +266,7 @@ int	ft_exe_cmd_exe_st(t_in *dt)
 		ft_close (fd[0]);
 		dt->fdaux = 0;
 		ft_dup2 (dt->fdaux, STDIN_FILENO);
-		if (dt->fdint > 0)
-		{
-			ft_dup2 (dt->fdint, STDIN_FILENO);
-			ft_close (dt->fdint);
-		}
-		if (dt->fdout > 0)
-		{
-			ft_dup2 (dt->fdout, STDOUT_FILENO);
-			ft_close (dt->fdout);
-		}
-		else
-			ft_dup2 (fd[1], STDOUT_FILENO);
+		ft_exe_cmd_exe_st_aux(dt, fd[1]);
 		ft_close (fd[1]);
 		execve (dt->rootcmd, dt->cmdf, dt->env);
 		exit(0);
@@ -284,6 +281,22 @@ int	ft_exe_cmd_exe_st(t_in *dt)
 	return (0);
 }
 
+void	ft_exe_cmd_exe_st_aux(t_in *dt, int fd1)
+{
+	if (dt->fdint > 0)
+	{
+		ft_dup2 (dt->fdint, STDIN_FILENO);
+		ft_close (dt->fdint);
+	}
+	if (dt->fdout > 0)
+	{
+		ft_dup2 (dt->fdout, STDOUT_FILENO);
+		ft_close (dt->fdout);
+	}
+	else
+		ft_dup2 (fd1, STDOUT_FILENO);
+}
+
 int	ft_exe_cmd_exe_int(t_in *dt)
 {
 	int	fd[2];
@@ -294,23 +307,7 @@ int	ft_exe_cmd_exe_int(t_in *dt)
 	if (pid == 0)
 	{
 		ft_close (fd[0]);
-		if (dt->fdint > 0)
-		{
-			ft_dup2 (dt->fdint, STDIN_FILENO);
-			ft_close (dt->fdint);
-		}
-		else if (dt->fdaux > 0)
-		{
-			ft_dup2 (dt->fdaux, STDIN_FILENO);
-			ft_close (dt->fdaux);
-		}
-		if (dt->fdout > 0)
-		{
-			ft_dup2 (dt->fdout, STDOUT_FILENO);
-			ft_close (dt->fdout);
-		}
-		else
-			ft_dup2 (fd[1], STDOUT_FILENO);
+		ft_exe_cmd_exe_int_aux(dt, fd[1]);
 		ft_close (fd[1]);
 		execve (dt->rootcmd, dt->cmdf, dt->env);
 		exit(0);
@@ -328,6 +325,27 @@ int	ft_exe_cmd_exe_int(t_in *dt)
 	return (0);
 }
 
+void	ft_exe_cmd_exe_int_aux(t_in *dt, int fd1)
+{
+	if (dt->fdint > 0)
+	{
+		ft_dup2 (dt->fdint, STDIN_FILENO);
+		ft_close (dt->fdint);
+	}
+	else if (dt->fdaux > 0)
+	{
+		ft_dup2 (dt->fdaux, STDIN_FILENO);
+		ft_close (dt->fdaux);
+	}
+	if (dt->fdout > 0)
+	{
+		ft_dup2 (dt->fdout, STDOUT_FILENO);
+		ft_close (dt->fdout);
+	}
+	else
+		ft_dup2 (fd1, STDOUT_FILENO);
+}
+
 int	ft_exe_cmd_exe_end(t_in *dt)
 {
 	int		pid;
@@ -336,30 +354,14 @@ int	ft_exe_cmd_exe_end(t_in *dt)
 	pid = ft_fork ();
 	if (pid == 0)
 	{
-		if (dt->fdint > 0)
-		{
-			ft_dup2 (dt->fdint, STDIN_FILENO);
-			ft_close (dt->fdint);
-		}
-		else if (dt->fdaux > 0)
-		{
-			ft_dup2 (dt->fdaux, STDIN_FILENO);
-			ft_close (dt->fdaux);
-		}
-		if (dt->fdout > 0)
-		{
-			ft_dup2 (dt->fdout, STDOUT_FILENO);
-			ft_close (dt->fdout);
-		}
+		ft_exe_cmd_exe_end_aux(dt);
 		execve (dt->rootcmd, dt->cmdf, dt->env);
 		exit(0);
 	}
 	else
-	{
 		ft_wait (pid);
-		if (dt->fdaux > 0)
-			ft_close (dt->fdaux);
-	}
+	if (dt->fdaux > 0)
+		ft_close (dt->fdaux);
 	if (dt->an == 1)
 	{
 		linenull = NULL;
@@ -371,6 +373,25 @@ int	ft_exe_cmd_exe_end(t_in *dt)
 		free (linenull);
 	}
 	return (0);
+}
+
+void	ft_exe_cmd_exe_end_aux(t_in *dt)
+{
+	if (dt->fdint > 0)
+	{
+		ft_dup2 (dt->fdint, STDIN_FILENO);
+		ft_close (dt->fdint);
+	}
+	else if (dt->fdaux > 0)
+	{
+		ft_dup2 (dt->fdaux, STDIN_FILENO);
+		ft_close (dt->fdaux);
+	}
+	if (dt->fdout > 0)
+	{
+		ft_dup2 (dt->fdout, STDOUT_FILENO);
+		ft_close (dt->fdout);
+	}
 }
 
 int	ft_ch_buil(char *name, t_list *list)
@@ -392,10 +413,7 @@ int	ft_ch_buil(char *name, t_list *list)
 
 int	ft_ch_cmde(t_in *dt)
 {
-	char	**root;
-	char	*rootb;
-	int		i;
-	int		j;
+	int	i;
 
 	if (dt->ncmd && dt->ncmd[0] == '/')
 	{
@@ -409,6 +427,18 @@ int	ft_ch_cmde(t_in *dt)
 			return (0);
 		return (-2);
 	}
+	else
+		i = ft_ch_cmde_aux(dt);
+	return (i);
+}
+
+int	ft_ch_cmde_aux(t_in *dt)
+{
+	char	**root;
+	char	*rootb;
+	int		i;
+	int		j;
+
 	root = ft_cut_root(dt);
 	i = -1;
 	while (root[++i])
@@ -425,11 +455,16 @@ int	ft_ch_cmde(t_in *dt)
 			free (root);
 			return (0);
 		}
-		free (dt->rootcmd);
-		dt->rootcmd = NULL;
+		ft_ch_cmde_aux_aux(dt);
 	}
 	free (root);
 	return (-1);
+}
+
+void	ft_ch_cmde_aux_aux(t_in *dt)
+{
+	free (dt->rootcmd);
+	dt->rootcmd = NULL;
 }
 
 char	*ft_get_name_bis(char *str)
