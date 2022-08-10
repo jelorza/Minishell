@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 07:27:11 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 08:26:18 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	ft_struct_init(t_in *dt, char **envp)
 	dt->cmdf = NULL;
 	dt->cr = NULL;
 	ft_get_env(dt, envp);
+	rl_catch_signals = 0;
+	ft_signal ();
 }
 
 void	ft_clean_all_lists(t_in *dt)
@@ -71,18 +73,18 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	ft_struct_init(&dt, envp);
-	rl_catch_signals = 0;
-	ft_signal ();
 	while (1)
 	{
 		line = readline("bash-jonpol$ ");
 		add_history (line);
 		if (!line)
+		{
+			printf ("exit\n");
 			break ;
+		}
 		if (ft_parse_line(line, &dt) == -1)
 			break ;
-		free (line);
-		ft_clean_all_lists(&dt);
+		ft_free_parcial (&dt, line);
 	}
 	ft_free_all(&dt, line);
 	return (g_status);

@@ -2,9 +2,22 @@ NAME = minishell
 
 SRC = main.c\
 	  aux_utils_0.c\
+	  aux_utils_1.c\
+	  aux_utils_2.c\
+	  aux_utils_3.c\
+	  aux_utils_4.c\
+	  aux_utils_5.c\
 	  builtin_utils_0.c\
+	  builtin_utils_1.c\
+	  builtin_utils_2.c\
 	  env_utils_0.c\
+	  env_utils_1.c\
+	  env_utils_2.c\
 	  exe_utils_0.c\
+	  exe_utils_1.c\
+	  exe_utils_2.c\
+	  exe_utils_3.c\
+	  exe_utils_4.c\
 	  free_utils_0.c\
 	  here_doc.c\
 	  linked_list_newnod.c\
@@ -14,6 +27,7 @@ SRC = main.c\
 	  list_utils_0.c\
 	  parse_line.c\
 	  red_utils_0.c\
+	  red_utils_1.c\
 	  signal_utils_0.c\
 	  expand_envs1.c\
 	  expand_envs2.c\

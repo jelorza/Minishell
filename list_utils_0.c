@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 11:12:15 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/10 07:59:22 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,6 @@ void	ft_add_back(t_list **list, t_list *new)
 		while (aux->next != NULL)
 			aux = aux->next;
 		aux->next = new;
-	}
-}
-
-void	ft_print_list(t_list *list)
-{
-	t_list	*aux;
-	int		i;
-
-	i = 0;
-	aux = list;
-	while (aux)
-	{
-		printf ("El nodo %d:\nPertenece al comando: %d\nTipo: %d\nDato: <%s>\n",
-			i, aux->id, aux->type, aux->data);
-		aux = aux->next;
-		i++;
 	}
 }
 
