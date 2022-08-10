@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 19:05:55 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/09 19:31:35 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void	ft_exe_cmd_exe_end_aux(t_in *dt);
 void	ft_free_0(t_in *dt);
 void	ft_free_1(t_in *dt);
 void	ft_free(t_in *dt, int i);
+void	ft_free_all(t_in *dt, char *line);
 
 //funciones que realizan el here dock (HD)
 //here_doc_0.c

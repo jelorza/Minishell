@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/26 10:58:55 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/09 19:23:01 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,12 @@ void	ft_free(t_in *dt, int i)
 		ft_free_0(dt);
 	if (i == 1 && dt->env_name != NULL && dt->env_value != NULL)
 		ft_free_1(dt);
+}
+
+void	ft_free_all(t_in *dt, char *line)
+{
+	ft_free_1(dt);
+	ft_free_0(dt);
+	ft_clean_all_lists(dt);
+	free(line);
 }
