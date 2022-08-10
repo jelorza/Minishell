@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 08:14:44 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:38:04 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**ft_split_echo(char *s, char c)
 		j = -1;
 		while (r[i][++j])
 		{
-			if (r[i][j] == '!')
+			if (r[i][j] == 1)
 			{
 				r[i] = ft_split_echo_aux(r[i]);
 				break ;
@@ -78,7 +78,7 @@ int	ft_count_rarus(char *str, int n)
 	j = 0;
 	while (str[++i] && i < n)
 	{
-		if (str[i] == '!')
+		if (str[i] == 1)
 			j++;
 	}
 	if (j % 2 == 0)
@@ -97,7 +97,7 @@ char	*ft_split_echo_aux(char *str)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] != '!')
+		if (str[i] != 1)
 		{
 			aux[j] = str[i];
 			j++;
@@ -120,10 +120,10 @@ int	ft_count_echo(char *s, char c)
 		count++;
 	while (s[i])
 	{
-		if (s[i] == '!')
+		if (s[i] == 1)
 		{
 			i++;
-			while (s[i] != '!' && s[i])
+			while (s[i] != 1 && s[i])
 				i++;
 		}
 		if (s[i] == c && s[i + 1] != c)

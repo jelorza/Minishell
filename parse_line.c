@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 15:03:57 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:50:41 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ int	ft_put_noimp(t_in *dt, int i)
 	{
 		if (aux->data[i] == '"' )
 		{
-			dt->l_parse_init->data[i] = '!';
+			dt->l_parse_init->data[i] = 1;
 			while (aux->data[++i] != '"' && aux->data[i])
 				dt->l_parse_init->data[i] = aux->data[i];
-			dt->l_parse_init->data[i] = '!';
+			dt->l_parse_init->data[i] = 1;
 		}
 		else if (aux->data[i] == 39)
 		{
-			dt->l_parse_init->data[i] = '!';
+			dt->l_parse_init->data[i] = 1;
 			while (aux->data[++i] != 39 && aux->data[i])
 				dt->l_parse_init->data[i] = aux->data[i];
-			dt->l_parse_init->data[i] = '!';
+			dt->l_parse_init->data[i] = 1;
 		}
 		else
 			dt->l_parse_init->data[i] = aux->data[i];

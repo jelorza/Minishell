@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/28 11:54:16 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/10 18:19:47 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,22 @@ int	ft_check_cases(char *line)
 	int	i;
 
 	bo1 = 0;
-	i = -1;
-	while (line[++i])
+	i = 0;
+	while (line[i])
 	{
 		if (line[i] == '"' && line[i + 1] != '"')
 		{
-			while (line[++i] != '"' && line[i])
+			while (line[i] != '"' && line[i])
 			{
 				if (line[i] == '$')
 				{
 					bo1 = 1;
 					return (bo1);
 				}
+				i++;
 			}
 		}
+		i++;
 	}
 	return (bo1);
 }
@@ -102,6 +104,9 @@ char	*ft_replace_in_line(char *line, char *old, char *new)
 	if (caso == 1)
 		return (ft_case_1(line, old, new, c));
 	else if (caso == 0)
+	{
 		return (ft_case_2(line, old, new, c));
-	return (line);
+	}
+	else
+		return (line);
 }
