@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 19:15:03 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 07:23:10 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,6 @@ int	ft_compare_str_cat(char *str)
 	if (!str)
 		return (0);
 	if (ft_compare_str(str, "cat"))
-		return (1);
-	if (ft_compare_str(str, "grep"))
 		return (1);
 	if (ft_compare_str(str, "wc"))
 		return (1);

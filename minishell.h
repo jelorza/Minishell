@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 19:31:35 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 07:26:56 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
-
-# define ROJO_T 			"\x1b[31m"
-# define RESET_C			"\x1b[0m"
 
 int	g_status;
 
@@ -75,7 +72,7 @@ typedef struct s_in
 
 }	t_in;
 
-void	ft_struct_init(t_in *dt);
+void	ft_struct_init(t_in *dt, char **envp);
 void	ft_clean_all_lists(t_in *dt);
 char	*ft_strlcpy(char *line, int st, int len);
 int		ft_strlcpy_itoa(char *line, char *st, int size);

@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 08:01:23 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 07:20:13 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,11 +365,7 @@ int	ft_exe_cmd_exe_end(t_in *dt)
 	if (dt->an == 1)
 	{
 		linenull = NULL;
-		while (1)
-		{
-			linenull = readline("");
-			free (linenull);
-		}
+		linenull = readline("");
 		free (linenull);
 	}
 	return (0);

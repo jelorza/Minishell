@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/09 19:32:02 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 07:27:11 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "minishell.h"
 
-void	ft_struct_init(t_in *dt)
+void	ft_struct_init(t_in *dt, char **envp)
 {
 	g_status = 0;
 	dt->l_parse_init = NULL;
@@ -34,6 +34,7 @@ void	ft_struct_init(t_in *dt)
 	dt->rootold = NULL;
 	dt->cmdf = NULL;
 	dt->cr = NULL;
+	ft_get_env(dt, envp);
 }
 
 void	ft_clean_all_lists(t_in *dt)
@@ -69,20 +70,16 @@ int	main(int argc, char **argv, char **envp)
 		printf ("Error in arguments\n");
 		return (0);
 	}
-	ft_struct_init(&dt);
-	ft_get_env(&dt, envp);
+	ft_struct_init(&dt, envp);
 	rl_catch_signals = 0;
 	ft_signal ();
 	while (1)
 	{
-		line = readline("bash-3.2$ ");
+		line = readline("bash-jonpol$ ");
 		add_history (line);
-/*		if (!line)
-		{
-			printf ("exit\n");
+		if (!line)
 			break ;
-		}
-*/		if (ft_parse_line(line, &dt) == -1)
+		if (ft_parse_line(line, &dt) == -1)
 			break ;
 		free (line);
 		ft_clean_all_lists(&dt);
