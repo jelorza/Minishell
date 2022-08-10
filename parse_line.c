@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/27 13:47:17 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/10 15:03:57 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	ft_parse_line(char *line, t_in *dt)
 	}
 	ft_remove_quot(dt);
 	ft_div_in_lists(dt);
-	//ft_printAllLists(dt);
 	free (line);
 	if (ft_exec(dt) == -1)
 		return (-1);

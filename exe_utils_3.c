@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 08:20:12 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 15:02:18 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,17 @@ void	ft_exe_cmd_exe_end_aux(t_in *dt)
 
 int	ft_ch_buil(char *name, t_list *list)
 {
-	char	builtins[7][7] = {"cd", "echo", "env", "exit", "export", "pwd", "unset"};
+	char	**builtins;
 	int		i;
 
+	builtins = (char **) malloc (sizeof (char *) * 7);
+	builtins[0] = "cd";
+	builtins[1] = "echo";
+	builtins[2] = "env";
+	builtins[3] = "exit";
+	builtins[4] = "export";
+	builtins[5] = "pwd";
+	builtins[6] = "unset";
 	i = -1;
 	while (++i < 7)
 	{
@@ -91,6 +99,7 @@ int	ft_ch_buil(char *name, t_list *list)
 			return (i);
 		}
 	}
+	free (builtins);
 	return (-1);
 }
 
