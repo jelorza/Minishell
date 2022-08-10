@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 08:21:25 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 17:21:33 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,33 @@ void	ft_redir_null(t_in *dt)
 {
 	t_list	*aux;
 
+	if (dt->l_parse_cmd)
+	{
+		aux = dt->l_parse_redir;
+		while (aux && aux->id < dt->l_parse_cmd->id && aux)
+		{
+			ft_ch_redir(dt, aux->id);
+			dt->l_parse_redir = dt->hd_r;
+			ft_exe_redir(dt, aux->id);
+			while (aux)
+				aux = aux->next;
+		}
+	}
+	else
+		ft_redir_null_aux(dt);
+}
+
+void	ft_redir_null_aux(t_in *dt)
+{
+	t_list	*aux;
+
+	aux = dt->l_parse_redir;
 	while (dt->l_parse_redir)
 	{
 		dt->l_parse_redir->id = 0;
 		dt->l_parse_redir = dt->l_parse_redir->next;
 	}
 	dt->l_parse_redir = dt->hd_r;
-	aux = dt->l_parse_redir;
 	while (aux)
 	{
 		ft_ch_redir(dt, aux->id);

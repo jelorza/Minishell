@@ -6,11 +6,9 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 08:26:18 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 15:10:30 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//Hay que checar por que se queda olgado << hola | wc, y solo << o solo <
 
 #include "minishell.h"
 

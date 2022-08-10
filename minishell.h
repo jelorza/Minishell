@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 08:26:41 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 17:18:58 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int		ft_update_env_aux_aux(t_in *dt, char c);
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c
 int		ft_exec(t_in *dt);
-void	ft_exec_aux(int i, t_in *dt);
+int		ft_exec_aux(t_in *dt);
 void	ft_clean(t_in *dt);
 int		ft_ch_buil(char *name, t_list *list);
 int		ft_ch_cmde(t_in *dt);
@@ -243,6 +243,7 @@ int		ft_exe_redir_int_aux_2(t_in *dt);
 int		ft_exe_redir_out(t_in *dt, int n);
 int		ft_exe_redir_out_aux0(t_in *dt);
 void	ft_redir_null(t_in *dt);
+void	ft_redir_null_aux(t_in *dt);
 
 //funciones para las señales
 //signal_utils_0.c
