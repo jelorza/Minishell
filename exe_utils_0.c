@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 07:55:44 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/10 17:21:52 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	ft_exec(t_in *dt)
 {
-	int	i;
-
 	ft_clean(dt);
 	if (dt->l_parse_cmd)
 	{
@@ -23,15 +21,8 @@ int	ft_exec(t_in *dt)
 		{
 			dt->cmdf = ft_split_echo(dt->l_parse_cmd->data, ' ');
 			dt->ncmd = ft_strdup(dt->cmdf[0]);
-			i = ft_ch_cmde(dt);
-			if ((ft_ch_buil(dt->ncmd, dt->l_parse_cmd) >= 0
-					&& ft_ch_buil(dt->ncmd, dt->l_parse_cmd) <= 6) || i == 0)
-			{
-				if (ft_execve (dt, dt->l_parse_cmd->id) == -1)
-					return (-1);
-			}
-			else
-				ft_exec_aux (i, dt);
+			if (ft_exec_aux(dt) == -1)
+				return (-1);
 			ft_free(dt, 0);
 			dt->l_parse_cmd = dt->l_parse_cmd->next;
 		}
@@ -41,13 +32,28 @@ int	ft_exec(t_in *dt)
 	return (0);
 }
 
-void	ft_exec_aux(int i, t_in *dt)
+int	ft_exec_aux(t_in *dt)
 {
-	g_status = 127;
-	if (i == -2)
-		printf ("bash: %s: No such file or directory\n", dt->rootcmd);
+	int	i;
+
+	i = ft_ch_cmde(dt);
+	if ((ft_ch_buil(dt->ncmd, dt->l_parse_cmd) >= 0
+			&& ft_ch_buil(dt->ncmd, dt->l_parse_cmd) <= 6) || i == 0)
+	{
+		if (dt->l_parse_redir && dt->l_parse_redir->id < dt->l_parse_cmd->id)
+			ft_redir_null(dt);
+		if (ft_execve (dt, dt->l_parse_cmd->id) == -1)
+			return (-1);
+	}
 	else
-		printf ("bash: %s: command not found\n", dt->ncmd);
+	{
+		g_status = 127;
+		if (i == -2)
+			printf ("bash: %s: No such file or directory\n", dt->rootcmd);
+		else
+			printf ("bash: %s: command not found\n", dt->ncmd);
+	}
+	return (0);
 }
 
 void	ft_clean(t_in *dt)
