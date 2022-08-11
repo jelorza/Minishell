@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 18:34:27 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/11 10:08:04 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ int	ft_init(char *line, int i)
 
 int	ft_check_quotations(char *line, int i)
 {
-	if (line[i] == 39)
+	if (line[i] == 39 || line[i] == 1)
 	{
 		i = ft_check_quot(line, i, '1');
 		if (i == -1)
 			return (-1);
 	}
-	else if (line[i] == '"')
+	else if (line[i] == '"' || line[i] == 1)
 	{
 		i = ft_check_quot(line, i, '2');
 		if (i == -1)
@@ -76,7 +76,7 @@ int	ft_check_quot(char *line, int i, char type)
 		type = '"';
 	if (line[++i])
 	{
-		while ((line[i] != type) && line[i])
+		while ((line[i] != type && line[i] != 1) && line[i])
 			i++;
 	}
 	if (!line[i])

@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 18:19:47 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/11 09:47:51 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,6 @@ char	*ft_replace_in_line(char *line, char *old, char *new)
 	if (caso == 1)
 		return (ft_case_1(line, old, new, c));
 	else if (caso == 0)
-	{
 		return (ft_case_2(line, old, new, c));
-	}
-	else
-		return (line);
+	return (line);
 }
