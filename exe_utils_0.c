@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/11 07:33:48 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/11 15:33:53 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@ int	ft_exec(t_in *dt)
 		while (dt->l_parse_cmd)
 		{
 			dt->cmdf = ft_split_echo(dt->l_parse_cmd->data, ' ');
-			/*borrar a partir de aqui*/
-			int i = -1;
-			while (dt->cmdf[++i])
-				printf ("El nombre: <%s>\n", dt->cmdf[i]);
-			/*borrar hasta aqui*/
 			dt->ncmd = ft_strdup(dt->cmdf[0]);
 			if (ft_exec_aux(dt) == -1)
 				return (-1);

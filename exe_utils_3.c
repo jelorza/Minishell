@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/11 06:36:11 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/11 16:12:56 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,30 +79,31 @@ void	ft_exe_cmd_exe_end_aux(t_in *dt)
 
 int	ft_ch_buil(char *name, t_list *list)
 {
-	char	**builtins;
-	int		i;
+	int	i;
 
-	builtins = (char **) malloc (sizeof (char *) * 7);
-	builtins[0] = "cd";
-	builtins[1] = "echo";
-	builtins[2] = "env";
-	builtins[3] = "exit";
-	builtins[4] = "export";
-	builtins[5] = "pwd";
-	builtins[6] = "unset";
 	i = -1;
-	while (++i < 7)
+	if (ft_compare_str (name, "cd") == 1)
+		i= 0;
+	if (ft_compare_str (name, "echo") == 1)
+		i = 1;
+	if (ft_compare_str (name, "env") == 1)
+		i = 2;
+	if (ft_compare_str (name, "exit") == 1)
+		i = 3;
+	if (ft_compare_str (name, "export") == 1)
+		i = 4;
+	if (ft_compare_str (name, "pwd") == 1)
+		i = 5;
+	if (ft_compare_str (name, "unset") == 1)
+		i = 6;
+	if (i != -1)
 	{
-		if (ft_compare_str (name, builtins[i]) == 1)
-		{
-			list->type = 1;
-			return (i);
-		}
+		list->type = 1;
+		return (i);
 	}
-	free (builtins);
-	return (-1);
+	return (i);
 }
-
+	
 int	ft_ch_cmde(t_in *dt)
 {
 	int	i;
