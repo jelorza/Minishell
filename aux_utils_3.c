@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 18:38:04 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/11 07:28:51 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*ft_split_echo_aux(char *str)
 	int		i;
 	int		j;
 
-	aux = (char *) malloc (sizeof (char) * (ft_strlen (str) -1));
+	aux = (char *) malloc (sizeof (char) * (ft_strlen (str) + 1));
 	i = 0;
 	j = 0;
 	while (str[i])
@@ -128,7 +128,8 @@ int	ft_count_echo(char *s, char c)
 		}
 		if (s[i] == c && s[i + 1] != c)
 			count++;
-		i++;
+		if (s[i])//añadida proteccion para SGF
+			i++;
 	}
 	return (count);
 }

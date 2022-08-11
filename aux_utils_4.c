@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 08:15:07 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/11 07:01:50 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	ft_wait(int pid)
 		perror ("Waitpid error");
 		return (-1);
 	}
-	g_status = WEXITSTATUS(st);
+	if (g_status != 130 && g_status != 131)
+		g_status = WEXITSTATUS(st);
 	return (0);
 }
