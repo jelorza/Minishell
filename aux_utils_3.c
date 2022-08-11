@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/11 09:59:02 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/11 16:16:30 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	ft_count_echo(char *s, char c)
 		}
 		if (s[i] == c && s[i + 1] != c)
 			count++;
-		if (s[i])//añadida proteccion para SGF
+		if (s[i])
 			i++;
 	}
 	return (count);

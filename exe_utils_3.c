@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/11 16:12:56 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/11 16:16:58 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_ch_buil(char *name, t_list *list)
 
 	i = -1;
 	if (ft_compare_str (name, "cd") == 1)
-		i= 0;
+		i = 0;
 	if (ft_compare_str (name, "echo") == 1)
 		i = 1;
 	if (ft_compare_str (name, "env") == 1)
@@ -103,7 +103,7 @@ int	ft_ch_buil(char *name, t_list *list)
 	}
 	return (i);
 }
-	
+
 int	ft_ch_cmde(t_in *dt)
 {
 	int	i;
