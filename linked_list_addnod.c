@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/27 12:19:19 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:03:43 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,4 @@ void	ft_add_nod_back(t_in *dt, char *data, char list, int id)
 		ft_add_nod_back_re(dt, data, id, list);
 	else if (list == 'c')
 		ft_add_nod_back_cmd(dt, data, id);
-	else
-		printf("Redireccion sin controlar\n");
 }

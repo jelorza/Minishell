@@ -26,6 +26,7 @@ SRC = main.c\
 	  linked_list_addnod.c\
 	  list_utils_0.c\
 	  parse_line.c\
+	  parse_line2.c\
 	  red_utils_0.c\
 	  red_utils_1.c\
 	  signal_utils_0.c\
