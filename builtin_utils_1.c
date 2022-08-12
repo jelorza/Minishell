@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/11 06:52:38 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 16:10:11 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,16 @@ int	ft_exe_exit_aux(t_in *dt, long aux)
 		if (dt->nc == 1)
 			printf ("exit\n");
 		printf ("bash: exit: %s: numeric argument required\n", dt->cmdf[1]);
+		g_status = 255;
 		if (dt->nc == 1)
-		{
-			g_status = 255;
 			return (-1);
-		}
 	}
-	if (aux > 256)
-		aux = aux % 256;
-	g_status = aux;
+	else
+	{
+		if (aux > 256)
+			aux = aux % 256;
+		g_status = aux;
+	}
 	return (0);
 }
 

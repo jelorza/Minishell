@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/12 11:51:22 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:24:12 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ int		ft_builtin(t_in *dt, int n);
 int		ft_exe_echo(t_in *dt, int n);
 int		ft_exe_cd(t_in *dt);
 void	ft_exe_cd_aux(t_in *dt);
+int		ft_exe_cd_aux_aux(t_in *dt);
+void	ft_exe_cd_print(t_in *dt);
 int		ft_exe_env(t_in *dt);
 int		ft_exe_pwd(void);
 int		ft_exe_exit(t_in *dt);
@@ -134,6 +136,7 @@ char	**ft_update_env_plus(t_in *dt, char *str);
 char	**ft_update_env_minus(t_in *dt, char *str);
 char	**ft_update_env_aux(t_in *dt, char c);
 int		ft_update_env_aux_aux(t_in *dt, char c);
+int		ft_search_env(t_in *dt, char *str);
 
 //funciones de ejecucion del minishel, las que lanzan el programa
 //exe_utils_0.c

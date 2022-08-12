@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 08:19:07 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:27:03 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,19 @@ int	ft_update_env_aux_aux(t_in *dt, char c)
 		while (dt->env_value[++i] != NULL)
 			free(dt->env_value[i]);
 		free (dt->env_value);
+	}
+	return (i);
+}
+
+int	ft_search_env(t_in *dt, char *str)
+{
+	int	i;
+
+	i = -1;
+	while (dt->env_name[++i] != NULL)
+	{
+		if (ft_compare_str (dt->env_name[i], str) == 1)
+			break ;
 	}
 	return (i);
 }

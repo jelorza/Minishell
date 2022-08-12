@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 08:16:58 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:28:57 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,54 +38,64 @@ int	ft_builtin(t_in *dt, int n)
 	return (0);
 }
 
-int	ft_exe_echo(t_in *dt, int n)
-{
-	int	i;
-
-	i = 1;
-	n = 0;
-	if (dt->cmdf[1] && ft_compare_str(dt->cmdf[1], "-n"))
-	{
-		n = 1;
-		i++;
-	}
-	while (dt->cmdf[i])
-	{
-		printf("%s", dt->cmdf[i]);
-		i++;
-		if (dt->cmdf[i])
-			printf(" ");
-	}
-	if (n == 0)
-		printf("\n");
-	return (0);
-}
-
 int	ft_exe_cd(t_in *dt)
 {
 	char	path[200];
-	int		fd;
+	int		i;
 
 	getcwd(path, 200);
 	if (dt->cmdf[1])
 	{
-		if (chdir(dt->cmdf[1]) == -1)
-		{
-			fd = open(dt->cmdf[1], O_RDONLY);
-			if (fd == -1)
-				printf("bash: cd: %s: No such file or directory\n", dt->cmdf[1]);
-			else
-				printf("bash: cd: %s: Not a directory\n", dt->cmdf[1]);
-			close (fd);
-			g_status = 1;
+		if (ft_exe_cd_aux_aux(dt) == -1)
 			return (-1);
-		}
 		if (dt->nc != 1)
 			chdir(path);
 		else
+		{
 			ft_exe_cd_aux(dt);
+			if (dt->cmdf[1][0] == '-')
+				ft_exe_cd_print(dt);
+		}
+	}
+	else if (dt->nc == 1)
+	{
+		i = ft_search_env (dt, "HOME");
+		chdir(dt->env_value[i]);
+		ft_exe_cd_aux(dt);
 	}
 	g_status = 0;
+	return (0);
+}
+
+void	ft_exe_cd_print(t_in *dt)
+{
+	int	i;
+
+	i = ft_search_env (dt, "PWD");
+	printf ("%s\n", dt->env_value[i]);
+}
+
+int	ft_exe_cd_aux_aux(t_in *dt)
+{
+	int		fd;
+	int		i;
+
+	if (dt->cmdf[1][0] == '-')
+	{
+		i = ft_search_env (dt, "OLDPWD");
+		chdir(dt->env_value[i]);
+	}
+	else if (chdir(dt->cmdf[1]) == -1)
+	{
+		fd = open(dt->cmdf[1], O_RDONLY);
+		if (fd == -1)
+			printf("bash: cd: %s: No such file or directory\n", dt->cmdf[1]);
+		else
+			printf("bash: cd: %s: Not a directory\n", dt->cmdf[1]);
+		close (fd);
+		g_status = 1;
+		return (-1);
+	}
 	return (0);
 }
 
@@ -99,14 +109,4 @@ void	ft_exe_cd_aux(t_in *dt)
 	getcwd(path, 200);
 	dt->root = ft_strlcpy(path, 0, ft_strlen(path));
 	ft_env_act(dt);
-}
-
-int	ft_exe_env(t_in *dt)
-{
-	int	i;
-
-	i = -1;
-	while (dt->env[++i])
-		printf ("%s\n", dt->env[i]);
-	return (0);
 }

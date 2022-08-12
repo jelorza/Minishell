@@ -6,7 +6,7 @@
 /*   By: pojea-lo <pojea-lo@student.42urduli>       +#+  +:+       +#+        */
 /*       jelorza- <jelorza-@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 08:11:33 by pojea-lo          #+#    #+#             */
-/*   Updated: 2022/08/10 08:16:27 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:28:38 by pojea-lo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,38 @@ int	ft_exe_unset(t_in *dt)
 	}
 	if (g_status == 1)
 		return (1);
+	return (0);
+}
+
+int	ft_exe_env(t_in *dt)
+{
+	int	i;
+
+	i = -1;
+	while (dt->env[++i])
+		printf ("%s\n", dt->env[i]);
+	return (0);
+}
+
+int	ft_exe_echo(t_in *dt, int n)
+{
+	int	i;
+
+	i = 1;
+	n = 0;
+	if (dt->cmdf[1] && ft_compare_str(dt->cmdf[1], "-n"))
+	{
+		n = 1;
+		i++;
+	}
+	while (dt->cmdf[i])
+	{
+		printf("%s", dt->cmdf[i]);
+		i++;
+		if (dt->cmdf[i])
+			printf(" ");
+	}
+	if (n == 0)
+		printf("\n");
 	return (0);
 }
