@@ -6,7 +6,8 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/12 17:24:12 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:32:33 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 17:08:28 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +164,8 @@ int		ft_exe_cmd_exe_int(t_in *dt);
 void	ft_exe_cmd_exe_int_aux(t_in *dt, int fd1);
 int		ft_exe_cmd_exe_end(t_in *dt);
 void	ft_exe_cmd_exe_end_aux(t_in *dt);
+char	*ft_remove_quot_re(char *str);
+void	ft_clean_redir(t_in *dt);
 
 //funciones de liberacion de memoria
 //free_utils_0.c
