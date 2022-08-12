@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 17:18:58 by pojea-lo         ###   ########.fr       */
+/*   Updated: 2022/08/12 11:51:22 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ char	*ft_replace_in_line(char *line, char *old, char *new);
 char	*ft_replace_if_env(char *line, int c[2], char *new, char *result);
 int		ft_pipes_list(char *line, t_in *dt, int i, int z);
 int		ft_check_quotations(char *line, int i);
+int		ft_check_quotations_div(char *line, int i);
 void	ft_div_in_lists(t_in *dt);
 int		ft_check_and_create(char *line, t_in *dt, int id, char type);
 char	ft_redir_type(char *line, int i);

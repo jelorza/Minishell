@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/07/27 18:56:30 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/12 11:44:41 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_check_create1(char *line, int i)
 	}
 	while (line[i] != ' ' && line[i])
 	{
-		i = ft_check_quotations(line, i);
+		i = ft_check_quotations_div(line, i);
 		if (i == -1)
 			return (-1);
 		i++;
@@ -51,7 +51,7 @@ int	ft_check_create2(char *line, int i)
 	while (line[i] != '>' && line[i] != '<'
 		&& line[i] && line[i] != ' ')
 	{
-		i = ft_check_quotations(line, i);
+		i = ft_check_quotations_div(line, i);
 		if (i == -1)
 			return (-1);
 		i++;
