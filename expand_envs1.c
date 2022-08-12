@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*       pojea-lo <pojea-lo@student.42urduli>     +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/26 09:50:12 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/08/10 18:20:33 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/08/12 12:50:17 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_expand_envs(char *line, t_in *dt)
 	while (n > 0)
 	{
 		env[0] = ft_check_env(env[2]);
-		if (ft_check_in_env_list(env[0], dt) || ft_compare_str(env[0], "?"))
+		if (ft_check_in_env_list(env[0], dt) || env[0][0] == '?')
 			ft_cmp_replace(env, dt, is_env);
 		else
 			env[2] = ft_replace_in_line(env[2], env[0], " ");
